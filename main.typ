@@ -102,7 +102,7 @@
 
 Es gibt ein Problem beim Stimmen von Floyd-Rose-Gitarren. Bei diesen Gitarren wird eine Saite zwischen dem Gitarrenkopf und einer bis zu einem gewissen Grad rotierbaren Brücke gespannt. An der Brücke halten unterhalb des Drehpunkts Federn dagegen, wenn man Saiten einspannt. Die Brücke wird gemeinhin als "Floating Bridge" bezeichnet, weil sie nicht wie herkömmliche Tremolos am Gitarrenkörper aufliegt sondern in der Luft schwebt. 
 
- #figure(image("assets/floydrose_frontside_neutral.jpg", height: 20%), caption: [Floyd-Rose-Tremolo Bild])<fr_bild1>
+ #figure(image("assets/floydrose_frontside_neutral.jpg", height: 20%), caption: [Floyd-Rose-Tremolo Bild])<FRQuer>
 
 Das Floyd-Rose-Tremolo hat einen Hebel, den man ziehen oder drücken kann. Beim Musizieren ändert das den Ton. Auch wenn diese Architektur neue Klänge ermöglicht, erschwert sie das Stimmen der Gitarre erheblich. Beim Stimmen erhöht oder verringert man die Spannung einer Saite, indem man deren Länge verändert. Demnach erhöht oder verringert sich die Auslenkung der Federn, da zum Beispiel bei geringerer Spannung der Saiten auch eine geringere Kraft auf die Federn wirkt. Das Resultat davon ist, dass sich der Winkel des Floyd-Rose-Tremolos verändert. Das führt dazu, dass die anderen Saiten verstimmt werden, wenn man eine Saite stimmt. Es gibt Erfahrungsberichte und Aufzeichnungen, wie man so eine Gitarre effizient stimmen kann. Dabei dauerte das Stimmen 8 Minuten @youtube_floyd_rose_tune2026. In Foren sprachen Nutzer von einer Stimmzeit von bis zu 20-30 Minuten, jenachdem wie Sauber und wieviele Saiten sie Stimmen mussten @ultimateguitar_floydrose_tuning_forum. Ziel der Arbeit ist eine App zu entwickeln, die diesen Stimmvorgang beschleunigt.
 
@@ -114,15 +114,19 @@ Die Brücke einer Gitarre kann bei einem Floyd-Rose-Tremolo bis zu einem gewisse
 
 #figure(
   image("assets/FloydRoseQuer.png",height: 34%),
-  caption: [Test],
+  caption: [Floyd-Rose-Model Quer],
   alt: "Test"
-)
+)<FRMQuer>
 #figure(
   image("assets/FlyodRoseTop.png",height: 40%),
-  caption: [Test],
+  caption: [Floyd-Rose-Model Draufsicht],
   alt: "Test"
-)
-
+)<FRMTop>
+#figure(
+  image("assets/FRrealTop.png",height: 40%),
+  caption: [Floyd-Rose Draufsicht],
+  alt: "Test"
+)<FRTop>
 === Experiment: Sind Stahlsaiten elastisch?
 
 In diesem Experiment wird untersucht, ob Stahlsaiten elastische Eigenschaften besitzen, vergleichbar mit einem sehr steifen Gummiband. Beim Stimmen der Saite, die im Wesentlichen aus Stahldraht besteht, wird diese um den Stimmwirbel aufgewickelt, wodurch ihre Zugspannung erhöht wird.
@@ -210,7 +214,7 @@ Dies bestätigt, dass sich die Dehnung der Saite über ihre gesamte Länge verte
 Die Gitarrensaite wird daher als Feder mit sehr hoher Federkonstante modelliert.
 
 Für eine realistischere Beschreibung des Gesamtsystems muss zusätzlich das Tremolosystem berücksichtigt werden,
-da dieses über die Rotation der Brücke unmittelbar mit den auf die Saiten wirkenden Kräften gekoppelt ist. (Siehe: @fr_bild1)
+da dieses über die Rotation der Brücke unmittelbar mit den auf die Saiten wirkenden Kräften gekoppelt ist. (Siehe: @FRQuer)
 
 Die auf eine einzelne Saite $i$ wirkende Kraft ist die Zugkraft am Stimmwirbel, mit der die Saite auf eine definierte Vorspannung gebracht wird.
 Die Tremolofedern sind die Federn die unterhalb des Tremolos angebracht sind.
@@ -223,27 +227,26 @@ Drehmoment explizit berücksichtigt werden muss.
 Für den Stimmvorgang ist maßgeblich, welche physikalischen Größen die Schwingungsfrequenz einer Saite bestimmen.
 Stimmen bedeutet, die Zugkraft einer Saite so einzustellen, dass sie mit einer vorgegebenen Eigenfrequenz schwingt.
 
-Der Zusammenhang zwischen effektiver Saitenlänge $L_S$, Zugkraft $F_(S,i)$,
+Der Zusammenhang zwischen effektiver Saitenlänge $L_(S,i)$, Zugkraft $F_(S,i)$,
 linearer Massendichte $mu_i$ und Frequenz $f_i$ wird durch das Mersennesche Gesetz beschrieben
 @wiki_mersennes_laws:
 
 $
-f_i = 1 / (2 L_S) sqrt(F_(S,i) / mu_i)
-$
+f_i = 1 / (2 L_(S,i)) sqrt(F_(S,i) / mu_i)
+$<eqMersenne>
 
-Die effektive Saitenlänge ist der zwischen Sattel und Steg gespannte Abschnitt der Saite, der schwingt und die Tonhöhe bestimmt. Die Gesamtsaitenlänge ist größer, da zusätzliches Saitenmaterial zur Fixierung und Spannungseinstellung am Stimmwirbel benötigt wird; diese aufgewickelten Abschnitte sind nicht schwingend und beeinflussen weder die Tonerzeugung noch die Grundfrequenz, sondern haben ausschließlich eine mechanische Funktion. 
-Dabei ist zu beachten, dass die effektive Saitenlänge $L_S$ keine konstante Größe ist. Sie hängt von der Auslenkung der Tremolofedern ab, welche wiederum durch die Gesamtkraft aller Saiten bestimmt wird. 
+Die effektive Saitenlänge ist der zwischen Sattel und Steg gespannte Abschnitt der Saite, der schwingt und die Tonhöhe bestimmt. Die Gesamtsaitenlänge ist größer, da zusätzliches Saitenmaterial zur Fixierung und Spannungseinstellung am Stimmwirbel benötigt wird; diese aufgewickelten Abschnitte sind nicht schwingend und beeinflussen weder die Tonerzeugung noch die Grundfrequenz, sondern haben ausschließlich eine mechanische Funktion - siehe @FRMTop.
 
-In einem realen Gitarrensystem wirken sechs Saiten gleichzeitig auf die Brücke.
-Die resultierende Gesamtkraft ergibt sich als Summe der einzelnen Saitenkräfte:
+Dabei ist zu beachten, dass die effektive Saitenlänge $L_(S,i)$ keine konstante Größe ist. Sie hängt von der Auslenkung der Tremolofedern ab, welche wiederum durch die Gesamtkraft aller Saiten bestimmt wird.
+In der Realität hat jede Saite eine eigene Schwingendesaitenlänge, wie in @FRTop zu sehen ist.  
+
+In einem Gitarrensystem wirken sechs Saiten gleichzeitig auf die Brücke. Mechanisch entspricht dies einer Parallelschaltung von Federn, wobei für parallel geschaltete Federn sich sowohl die Kräfte als auch die Federkonstanten addieren. 
+@leifiphysik_kombination_federn:
+
 
 $
 F_S = sum_(i=1)^6 F_(S,i)
 $
-
-Mechanisch entspricht dies einer Parallelschaltung von Federn.
-Für parallel geschaltete Federn addieren sich sowohl die Kräfte als auch die Federkonstanten
-@leifiphysik_kombination_federn:
 
 $
 k_S = sum_(i=1)^6 k_(S,i)
@@ -252,11 +255,10 @@ $
 Dabei bezeichnet $k_(S,i)$ die Federkonstante der $i$-ten Saite. Die innere Kraft der jeweiligen Saite $i$ ergibt sich zu
 
 $
-F_(S,i) = (L_S - L_(0S,i)) dot k_(S,i)
+F_(S,i) = (L_(S,i) - L_(0S,i)) dot k_(S,i)
 $
 
 wobei $L_(0S,i)$ die unbelastete Saitenlänge im Abschnitt zwischen Sattel und Brücke beschreibt.
-Die effektive Länge $L_S$ ist für alle Saiten identisch.
 
 Die Saite wird nun beim Stimmen um eine Strecke $Delta L_i$ aufgewickelt. Die unbelastete Länge der Saite ergibt sich zu
 
@@ -268,7 +270,7 @@ Die gesamte Saitenkraft ergibt sich somit zu:
 
 $
 F_S
-= sum_(i=1)^6 (L_S - L_(0S,i)) dot k_(S,i)
+= sum_(i=1)^6 (L_(S,i) - L_(0S,i)) dot k_(S,i)
 $
 
 Für die Tremolofeder gilt analog:
@@ -286,7 +288,7 @@ formulieren zu
 
 $
 F_S (arrow(Delta L))
-= sum_(i=1)^6 (L_S - L'_(0S,i) + Delta L_i) dot k_(S,i)
+= sum_(i=1)^6 (L_(S,i) - L'_(0S,i) + Delta L_i) dot k_(S,i)
 $
 
 Gesucht ist eine Abbildung $arrow(f)(arrow(Delta L))$
@@ -294,8 +296,8 @@ die den Vektor der Aufwickelstrecken $arrow(Delta L)$
 auf den Vektor der Eigenfrequenzen $ vec(f_1, f_2, dots.v, f_6) $
 abbildet.
 
-Die zentrale zu bestimmende Größe ist hierbei $L_S$.
-Zu diesem Zweck wird zunächst die Brücke modelliert, da diese $L_S$ direkt beeinflusst.
+Die zentrale zu bestimmende Größe ist hierbei $L_(S,i)$.
+Zu diesem Zweck wird zunächst die Brücke modelliert, da diese $L_(S,i)$ direkt beeinflusst.
 
 Die Brücke wird als starrer, gewinkelter Hebel betrachtet.
 Die Drehachse liege im Koordinatenursprung.
@@ -319,7 +321,7 @@ Sei $arrow(P_S)$ die Position des Sattels.
 Die effektive Saitenlänge ergibt sich zu
 
 $
-L_S (beta) = abs(arrow(h_S)(beta) - arrow(P_S))
+L_(S,i) (beta) = abs(arrow(h_S)(beta) - arrow(P_S))
 $
 
 wobei $arrow(P_S)$ konstant ist.
@@ -544,7 +546,7 @@ Damit liegt ein eindimensionales nichtlineares Optimierungs- bzw. Nullstellenpro
 
 Aus dem so berechneten Winkel ergeben sich transitiv die abhängigen Größen
 $
-h_F (beta); h_S (beta); L_S (beta)
+h_F (beta); h_S (beta); L_(S,i) (beta)
 $
 und daraus schließlich die Saitenkraft
 $
@@ -578,19 +580,19 @@ wobei $d_i (arrow(Delta L))$ der Längenanteil ist, um den sich die Saite elasti
 Die Länge der schwingenden Saite lässt sich daher schreiben als:
 
 $
-L_S (arrow(Delta L)) = L'_"0S,i" - Delta h(arrow(Delta L))
+L_(S,i) (arrow(Delta L)) = L'_"0S,i" - Delta h(arrow(Delta L))
 $
 
 Setzt man den Ausdruck für $Delta h$ ein, ergibt sich im allgemeinen Fall:
 
 $
-L_S (arrow(Delta L)) = L'_"0S,i" - Delta L_i + d_i (arrow(Delta L))
+L_(S,i) (arrow(Delta L)) = L'_"0S,i" - Delta L_i + d_i (arrow(Delta L))
 $
 
 Daraus folgt für die Verlängerung der Saite:
 
 $
-d_i (arrow(Delta L)) = L_S (arrow(Delta L)) - L'_"0S,i" + Delta L_i
+d_i (arrow(Delta L)) = L_(S,i) (arrow(Delta L)) - L'_"0S,i" + Delta L_i
 $
 
 
@@ -599,7 +601,7 @@ $
 L_"S,i,Total" (arrow(Delta L)) = L'_"0S,i" + L'_"0M,i" + d_i (arrow(Delta L))
 $
 $
-L_"S,i,Total" (arrow(Delta L)) = L_S (arrow(Delta L))+ L'_"0M,i" + Delta L_i
+L_"S,i,Total" (arrow(Delta L)) = L_(S,i) (arrow(Delta L))+ L'_"0M,i" + Delta L_i
 $
 
 wobei $L'_"0M,i"$ die initiale Strecke der Saite hinter dem Sattel beschreibt ($Delta L_i = 0)$. 
@@ -607,14 +609,14 @@ wobei $L'_"0M,i"$ die initiale Strecke der Saite hinter dem Sattel beschreibt ($
 Die lineare Massendichte ergibt sich somit zu:
 
 $
-mu_i (arrow(Delta L)) = m_i/(L_S (arrow(Delta L)) + L'_"0M,i" + Delta L_i)
+mu_i (arrow(Delta L)) = m_i/(L_(S,i) (arrow(Delta L)) + L'_"0M,i" + Delta L_i)
 $
 
 Darauf aufbauend lässt sich eine Abbildung definieren, die die Aufwickelstrecke jeder Saite auf einen Frequenzvektor abbildet:
 
 $
 f_i (arrow(Delta L)) =
-1 / (2 dot L_S (arrow(Delta L)))
+1 / (2 dot L_(S,i) (arrow(Delta L)))
 sqrt((F_"S,i" (arrow(Delta L)) )/ (mu_i (arrow(Delta L))))
 $
 
@@ -623,16 +625,16 @@ Setzt man die Definitionen für $F_"S,i" (arrow(Delta L))$und $mu_i (arrow(Delta
 
 $
 f_i (arrow(Delta L)) =
-1 / (2 dot L_S (arrow(Delta L)))
-sqrt(((L_S (arrow(Delta L))- L'_(0S,i) + Delta L_i) dot k_(S,i))/ (
-m_i/(L_S (arrow(Delta L)) + L'_"0M,i" + Delta L_i)
+1 / (2 dot L_(S,i) (arrow(Delta L)))
+sqrt(((L_(S,i) (arrow(Delta L))- L'_(0S,i) + Delta L_i) dot k_(S,i))/ (
+m_i/(L_(S,i) (arrow(Delta L)) + L'_"0M,i" + Delta L_i)
 ))
 $
 Nach Vereinfachen:
 $
 f_i (arrow(Delta L)) =
-1 / (2 dot L_S (arrow(Delta L)))
-sqrt(((L_S (arrow(Delta L))- L'_(0S,i) + Delta L_i) dot k_(S,i) dot (L_S (arrow(Delta L)) + L'_"0M,i" + Delta L_i))/ 
+1 / (2 dot L_(S,i) (arrow(Delta L)))
+sqrt(((L_(S,i) (arrow(Delta L))- L'_(0S,i) + Delta L_i) dot k_(S,i) dot (L_(S,i) (arrow(Delta L)) + L'_"0M,i" + Delta L_i))/ 
 m_i
 )
 $
