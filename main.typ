@@ -240,57 +240,35 @@ Die effektive Saitenlänge ist der zwischen Sattel und Steg gespannte Abschnitt 
 Dabei ist zu beachten, dass die effektive Saitenlänge $L_(S,i)$ keine konstante Größe ist. Sie hängt von der Auslenkung der Tremolofedern ab, welche wiederum durch die Gesamtkraft aller Saiten bestimmt wird.
 In der Realität hat jede Saite eine eigene Schwingendesaitenlänge, wie in @FRTop zu sehen ist.  
 
-In einem Gitarrensystem wirken sechs Saiten gleichzeitig auf die Brücke. Mechanisch entspricht dies einer Parallelschaltung von Federn, wobei für parallel geschaltete Federn sich sowohl die Kräfte als auch die Federkonstanten addieren. 
-@leifiphysik_kombination_federn:
+In einem Gitarrensystem wirken sechs Saiten gleichzeitig auf die Brücke. Mechanisch entspricht dies einer Parallelschaltung von Federn, wobei für parallel geschaltete Federn sich sowohl die Kräfte als auch die Federkonstanten addieren 
+@leifiphysik_kombination_federn. Die Summe der Kräfte ist die auf die Brücke wirkende Gesamtkraft $F_B$:
 
 
 $
-F_S = sum_(i=1)^6 F_(S,i)
-$
+F_B = sum_(i=1)^6 F_(S,i) = sum_(i=1)^6(L_(S,i) - L_(0S,i)) dot k_(S,i)
+$<eqBrückenkraft>
 
-$
-k_S = sum_(i=1)^6 k_(S,i)
-$
 
-Dabei bezeichnet $k_(S,i)$ die Federkonstante der $i$-ten Saite. Die innere Kraft der jeweiligen Saite $i$ ergibt sich zu
-
-$
-F_(S,i) = (L_(S,i) - L_(0S,i)) dot k_(S,i)
-$
 
 wobei $L_(0S,i)$ die unbelastete Saitenlänge im Abschnitt zwischen Sattel und Brücke beschreibt.
 
-Die Saite wird nun beim Stimmen um eine Strecke $Delta L_i$ aufgewickelt. Die unbelastete Länge der Saite ergibt sich zu
 
-$ L_(0S,i) = L'_(0S,i) - Delta L_i $
-
-Dabei bezeichnet $L'_(0S,i)$ die initiale unbelastete Länge der $i$-ten Saite.
-$Delta L_i$ ist die einzige direkt steuerbare Variable beim Stimmen.
-Die gesamte Saitenkraft ergibt sich somit zu:
+Für die Tremolofedern gilt analog:
 
 $
-F_S
-= sum_(i=1)^6 (L_(S,i) - L_(0S,i)) dot k_(S,i)
-$
+F_F = (L_F - L_(0F)) dot k_F
+$<eqTremolofederkraft>
 
-Für die Tremolofeder gilt analog:
-
-$
-F_F = (L_F - L_(0F)) k_F
-$
-
-Sei
-$ arrow(Delta L) = vec(Delta L_1, dots.v, Delta L_i, dots.v, Delta L_6) $
-der Vektor, der für jede Saite die jeweilige Aufwickelstrecke beschreibt.
+Die Saite wird beim Stimmen um eine Strecke $Delta L_i$ aufgewickelt, was die unbelastete Saitenlänge beeinflusst und welche die einzige direkt steuerbare Variable beim Stimmen ist.  Sei $ arrow(Delta L) = vec(Delta L_1, dots.v, Delta L_i, dots.v, Delta L_6) $ der Vektor, der für jede Saite die jeweilige Aufwickelstrecke beschreibt.
 
 Unter dieser Definition lässt sich die resultierende Saitenkraft als Funktion von $arrow(Delta L)$
 formulieren zu
 
 $
-F_S (arrow(Delta L))
+F_B (arrow(Delta L))
 = sum_(i=1)^6 (L_(S,i) - L'_(0S,i) + Delta L_i) dot k_(S,i)
 $
-
+// TODO: weiter machen
 Gesucht ist eine Abbildung $arrow(f)(arrow(Delta L))$
 die den Vektor der Aufwickelstrecken $arrow(Delta L)$
 auf den Vektor der Eigenfrequenzen $ vec(f_1, f_2, dots.v, f_6) $
@@ -349,19 +327,19 @@ abs(F_(S,"Effective")) dot h_S = abs(F_(F,"Effective")) dot h_F
 $
 
 Dabei bezeichnen $F_(S,"Effective")$ und $F_(F,"Effective")$ jeweils die Anteile der Kräfte
-$arrow(F_S)$ und $arrow(F_F)$, die orthogonal zu den Hebelarmen $arrow(h_S)$ und $arrow(h_F)$ wirken.
+$arrow(F_B)$ und $arrow(F_F)$, die orthogonal zu den Hebelarmen $arrow(h_S)$ und $arrow(h_F)$ wirken.
 
 Der normierte Richtungsvektor der Saitenkraft ist gegeben durch
 
 $
-arrow(e)_(F_S)
+arrow(e)_(F_B)
 = (arrow(P_S) - arrow(h_S)) / abs(arrow(P_S) - arrow(h_S))
 $
 
 Der Kraftvektor lautet damit:
 
 $
-arrow(F_S) = F_S dot arrow(e)_(F_S)
+arrow(F_B) = F_B dot arrow(e)_(F_B)
 $
 
 Der normierte Richtungsvektor des Hebelarms ergibt sich aus:
@@ -387,11 +365,11 @@ $
 
 
 Da $arrow(e)_(h_S)$ normiert ist, gilt $abs(arrow(e)_(h_S))^2 = 1$.
-Setzt man $arrow(a) = arrow(F_S)$ und $arrow(b) = arrow(e)_(h_S)$, so folgt:
+Setzt man $arrow(a) = arrow(F_B)$ und $arrow(b) = arrow(e)_(h_S)$, so folgt:
 
 $
-arrow(F_S)_(bot arrow(e)_(h_S)) =
-arrow(F_S) - (arrow(F_S) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
+arrow(F_B)_(bot arrow(e)_(h_S)) =
+arrow(F_B) - (arrow(F_B) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
 $
 
 Da im Drehmomentgleichgewicht lediglich der Betrag der orthogonalen Kraft relevant ist,
@@ -400,61 +378,61 @@ betrachten wir den Betrag dieses Vektors:
 $
 F_(S bot arrow(h_S)) =
 abs(
-arrow(F_S) - (arrow(F_S) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
+arrow(F_B) - (arrow(F_B) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
 )
 $
 
-Einsetzen von $arrow(F_S) = F_S dot arrow(e)_(F_S)$ ergibt:
+Einsetzen von $arrow(F_B) = F_B dot arrow(e)_(F_B)$ ergibt:
 
 $
 F_(S bot arrow(h_S)) =
 abs(
-F_S dot arrow(e)_(F_S)
-- (F_S dot arrow(e)_(F_S) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
+F_B dot arrow(e)_(F_B)
+- (F_B dot arrow(e)_(F_B) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
 )
 $
 
-Faktorisiert nach $F_S$:
+Faktorisiert nach $F_B$:
 
 $
 F_(S bot arrow(h_S)) =
-F_S dot
+F_B dot
 abs(
-arrow(e)_(F_S)
-- (arrow(e)_(F_S) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
+arrow(e)_(F_B)
+- (arrow(e)_(F_B) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
 )
 $
 
 Der Ausdruck in den Betragsstrichen beschreibt den Betrag der orthogonalen Komponente
-des normierten Richtungsvektors $arrow(e)_(F_S)$ bezüglich des normierten Hebelarmvektors
+des normierten Richtungsvektors $arrow(e)_(F_B)$ bezüglich des normierten Hebelarmvektors
 $arrow(e)_(h_S)$.
 
 Die orthogonale Komponente ergibt sich aus der Vektorzerlegung in einen parallelen und
 einen orthogonalen Anteil:
 
 $
-abs(arrow(e)_(F_S bot arrow(e)_(h_S))) =
+abs(arrow(e)_(F_B bot arrow(e)_(h_S))) =
 abs(
-arrow(e)_(F_S)
-- (arrow(e)_(F_S) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
+arrow(e)_(F_B)
+- (arrow(e)_(F_B) dot arrow(e)_(h_S)) dot arrow(e)_(h_S)
 )
 $
 
-Da $arrow(e)_(F_S)$ und $arrow(e)_(h_S)$ normiert sind, kann auf den Satz des Pythagoras
+Da $arrow(e)_(F_B)$ und $arrow(e)_(h_S)$ normiert sind, kann auf den Satz des Pythagoras
 zurückgegriffen werden. Für den Betrag der orthogonalen Komponente gilt damit:
 
 $
-abs(arrow(e)_(F_S bot arrow(e)_(h_S)))^2 =
-abs(arrow(e)_(F_S))^2
-- abs((arrow(e)_(F_S) dot arrow(e)_(h_S)) dot arrow(e)_(h_S))^2
+abs(arrow(e)_(F_B bot arrow(e)_(h_S)))^2 =
+abs(arrow(e)_(F_B))^2
+- abs((arrow(e)_(F_B) dot arrow(e)_(h_S)) dot arrow(e)_(h_S))^2
 $
 
-Wegen $abs(arrow(e)_(F_S)) = 1$ folgt unmittelbar:
+Wegen $abs(arrow(e)_(F_B)) = 1$ folgt unmittelbar:
 
 $
-abs(arrow(e)_(F_S bot arrow(e)_(h_S)))^2 =
+abs(arrow(e)_(F_B bot arrow(e)_(h_S)))^2 =
 1
-- abs((arrow(e)_(F_S) dot arrow(e)_(h_S)) dot arrow(e)_(h_S))^2
+- abs((arrow(e)_(F_B) dot arrow(e)_(h_S)) dot arrow(e)_(h_S))^2
 $
 
 Unter Verwendung der Definition des Skalarprodukts
@@ -467,12 +445,12 @@ $
 ergibt sich:
 
 $
-abs(arrow(e)_(F_S bot arrow(e)_(h_S)))^2 =
+abs(arrow(e)_(F_B bot arrow(e)_(h_S)))^2 =
 1
 - abs(
-abs(arrow(e)_(F_S))
+abs(arrow(e)_(F_B))
 abs(arrow(e)_(h_S))
-cos(angle.arc(arrow(e)_(F_S), arrow(e)_(h_S)))
+cos(angle.arc(arrow(e)_(F_B), arrow(e)_(h_S)))
 dot arrow(e)_(h_S)
 )^2
 $
@@ -480,30 +458,30 @@ $
 Da beide Richtungsvektoren normiert sind, vereinfacht sich der Ausdruck zu:
 
 $
-abs(arrow(e)_(F_S bot arrow(e)_(h_S)))^2 =
+abs(arrow(e)_(F_B bot arrow(e)_(h_S)))^2 =
 1
-- cos^2(angle.arc(arrow(e)_(F_S), arrow(e)_(h_S)))
+- cos^2(angle.arc(arrow(e)_(F_B), arrow(e)_(h_S)))
 $
 
 Mit der trigonometrischen Identität $1 = sin^2(x) + cos^2(x)$ folgt schließlich:
 
 $
-abs(arrow(e)_(F_S bot arrow(e)_(h_S))) =
-abs(sin(angle.arc(arrow(e)_(F_S), arrow(e)_(h_S))))
+abs(arrow(e)_(F_B bot arrow(e)_(h_S))) =
+abs(sin(angle.arc(arrow(e)_(F_B), arrow(e)_(h_S))))
 $
 
 Setzt man dieses Ergebnis in die Definition des wirksamen Kraftanteils ein, erhält man:
 
 $
 F_(S bot arrow(h_S)) =
-F_S dot abs(sin(angle.arc(arrow(e)_(F_S), arrow(e)_(h_S))))
+F_B dot abs(sin(angle.arc(arrow(e)_(F_B), arrow(e)_(h_S))))
 $
 
 Der Winkel zwischen den beiden Richtungsvektoren lässt sich über das Skalarprodukt ausdrücken:
 
 $
-angle.arc(arrow(e)_(F_S), arrow(e)_(h_S)) =
-arccos(arrow(e)_(F_S) dot arrow(e)_(h_S))
+angle.arc(arrow(e)_(F_B), arrow(e)_(h_S)) =
+arccos(arrow(e)_(F_B) dot arrow(e)_(h_S))
 $
 
 Alternativ kann der Ausdruck rein algebraisch formuliert werden.
@@ -513,7 +491,7 @@ Da $arrow(e)_(h_S)$ normiert ist, folgt:
 
 $
 F_(S bot arrow(h_S))
-= F_S dot sqrt(1 - (arrow(e)_(F_S) dot arrow(e)_(h_S))^2)
+= F_B dot sqrt(1 - (arrow(e)_(F_B) dot arrow(e)_(h_S))^2)
 $
 
 Analog ergibt sich für die Tremolofeder:
@@ -528,7 +506,7 @@ Diese Terme gehen in das Drehmomentgleichgewicht ein:
 $
 h_F dot F_F dot sqrt(1 - (arrow(e)_(F_F) dot arrow(e)_(h_F))^2)
 =
-h_S dot F_S dot sqrt(1 - (arrow(e)_(F_S) dot arrow(e)_(h_S))^2)
+h_S dot F_B dot sqrt(1 - (arrow(e)_(F_B) dot arrow(e)_(h_S))^2)
 $
 
 Diese Gleichung ist im Allgemeinen nichtlinear und bestimmt den Rotationswinkel $beta$ der Brücke.
@@ -539,7 +517,7 @@ $
 0 = g(beta) =
 h_F dot F_F dot sqrt(1 - (arrow(e)_(F_F)(beta) dot arrow(e)_(h_F)(beta))^2)
 -
-h_S dot F_S dot sqrt(1 - (arrow(e)_(F_S)(beta) dot arrow(e)_(h_S)(beta))^2)
+h_S dot F_B dot sqrt(1 - (arrow(e)_(F_B)(beta) dot arrow(e)_(h_S)(beta))^2)
 $
 
 Damit liegt ein eindimensionales nichtlineares Optimierungs- bzw. Nullstellenproblem vor, mit dem sich der Rotationswinkel $beta$ numerisch bestimmen lässt.
@@ -550,7 +528,7 @@ h_F (beta); h_S (beta); L_(S,i) (beta)
 $
 und daraus schließlich die Saitenkraft
 $
-F_S (arrow(Delta L)).
+F_B (arrow(Delta L)).
 $
 
 
