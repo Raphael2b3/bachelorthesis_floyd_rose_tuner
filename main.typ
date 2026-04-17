@@ -384,88 +384,8 @@ Diese Linearität soll nun experimentell überprüft werden. Hierbei werden die 
 Zunächst wird jede Saite in eine Ausgangsposition gebracht. Die Ausgangsfrequenzen der Saiten werden zunächst in Hertz gemessen.
 Anschließend wird jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) verstimmt. Dieses $Delta$ wird so gewählt, dass die Verstimmung deutlich hörbar ist. Jede Saite wird in vier Schritten nach oben und unten verstimmt. Für jeden Schritt wird die Frequenz aller anderen Saiten gemessen.
 
-=== Ziel
+Das Experiment mit Dokumentation und verwendeten Daten ist in Quelle @Schuetz2026FloydRose verlinkt.
 
-Das Ziel des Experiments ist es zu beobachten, ob das System
-- hinreichend linear ist
-- elastisch ist.
-
-Elastizität bedeutet hier, dass die Frequenz einer Saite wieder in ihren Ausgangszustand zurückkehrt, sobald die Saite selbst wieder in die Ausgangslage gebracht wird. Um dies zu überprüfen, werden nach allen Verstimmungsschritten die Endfrequenzen mit den Anfangswerten verglichen.
-
-Zur Frequenzmessung wird ein Python-Programm eingesetzt, das mithilfe der Fourier-Transformation die Grundfrequenzen bestimmt. Die Visualisierung erfolgt ebenfalls mit Python und der Bibliothek matplotlib.pyplot.
-
-Insgesamt werden 324 gelabelte Audio-Samples aufgenommen:
-
-- Es gibt 6 Saiten,
-- jede Saite beeinflusst alle 6 Saiten,
-- jede Saite wird dabei in 4 Schritten nach oben und 4 Schritte nach unten verstimmt,
-- hinzu kommt noch die Ausgangsposition.
-Damit ergibt sich die Anzahl der Messungen zu
-$324 = 6 dot 6 dot (4 dot 2+1)$.
-
-=== Frequenzmessung
-
-Die Audio-Samples werden mit Hilfe der Fourier Transformation in den Frequenzbereich transformiert. Die Frequenz mit der höchsten Amplitude wird als die Frequenz der Saite angenommen.
-Der Python Code um von einer Audio-Datei die Frequenz zu erhalten ist im folgenden definiert:
-
-```py
-import numpy as np
-from scipy.fftpack import rfft
-from scipy.io import wavfile
-from scipy.signal import find_peaks
-import matplotlib.pyplot as plt
-from ipywidgets import HBox, VBox, interactive, Layout, Checkbox, fixed
-import random
-from sklearn.linear_model import LinearRegression
-
-def get_samples(filepath):
-    fs, data = wavfile.read(filepath)  # Load the data
-    if len(data.shape) > 1:  # Stereo → Mono
-        data = data.mean(axis=1)
-    return data, fs
-
-def get_peak_frequency(spectrum, samplerate, min_prominence=1000):
-    # Betragsspektrum
-    magnitude = np.abs(spectrum)
-    # Peaks finden (optional: Mindestprominenz gegen Rauschen)
-    peaks, _ = find_peaks(magnitude, prominence=min_prominence)
-    if len(peaks) == 0:
-        return None  # Falls keine Peaks erkannt werden
-    # Index des höchsten Peaks
-    peak_idx = peaks[np.argmax(magnitude[peaks])]
-    # Frequenz berechnen
-    frequency = peak_idx * (samplerate / (2 * len(spectrum)))
-    return frequency
-
-def get_frequency_from_file(filepath, min_prominence=1000):
-    samples, samplerate = get_samples(filepath)
-    spectrum = rfft(samples)
-    return get_peak_frequency(spectrum, samplerate, min_prominence=min_prominence)
-```
-
-=== Visualisierung der Messdaten
-
-Die Visualisierung zeigt die Frequenz der Saiten in Abhängigkeit von der Verstimmung. Zum Visualisieren wird Matplotlib und IPyWidgets verwendet.
-Die Daten zum Visualisieren werden wie folgt strukturiert:
-
-```json
-data = {
-    'E2': {                              // The first key represents the String that is detuned
-        'E2': [200Hz,220Hz,...,330Hz],                          // The second key represents the string on which the impact is measured
-                                         // The Value is a List of the length 8. on Index 0 is the measurement where the detuned string was tuned the lowest.
-        'D3': [340Hz,330Hz,...,300Hz]),
-        ...,
-        'E4': [...])
-    },
-    ...
-    'E4': {
-        'E2': [...]),
-        'A2': [...]),
-        ...,
-        'E4': [...])
-    }
-}
-```
 Die Namen der Saiten sind wie folgt definiert:
 1. E2
 2. A2
@@ -474,229 +394,97 @@ Die Namen der Saiten sind wie folgt definiert:
 5. B3
 6. E4
 
-Das folgende Programm ermöglicht es uns die Daten zu visualisieren. Es gibt 6 Abbildungen mit jewails 6 Plots. Jede Abbildung zeigt wie sich alle Saiten verstimmen, wenn sich eine andere Saite verändert. Pro Abbildung wird eine Checkbox für jede Saite erstellt, die es uns ermöglicht, die Daten für jede Saite einzeln anzuzeigen. Da interessant ist, ob die Verstimmung logarithmisch ist, wird die Änderung der Frequenz in Cent und in Hz dargestellt.
-
-Im Folgenden werden erstmal zufällige Messdaten zum testen der Visualisierung generiert:
-
-```python
-nStrings = 6
-steps = 4
-step_range = range(-steps, steps + 1)
-strings = ["E2", "A2", "D3", "G3", "B3", "E4"]
-# Verstimmung jeder anderen seite für jede Saite für alle Verstimmungsschritte
-example_dataset = {  # Dummy Data
-    string: {other_string: np.array([400 + (-_ * random.random() if other_string != string else _) for _ in step_range])
-             for other_string in strings}
-    for string in strings
-}
-
-def visualisation(df, string, label, **args):
-    for other_string in strings:
-        if other_string in args.keys() and args[other_string]:
-            ## Lineare Regression
-            x = df[string][string]
-            y = df[string][other_string]
-            #m,b = np.polyfit(x, y, 1)
-            #plt.plot(x, m*x+b, label=f"Linear Fit {m}x+{b} {other_string}")
-            plt.plot(df[string][string], df[string][other_string], label=other_string)
-    plt.title("Impact on String when detuning String " + string)
-    plt.xlabel(f"Detuning of String {string} in {label}")
-    plt.ylabel(f"Frequency of other Strings in {label}")
-     # Koordinatengitter hinzufügen
-    plt.grid(True)
-    plt.legend()
-
-def visualize_all(data, label): # Adds Checkboxes for every Sample
-    widget_list = []
-    for string in strings:
-        checkboxes = {string: Checkbox(value=True, label=string, indent=False) for string in strings}
-        widget = interactive(visualisation, df=fixed(data), string=fixed(string), label=fixed(label), **checkboxes)
-        controls = HBox(widget.children[:-1])  # Horizontale Box für die Checkboxes
-        output = widget.children[-1]
-        w = VBox([controls, output], layout=Layout(margin="10px"))
-        widget_list.append(w)
-    row1 = HBox(widget_list[:3])
-    row2 = HBox(widget_list[3:])
-    output = VBox([row1, row2])
-    display(output)
-```
-
-=== Durchführung
-```
-Die Audio-Dateien sind im Ordner `audio` zu finden.
-Die Ordnerstruktur ist wie folgt:
-
-
-    audio/<variable_saite>/<beeinflusste_saite>/<verstimmungsschritt>.wav
-
-    audio
-    ├── E2 # Ändernde Saite
-      ├── E2 # Beinflusste Saite
-        ├─── -4.wav
-        ├─── ...
-        ├─── 4.wav
-      ├─── ...
-      ├─── E4
-    ├── ...
-    ├── E4
-
-```
-=== Setup
-Die Gitarre wird per Klinkenkabel an eine Audio-Interface-Karte angeschlossen und mit einer Abtastrate von 44,1 kHz aufgenommen. Die Abbildung zeigt die Positionierung der Gitarre, die so gewählt wurde, dass sich der Hals nicht verzieht und dadurch den Ton beeinflusst. Die Gitarre wird am Stimmwirbel verstimmt, nicht am Feinstimmer an der Brücke.
-
-
-#figure(image("assets/setup.jpg"), caption: [Setup der Aufnahme])<figSetup>
-
-Die Aufnahmen erfolgen mit der Digital Audio Workstation (DAW) Cubase. Dabei wird in Mono, mit 16 Bit und 44,1 kHz aufgenommen. Zusätzlich wird das in Cubase integrierte Stimmgerät genutzt, um die Frequenz jeder Saite vor jedem Durchgang erneut exakt in die Ausgangsposition zu bringen.
-
-
-#figure(
-  image("assets/digital_setup.png"),
-  caption: [Screenshot von Cubase mit Stimmgerät und integriertem Frequenzmessgerät],
-)<figCubase>
-
-Jeder Aufnahmeblock enthält die Roh-Audiodaten aller Saiten der Gitarre (E2, A2, D3, G3, B3 und E4). Die Saiten werden in dieser Reihenfolge gespielt. Die Färbung der Blöcke in der DAW visualisiert die Stärke und Richtung der Verstimmung:
-
-- Rottöne → Verstimmung zu tieferen Frequenzen,
-- Blautöne → Verstimmung zu höheren Frequenzen.
-
-Jede Zeile in der Aufnahme entspricht einer Saite und einer Verstimmungsrichtung. Von oben nach unten ergibt sich die Reihenfolge:
-E2 nach oben, E2 nach unten, A2 nach oben, A2 nach unten, …, E4 nach oben, E4 nach unten.
-
-Im Anschluss werden die einzelnen Audioblöcke so zugeschnitten, dass Transienten und das Ausklingen der Saite entfernt werden. Transienten sind kurze, perkussive Geräusche mit hohem Pegel, die beim Anschlag entstehen und die Frequenzanalyse verfälschen würden.
-
-
-#figure(
-  image("assets/cutted_audio.png"),
-  caption: [Screenshot von Cubase mit zugeschnittenen Samples],
-)<figCuttedAudio>
-
-Jeder zugeschnittene Block wird einzeln exportiert und in den entsprechenden Ordner der oben beschriebenen Struktur verschoben.
-
-=== Clean Up
-Da von dem oben geschriebenen Python-Programm in manchen Aufnahmen die Obertöne der Saite fälschlicherweise als Ton erkannt wurden, werden die Samples noch einmal gefiltert.
-Die folgende Abbildung zeigt eine Konsolenausgabe von dem Problem.
-
-#figure(
-  image("assets/need_to_clean_data.png"),
-  caption: [Screenshot der Zeigt das Obertöne erkannt werden statt Grundfrequenzen],
-)<figNeedToCleanData>
-Der Screenshot zeigt, dass nicht die Grundfrequenz als solche erkannt wird, sondern teilweise Obertöne als Grundfrequenz erkannt werden. \
-
-Die automatische Auswahl des Peaks anhand einer erwarteten Frequenz ist problematisch, da die Grundfrequenz einer Saite variieren kann (z.B. durch Verstimmen oder unterschiedliche Gitarrenstimmungen). Wird die Saite stark von einem Referenzwert abweichen, besteht die Gefahr, dass der falsche Peak erkannt wird. Eine explizite Übergabe der erwarteten Frequenz für jedes Sample wäre möglich, jedoch aufwendig und nicht praktikabel für die allgemeine Analyse. Deshalb wird für jede Saite ein Bandpassfilter erstellt, der die Obertöne reduziert.
-
-Die folgenden Abbildungen dienten ursprünglich lediglich der Veranschaulichung der Filter und nicht der Spektren des Klanges; ein eventuelles Fehlen der Spektren beeinträchtigt daher die Aussagekraft der Darstellung nicht.
-
-=== Bandpassfilter
+=== Ergebnisse
+==== Absolute Visualisierung der Frequenzänderungen
 #grid(
   columns: 2,
-  inset: 6pt,
-
   grid.cell([
     #figure(
-      image("assets/bandpass_e2.png"),
-      caption: [Bandpass für E2],
-    )<figBandpassE2>
+      image("assets/plot_E2_Hz.png"),
+      caption: [Einluss der E2 Saite auf die anderen Saiten],
+    ) <absoluteE2>
   ]),
   grid.cell([
     #figure(
-      image("assets/bandpass_a2.png"),
-      caption: [Bandpass für A2],
-    )<figBandpassA2>
-  ]),
-
-  grid.cell([
-    #figure(
-      image("assets/bandpass_d3.png"),
-      caption: [Bandpass für D3],
-    )<figBandpassD3>
+      image("assets/plot_A2_Hz.png"),
+      caption: [Einluss der A2 Saite auf die anderen Saiten],
+    ) <absoluteA2>
   ]),
   grid.cell([
     #figure(
-      image("assets/bandpass_g3.png"),
-      caption: [Bandpass für G3],
-    )<figBandpassG3>
-  ]),
-
-  grid.cell([
-    #figure(
-      image("assets/bandpass_b3.png"),
-      caption: [Bandpass für B3],
-    )<figBandpassB3>
+      image("assets/plot_D3_Hz.png"),
+      caption: [Einluss der D3 Saite auf die anderen Saiten],
+    ) <absoluteD3>
   ]),
   grid.cell([
     #figure(
-      image("assets/bandpass_e4.png"),
-      caption: [Bandpass für E4],
-    )<figBandpassE4>
+      image("assets/plot_G3_Hz.png"),
+      caption: [Einluss der G3 Saite auf die anderen Saiten],
+    ) <absoluteG3>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/plot_B3_Hz.png"),
+      caption: [Einluss der B3 Saite auf die anderen Saiten],
+    ) <absoluteB3>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/plot_E4_Hz.png"),
+      caption: [Einluss der E4 Saite auf die anderen Saiten],
+    ) <absoluteE4>
   ]),
 )
-=== Laden der Daten
-Im folgenden Script werden die gesamten Audio-Samples geladen, um sie zu verarbeiten und zu visualisieren. Es wird das oben spezifizierte Datenformat zum Speichern der Daten genutzt.
 
-- Dimensionen:
-  - 0: `changing_string`
-  - 1: `impacted string`
-  - 2: Verstimmungsschritt
-- Eintrag = `frequency`.
-
-```python
-# Experiment
-measured_data = {}
-filenames = [f"{i}.wav" for i in step_range]
-counter = 0
-for changing_string in strings:
-    for impacted_string in strings:
-        #f0 = get_frequency_from_file(f"audio/{changing_string}/{impacted_string}/0.wav")
-
-        for filename in filenames:
-            frequency = get_frequency_from_file(f"audio/{changing_string}/{impacted_string}/{filename}")
-
-            print(
-                f"Saite: {changing_string}, Beeinflusste Saite: {impacted_string}, Verstimmungsschritt: {filename}, Frequenz: {frequency}")
-            counter+=1
-            if changing_string not in measured_data:
-                measured_data[changing_string] = {}
-
-            if impacted_string not in measured_data[changing_string]:
-                measured_data[changing_string][impacted_string] = []
-
-            measured_data[changing_string][impacted_string].append(frequency)
-counter
-```
-
-=== Aggregierung der Daten
-Gemessen wurden die tatsächlichen Frequenzen jeder Saite und wie sie sich in Abhängigkeit der Veränderung jeder anderen Saite ändern. Für unsere Analyse interessiert uns jedoch vor allem das Maß dieser Änderung. Daher werden alle Messwerte mit ihren jeweiligen Ausgangswerten verglichen - sowohl in Cent als auch in Hertz - um die Frequenzänderungen anschaulich darzustellen.
-
-```python
-
-hz_changes = {  # Dummy Data
-    string: {other_string: np.array([float(0) for _ in step_range]) for other_string in strings}
-    for string in strings
-}
-cent_changes = hz_changes.copy()
-
-for changing_string in strings:
-    for impacted_string in strings:
-        inital_value = measured_data[changing_string][impacted_string][steps]
-        for i in range(steps * 2 + 1):  # -4 bis 4
-            cent_changes[changing_string][impacted_string][i] = frequency_difference_to_cent(
-                measured_data[changing_string][impacted_string][i], inital_value)
-            hz_changes[changing_string][impacted_string][i] = measured_data[changing_string][impacted_string][i] - inital_value
-
-```
-
-=== Visualiserung der Daten
+==== Relative Visualisierung der Frequenzänderungen
+#grid(
+  columns: 2,
+  grid.cell([
+    #figure(
+      image("assets/plot_E2_relative Hz.png"),
+      caption: [Relativer Einluss der E2 Saite auf die anderen Saiten],
+    ) <relativeE2>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/plot_A2_relative Hz.png"),
+      caption: [Relativer Einluss der A2 Saite auf die anderen Saiten],
+    ) <relativeA2>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/plot_D3_relative Hz.png"),
+      caption: [Relativer Einluss der D3 Saite auf die anderen Saiten],
+    ) <relativeD3>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/plot_G3_relative Hz.png"),
+      caption: [Relativer Einluss der G3 Saite auf die anderen Saiten],
+    ) <relativeG3>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/plot_B3_relative Hz.png"),
+      caption: [Relativer Einluss der B3 Saite auf die anderen Saiten],
+    ) <relativeB3>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/plot_E4_relative Hz.png"),
+      caption: [Relativer Einluss der E4 Saite auf die anderen Saiten],
+    ) <relativeE4>
+  ]),
+)
+Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.
 
 === Diskussion der Ergebnisse
-Das System ist *elastisch*, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind. Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.
+Das System ist elastisch, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind.
 
 Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem *Korrelationskoeffizienten nach Bravais-Pearson* zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen. Eine hohe Korrelation bestätigt, dass die Annahme einer linearen Beziehung für kleine Änderungen gerechtfertigt ist.
 
-Die Linearität ist wichtig, da sie die Grundlage für die Modellierung als *lineares Gleichungssystem* bildet. Nur dadurch können die Effekte der Verstimmung jeder Saite auf alle anderen Saiten mit einer *Matrix* erfasst und mathematisch gelöst werden.
-
 == Mathematische Lösung
-Die Frequenzen der Saiten können als *Vektor* dargestellt werden:
+Die Frequenzen der Saiten können als Vektor dargestellt werden:
 
 $
   arrow(f_0) = vec(f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4")
@@ -714,7 +502,7 @@ $
 $
 
 - $arrow(f_0)$: Ausgangsfrequenzen der Saiten, gemessen z.B. mit einem digitalen Stimmgerät
-- $C$: Verstimmungsmatrix, wobei $c_"ij"$ den *Verstimmungsfaktor* der Saite $i$ angibt, wenn die Saite $j$ um 1Hz verstimmt wird
+- $C$: Verstimmungsmatrix, wobei $c_"ij"$ den Verstimmungsfaktor der Saite $i$ angibt, wenn die Saite $j$ um 1Hz verstimmt wird
 - $arrow(g)$: Ziel-Frequenzen nach der Verstimmung
 Der Vektor
 
@@ -724,7 +512,7 @@ $
 
 gibt an, um wie viel jede Saite verstimmt werden muss.
 
-Die *effektive Verstimmung* wird durch die Multiplikation mit der Verstimmungsmatrix berechnet:
+Die effektive Verstimmung wird durch die Multiplikation mit der Verstimmungsmatrix berechnet:
 
 $
   C dot arrow(Delta) = arrow(Delta)_"effective"
@@ -736,7 +524,7 @@ $
   arrow(g) = arrow(f_0) + arrow(Delta)_"effective" quad arrow quad arrow(Delta)_"effective" = arrow(g)-arrow(f_0)
 $
 
-Um die Eingangsverstimmung $arrow(Delta)$ zu bestimmen, muss das *Inverse der Matrix $C$* gebildet werden:
+Um die Eingangsverstimmung $arrow(Delta)$ zu bestimmen, muss das Inverse der Matrix $C$ gebildet werden:
 
 $
   C dot arrow(Delta) = arrow(Delta)_"effective" quad arrow quad arrow(Delta) = C^(-1) dot arrow(Delta)_"effective"
@@ -755,11 +543,9 @@ Somit benötigt man für die Berechnung:
 = Verfahrensweise
 
 == Ablauf eines Stimmvorgangs
-Um nun eine Gitarre zustimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Dazu muss zunächst die Ausgangslage der Gitarre bestimmt werden. Dann wird die 1. Saite verstimmt und der Einfluss dieser Saite auf die anderen 5. Saiten gemessen. Dann werden die nächsten Saiten nach diesem Schema verstimmt und gemessen. Anhand diesen änderungen wird die Verstimmungsmatrix berechnet. Anschließend wird der Zustand der Gitarre ermittelt und es wird für jede Saite ein delta Frequenz berechnet, um die die Gitarre verstimmt werden muss. Der Nutzer muss dann jede Saite verstimmen sodass die Delta Frequenz 0 ist.
+Um nun eine Gitarre zustimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Dazu muss zunächst die Ausgangslage der Gitarre bestimmt werden. Dann wird die 1. Saite verstimmt und der Einfluss dieser Saite auf die anderen 5. Saiten gemessen. Dann werden die nächsten Saiten nach diesem Schema verstimmt und gemessen. Anhand diesen änderungen wird die Verstimmungsmatrix berechnet. Anschließend wird der Zustand der Gitarre ermittelt und es wird für jede Saite ein delta Frequenz berechnet, um die die Saiten verstimmt werden müssen. Der Nutzer muss dann jede Saite verstimmen sodass die Delta Frequenz 0 ist.
 
 Um das umzusetzen benötigt man ein Verfahren um die Frequenz der Angespielten Saite zu ermitteln.
-
-In der Regel wird auch ein Verfahren benötigt um das Signal zu Filtern sodass es weniger Anfällig für störgeräusche ist.
 
 == Wahl des Verfahrens für die Frequenzanalyse
 
@@ -767,7 +553,7 @@ Für die Implementierung eines Tuners auf mobilen Geräten ist die präzise und 
 
 
 === Autokorrelation
-Die Idee der Autokorrelation besteht darin, dass ein Signal mit einer Periode von $tau$, wenn es mit sich selbst gefaltet wird, bei vielfachen von $tau$ maxima aufweisen wird. Wenn man nun den ersten von null verschiedenen x Wert wählt der bei einem Peak ist, hat man mit hoher Wahrscheinlichkeit, das Richtige $Tau$ und mit seinem Inversen die Frequenz des Signals.
+Die Idee der Autokorrelation besteht darin, dass ein Signal mit einer Periode von $tau$, wenn es mit sich selbst gefaltet wird, bei vielfachen von $tau$ maxima aufweisen wird. Wenn man nun den ersten von null verschiedenen x Wert wählt der bei einem Hochpunkt ist, hat man mit hoher Wahrscheinlichkeit, das Richtige $Tau$ und mit seinem Inversen die Frequenz des Signals.
 
 $
   r_t(tau) = sum_(j=t+1)^(t+W) x_j x_(j+tau)
@@ -781,89 +567,62 @@ Der YIN-Algorithmus ist eine Weiterentwicklung der Autokorrelation. Sie fügt ex
 
 === Fourier- und Cepstrum-Analyse
 
-Bei der Fourier-Analyse wird das Signal ins Frequenzspektrum transformiert, um das Spektrum nach der Grundfrequenz zu durchsuchen. Die Cepstrum-Analyse erweitert diesen Ansatz, indem das logarithmierte Spektrum erneut transformiert wird, um periodische Muster zu detektieren. Eine Analyse hat gezeigt, dass Jedoch Fourier-Analysen fehleranfällig sind und eine hohe sampling rate benötigen. @FFT_NEEDS_HIGH_SAMPLING
-- *Vorteile:* Robust gegenüber Harmonischen (Cepstrum), gute Integration in digitale Signalverarbeitungssysteme.
-- *Nachteile:* Eingeschränkte Genauigkeit bei niedrigen Frequenzen oder verrauschten Signalen.
-- *Referenzen:*
-  Noll, A. M. (1967). *Cepstrum pitch determination*. J. Acoust. Soc. Am., 41(2), 293-309.
+Bei der Fourier-Analyse wird das Signal ins Frequenzspektrum transformiert, um das Spektrum nach der Grundfrequenz zu durchsuchen. Die Cepstrum-Analyse erweitert diesen Ansatz, indem das logarithmierte Spektrum erneut transformiert wird, um periodische Muster zu detektieren. Eine Analyse hat gezeigt, dass jedoch Fourier-Analysen fehleranfällig sind und eine hohe sampling rate benötigen. @FFT_NEEDS_HIGH_SAMPLING
+Ein Vorteil von Cepstrum ist die Robustheit gegenüber harmonischen Obertönen und eine gute Integration in digitale Signalverarbeitungssysteme.
+Ein Nachteil ist die eingeschränkte Genauigkeit bei niedrigen Frequenzen oder verrauschten Signalen, da die Cepstrum-Analyse auf der Annahme basiert, dass das Signal periodisch ist und dass die Obertöne harmonisch sind. In realen Situationen können diese Annahmen jedoch nicht immer erfüllt sein, was zu Fehlern bei der Schätzung der Grundfrequenz führen kann. @Noll1967Cepstrum
 
 === Moderne Deep-Learning-Ansätze
 
 Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional- oder Recurrent Neural Networks, um direkt aus Roh-Audio oder Spektrogrammen die Fundamental-Frequenz vorherzusagen.
 
-- *Vorteile:* Sehr robust bei Polyphonie, Hintergrundgeräuschen und unterschiedlichen Instrumenten.
-- *Nachteile:* Hoher Rechenaufwand, Trainingsdaten erforderlich, auf Mobilgeräten ressourcenintensiv.
-- *Referenz:*
-  Kim, J., & Bello, J. P. (2019). *CREPE: A Convolutional Representation for Pitch Estimation*. ISMIR 2019. [arXiv:1802.06291](https://arxiv.org/abs/1802.06291)
+Vorteile sind die hohe Robustheit bei Polyphonie, Hintergrundgeräuschen und unterschiedlichen Instrumenten.
 
+Nachteikle sind der hohe Rechenaufwand, die Notwendigkeit großer Trainingsdatensätze und die Ressourcenintensität auf Mobilgeräten. @Kim2019CREPE
+
+=== Auswahl des Verfahrens
+Für die Implementierung wird der YIN-Algorithmus gewählt, da er eine gute Balance zwischen Genauigkeit und Rechenaufwand bietet. Er ist speziell für die Schätzung der Grundfrequenz entwickelt worden und bietet eine robuste Leistung bei verschiedenen Signalbedingungen. Hinzu kommt, dass er bereits in vielen Stimmgeräten erfolgreich eingesetzt wird und bereits Implementierungen in verschiedenen Programmiersprachen verfügbar sind.
 
 == Filter
-
+TODO
 1. Filterung durch die Anpassung der Parameter in Frequenzanalyse
-2. Bandpass Filter durch FFT
+2. Signale werden gestreamt, und müssen ausgelesen werden, deswegen wird ein moving average Filter implementiert umd die Frequenzschwankungen zu glätten und das ablesen zu erleichtern.
+
 
 = Software Entwicklung/Implementierung
 Die Software soll nach Buch- Mobile App Engineering
 implementiert werden.
-== User Journeys
-=== Gerhard Gitarrist
-Gerhard Gitarrist möchte seine Floyd Rose Tremolo Gitarre stimmen,
+Im Rahmen der Anforderungsanalyse und der nutzerzentrierten Gestaltung der mobilen Tuning-App wurden drei repräsentative User Journeys erarbeitet. Diese beschreiben typische Nutzungsszenarien unterschiedlicher Nutzergruppen und dienen der Validierung der funktionalen sowie der interaktionsbezogenen Anforderungen. Die Journeys wurden auf Basis der erstellten Personas und der identifizierten Pain Points entwickelt und berücksichtigen sowohl Erstnutzung als auch wiederkehrende Nutzungsszenarien.
+=== Gerhard Gitarrist (Erstnutzer mit Floyd-Rose-Tremolo-Gitarre)
+Gerhard Gitarrist besitzt eine Floyd-Rose-Tremolo-Gitarre und möchte diese präzise stimmen.
+Er hat von der App erfahren und lädt sie aus dem App Store herunter.
+Beim erstmaligen Start der App gelangt er auf eine Onboarding-Seite, die ihm bewusst macht, dass er mit der Funktionsweise der App noch nicht vertraut ist.
 
-er weiß von der App und lädt diese runter. Als er die App zum ersten mal startet, weiß er nicht direkt wie die App funktioniert.
-Deswegen findet er einen Link zu einem erklär Video. Und ein Erklär text. Er hat aber keine Lust sich
-das anzugucken und er möchte sofort loslegen. Er findet ein Knopf der ihm direkt zur Stimmpage
-weiterleitet.
+Auf dieser Startseite werden ihm zwei Hilfsangebote prominent angezeigt: ein Link zu einem kurzen Erklärvideo (ca. 90 Sekunden) sowie ein prägnanter, textbasierter Erklärtext.
+Gerhard entscheidet sich jedoch gegen beide Hilfsmittel, da er sofort mit dem Stimmvorgang beginnen möchte.
+Er klickt daher auf den prominent platzierten Button „Direkt zum Stimmgerät“, der ihn ohne weitere Verzögerung auf die Tuning-Seite führt.Die App informiert ihn nun klar und strukturiert darüber, dass zunächst eine einmalige Konfiguration des Stimmgeräts für seine Floyd-Rose-Gitarre notwendig ist.
+Der Konfigurationsprozess beginnt automatisch:
+Die App fordert Gerhard auf, nacheinander alle sechs Saiten einmal anzuspielen, um die aktuelle Grundstimmung und die Saitenreihenfolge zu erfassen.
+Anschließend wird er aufgefordert, die tiefe E-Saite bewusst um einen definierten Betrag zu verstimmen (z. B. um eine Terz).
+Sobald die gewünschte Verstimmung erreicht ist, erhält er ein positives visuelles und akustisches Feedback.
+Danach muss er jede weitere Saite einmal einzeln anspielen. Spielt er versehentlich eine falsche Saite an, kann er über einen deutlich sichtbaren Button „Vorherige Saite“ zum vorherigen Schritt zurückkehren.
 
-Die App erklärt ihm, das zu nächst das stimmgerät auf seine Gitarre angepasst werden muss.
-Dann passiert das:
-Die App fordert ihn auf die E-Saite zu spielen, und dann alle anderen.
-
-Dann fordert die App ihn auf die E-Saite um ein gewisses Maß zu verstimmen.
-
-Es gibt ein Positives Feedback wenn er es geschafft hat. Dann soll er jede andere
-Saite einmal Anspielen. Als er ausversehen die Falsche Saite spielt, hat er die möglichtkeit auf
-den button, vorherige Saite zu klicken.
-
-Das selbe passiert dann mit jeder anderen Saite.
-
-Die App fragt, ihn ob er die Konfiguration speichern will sodass er diesen
-prozess nicht wieder machen muss. Es gibt ein Textfeld auf dem er die
-Konfiguration gleich benennen kann. Mit zwei button, Speichern und Abbrechen.
-
-Es öffnet sich nun das Stimmgerät. Oben sieht er welche Konfiguration ausgewählt ist.
-Er soll die E seite zu einer bestimmten Frequenz stimmen.
-Das gleiche auch mit allen anderen Saiten.
-
-Jetzt ist seine Gitarre gestimmt.
-
-=== Arnold Abbrächer
-
-Arnold Abbrecher möchte seine Floyd Rose Tremolo Gitarre stimmen.
-
-er besitzt die App bereits.
-Als er die App Startet, öffnet sich direkt das Stimmgerät mit der letzten konfiguration.
-
-Er findet die Information, dass wenn die Gitarre neue Saiten bekommt, oder es
-eine andere Gitarre ist, dass das Stimmgerät neu Konfiguriert werden muss.
-
-Er klickt auf neue konfiguration.
-
-Nun Startet sich der Prozess, der Konfiguration.
-
-Er möchte den Prozess wegen äußeren einflüssen Abbrechen.
-
-Dazu klickt er auf abbrechen.
-
-
-=== Norman Normaler
-
-Norman Normaler Gitarrist möchte sei Normale Gitarre stimmen.
-
-Er besitzt die App bereits.
-Als er die App Startet, öffnet sich direkt das Stimmgerät mit der letzten konfiguration.
-
-Er kann in der Navigation auf Standart Tuner klicken und kommt zu einem Normalen
-stimmgerät. und stimmt die Gitarre so.
+Der Vorgang wiederholt sich analog für alle Saiten.
+Nach Abschluss der Kalibrierung erscheint ein Dialog, der Gerhard fragt, ob er diese Konfiguration speichern möchte, um den Prozess künftig zu überspringen. Neben einem Textfeld zur freien Benennung der Konfiguration (z. B. „Meine Floyd Rose – Standard“) stehen die beiden Buttons „Speichern“ und „Abbrechen“ zur Verfügung.Nach Bestätigung öffnet sich das eigentliche Stimmgerät.
+Oben in der Kopfzeile wird die gerade ausgewählte Konfiguration angezeigt.
+Gerhard wird nun aufgefordert, jede Saite einzeln auf die exakte Zieltonhöhe (in Hz) zu stimmen.
+Sobald alle Saiten korrekt gestimmt sind, erhält er eine abschließende Bestätigung „Gitarre erfolgreich gestimmt“ und kann die App beenden.
+=== Arnold Abbrecher (Wiederholungsnutzer mit Abbruchwunsch)
+Arnold Abbrecher ist bereits Nutzer der App und besitzt ebenfalls eine Floyd-Rose-Tremolo-Gitarre. Beim Start der App gelangt er direkt in das Stimmgerät, das automatisch die zuletzt verwendete Konfiguration lädt.
+Bevor er mit dem eigentlichen Stimmen beginnt, bemerkt er einen Hinweis-Text, der ihn darauf aufmerksam macht, dass bei neuen Saiten oder bei einer anderen Gitarre eine erneute Konfiguration des Stimmgeräts erforderlich ist.
+Arnold entscheidet sich dafür, eine neue Konfiguration anzulegen, und klickt auf den Button „Neue Konfiguration erstellen“.Der Konfigurationsprozess startet wie bei Gerhard Gitarrist. Nach einigen Schritten wird Arnold jedoch durch äußere Einflüsse (z. B. ein Telefonat oder Zeitmangel) unterbrochen.
+Er möchte den Vorgang an dieser Stelle abbrechen und klickt auf den jederzeit sichtbaren und gut erreichbaren Button „Konfiguration abbrechen“.
+Die App fragt sicherheitshalber noch einmal nach einer Bestätigung („Möchten Sie den Konfigurationsprozess wirklich abbrechen? Die bisherigen Daten gehen verloren.“).
+Nach Bestätigung wird Arnold zurück zur Startseite des Stimmgeräts geleitet; die bisherigen Konfigurationsdaten werden verworfen und die zuletzt gespeicherte Konfiguration bleibt erhalten.
+=== Norman Normaler (Nutzer einer Standard-Gitarre ohne Tremolo)
+Norman Normaler ist Gitarrist mit einer herkömmlichen E-Gitarre ohne Floyd-Rose-Tremolo-System.
+Er besitzt die App bereits und startet sie.
+Wie bei Arnold öffnet sich direkt das Stimmgerät mit der zuletzt verwendeten Konfiguration.Da Norman keine Floyd-Rose-Gitarre stimmen möchte, sondern lediglich eine schnelle Standardstimmung benötigt, navigiert er über die untere Navigationsleiste zum Menüpunkt „Standard Tuner“. Die App wechselt nahtlos in den vereinfachten Stimmmodus, der auf die klassische chromatische Stimmfunktion ohne spezielle Floyd-Rose-Kalibrierung zurückgreift.Norman spielt nun nacheinander die Saiten an und stimmt sie manuell auf die Standardtonhöhen (E-A-D-G-H-e).
+Die App zeigt dabei in Echtzeit die aktuelle Frequenz sowie eine visuelle Hilfestellung (Zeiger bzw. Farbverlauf). Sobald alle Saiten korrekt gestimmt sind, erhält er eine Erfolgsmeldung. Norman kann die App anschließend direkt schließen, ohne weitere Konfigurationsschritte durchlaufen zu müssen.
 
 
 == Anforderungen
