@@ -108,7 +108,7 @@ Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in
 #figure(
   image("assets/gitarren_begriffe.png", height: 34%),
   caption: [Begriffe einer Gitarre],
-)<figStimmwirbel>
+)<figBegriffe>
 
 #figure(
   image("assets/stimmwirbel.png", height: 34%),
@@ -345,18 +345,23 @@ $
 $
 
 Dabei bezeichnet $m_i$ die Gesamtmasse der Saite $i$ und $L_"S,i,Total"$ die Gesamtlänge der Saite.
-Wird die Saite aufgezogen, bewegt sich die Brücke um eine Strecke $Delta h$ in Richtung Sattel.
+Die Gesamtlänge setzt sich zusammen aus der effektiven Saitenlänge $L_(S,i)$ und der Teil der Saite der hinter dem Sattel liegt,
+wie in @figStimmwirbel und @FRMTop zu sehen ist. Diese Strecke sei
+$L_(M,i) = L_(0M,i)+Delta L_i$.
+
 $
-  L_"S,i,Total" (arrow(Delta L)) = ???
+  L_"S,i,Total" (arrow(Delta L)) = L_(S,i) (arrow(Delta L)) + L_(0M,i) + Delta L_i
 $
+
+Beim Aufwickeln der Saite erhöht sich die Strecke hinter dem Sattel um $Delta L_i$. Die zusätzliche Strecke, die durch die Dehnung entsteht steckt in $Delta L_(S,i)(arrow(Delta L))$.
 
 Die lineare Massendichte ergibt sich somit zu:
 
 $
-  mu_i (arrow(Delta L)) = m_i/(???)
+  mu_i (arrow(Delta L)) = m_i/(L_(S,i) (arrow(Delta L)) + L_(0M,i) + Delta L_i)
 $
 
-Darauf aufbauend lässt sich eine Abbildung definieren, die die Aufwickelstrecke jeder Saite auf einen Frequenzvektor abbildet:
+Darauf aufbauend lässt sich eine Abbildung definieren, die die Aufwickelstrecken jeder Saite auf einen Frequenzvektor abbildet:
 
 $
   f_i (arrow(Delta L)) =
