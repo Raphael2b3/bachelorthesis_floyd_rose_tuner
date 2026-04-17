@@ -156,23 +156,23 @@ In der folgenden Tabelle sind Bilder, die Verschiebungen der Markierungen zeigen
     inset: 6pt,
     stroke: 0.5pt,
 
-    table.header([*Bund*], [*Pacifica – Ruhe*], [*Pacifica – Spannung*]),
+    table.header([*Bund*], [*Pacifica - Ruhe*], [*Pacifica - Spannung*]),
 
-    ..fret-row(1, "assets/p_1.jpeg", "Bund 1 – Ruhe", "assets/p_1t.jpeg", "Bund 1 – Spannung"),
+    ..fret-row(1, "assets/p_1.jpeg", "Bund 1 - Ruhe", "assets/p_1t.jpeg", "Bund 1 - Spannung"),
 
-    ..fret-row(2, "assets/p_2.jpeg", "Bund 2 – Ruhe", "assets/p_2t.jpeg", "Bund 2 – Spannung"),
+    ..fret-row(2, "assets/p_2.jpeg", "Bund 2 - Ruhe", "assets/p_2t.jpeg", "Bund 2 - Spannung"),
 
-    ..fret-row(4, "assets/p_4.jpeg", "Bund 4 – Ruhe", "assets/p_4t.jpeg", "Bund 4 – Spannung"),
+    ..fret-row(4, "assets/p_4.jpeg", "Bund 4 - Ruhe", "assets/p_4t.jpeg", "Bund 4 - Spannung"),
 
-    ..fret-row(6, "assets/p_6.jpeg", "Bund 6 – Ruhe", "assets/p_6t.jpeg", "Bund 6 – Spannung"),
+    ..fret-row(6, "assets/p_6.jpeg", "Bund 6 - Ruhe", "assets/p_6t.jpeg", "Bund 6 - Spannung"),
 
-    ..fret-row(8, "assets/p_8.jpeg", "Bund 8 – Ruhe", "assets/p_8t.jpeg", "Bund 8 – Spannung"),
+    ..fret-row(8, "assets/p_8.jpeg", "Bund 8 - Ruhe", "assets/p_8t.jpeg", "Bund 8 - Spannung"),
 
-    ..fret-row(12, "assets/p_12.jpeg", "Bund 12 – Ruhe", "assets/p_12t.jpeg", "Bund 12 – Spannung"),
+    ..fret-row(12, "assets/p_12.jpeg", "Bund 12 - Ruhe", "assets/p_12t.jpeg", "Bund 12 - Spannung"),
 
-    ..fret-row(16, "assets/p_16.jpeg", "Bund 16 – Ruhe", "assets/p_16t.jpeg", "Bund 16 – Spannung"),
+    ..fret-row(16, "assets/p_16.jpeg", "Bund 16 - Ruhe", "assets/p_16t.jpeg", "Bund 16 - Spannung"),
 
-    ..fret-row(22, "assets/p_22.jpeg", "Bund 22 – Ruhe", "assets/p_22t.jpeg", "Bund 22 – Spannung"),
+    ..fret-row(22, "assets/p_22.jpeg", "Bund 22 - Ruhe", "assets/p_22t.jpeg", "Bund 22 - Spannung"),
   )
 }
 === Beobachtung
@@ -365,23 +365,18 @@ $
 $
 
 
-== Fazit
+=== Fazit
 Es wird ersichtlich, dass die Aufwickelstrecken der Saiten die Frequenzen aller Saiten beeinflussen. Dass erklärt, warum das Stimmen einer Floyd-Rose-Gitarre so schwierig ist.
 
 Beim Stimmen werden die Aufwickelstrecken nur in kleinen Schritten verändert. In diesem Fall verhält sich das System näherungsweise linear, da die Taylor-Approximation für sehr kleine Änderungen gilt. Da das System physikalisch ist, können wir das System als stetig betrachten.
 
 == Experiment: Nachweis Linearität
 
-Diese Linearität soll nun experimentell überprüft werden.
-
-Hierbei werden die Frequenzänderungen der Saiten gemessen, wenn eine andere Saite verstimmt wird.
+Diese Linearität soll nun experimentell überprüft werden. Hierbei werden die Frequenzänderungen der Saiten gemessen, wenn eine andere Saite verstimmt wird.
 
 === Vorgehensweise
-Zunächst wird jede Saite in eine Ausgangsposition gebracht. Eine Standard-Gitarrenstimmung ist E–A–D–G–B–e. Da eine Gitarre aufgrund menschlicher Ungenauigkeiten nicht perfekt gestimmt werden kann, werden die Ausgangsfrequenzen der Saiten zunächst gemessen und aufgezeichnet.
-
-Anschließend wird jeweils eine Saite um ein beliebiges $Delta$ verstimmt. Dieses $Delta$ wird so gewählt, dass die Verstimmung deutlich hörbar ist. Auch dieses $Delta$ wird gemessen und dokumentiert.
-
-Jede Saite wird in vier Schritten nach oben und vier Schritten nach unten verstimmt. Für jeden Schritt wird die Frequenz aller anderen Saiten gemessen und aufgezeichnet.
+Zunächst wird jede Saite in eine Ausgangsposition gebracht. Die Ausgangsfrequenzen der Saiten werden zunächst in Hertz gemessen.
+Anschließend wird jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) verstimmt. Dieses $Delta$ wird so gewählt, dass die Verstimmung deutlich hörbar ist. Jede Saite wird in vier Schritten nach oben und unten verstimmt. Für jeden Schritt wird die Frequenz aller anderen Saiten gemessen.
 
 === Ziel
 
@@ -391,14 +386,14 @@ Das Ziel des Experiments ist es zu beobachten, ob das System
 
 Elastizität bedeutet hier, dass die Frequenz einer Saite wieder in ihren Ausgangszustand zurückkehrt, sobald die Saite selbst wieder in die Ausgangslage gebracht wird. Um dies zu überprüfen, werden nach allen Verstimmungsschritten die Endfrequenzen mit den Anfangswerten verglichen.
 
-Zur Frequenzmessung wird ein Python-Programm eingesetzt, das mithilfe der Fourier-Transformation die Schwingungsfrequenzen bestimmt. Die Visualisierung erfolgt ebenfalls mit Python, wobei die Bibliothek matplotlib.pyplot für die Darstellung der Graphen genutzt wird.
+Zur Frequenzmessung wird ein Python-Programm eingesetzt, das mithilfe der Fourier-Transformation die Grundfrequenzen bestimmt. Die Visualisierung erfolgt ebenfalls mit Python und der Bibliothek matplotlib.pyplot.
 
 Insgesamt werden 324 gelabelte Audio-Samples aufgenommen:
 
-* Es gibt 6 Saiten,
-* jede Saite beeinflusst alle 6 Saiten,
-* jede Saite wird dabei in 4 Schritten nach oben und 4 Schritte nach unten verstimmt,
-* hinzu kommt noch die Ausgangsposition.
+- Es gibt 6 Saiten,
+- jede Saite beeinflusst alle 6 Saiten,
+- jede Saite wird dabei in 4 Schritten nach oben und 4 Schritte nach unten verstimmt,
+- hinzu kommt noch die Ausgangsposition.
 Damit ergibt sich die Anzahl der Messungen zu
 $324 = 6 dot 6 dot (4 dot 2+1)$.
 
@@ -407,7 +402,7 @@ $324 = 6 dot 6 dot (4 dot 2+1)$.
 Die Audio-Samples werden mit Hilfe der Fourier Transformation in den Frequenzbereich transformiert. Die Frequenz mit der höchsten Amplitude wird als die Frequenz der Saite angenommen.
 Der Python Code um von einer Audio-Datei die Frequenz zu erhalten ist im folgenden definiert:
 
-```python
+```py
 import numpy as np
 from scipy.fftpack import rfft
 from scipy.io import wavfile
@@ -544,20 +539,20 @@ Die Ordnerstruktur ist wie folgt:
 Die Gitarre wird per Klinkenkabel an eine Audio-Interface-Karte angeschlossen und mit einer Abtastrate von 44,1 kHz aufgenommen. Die Abbildung zeigt die Positionierung der Gitarre, die so gewählt wurde, dass sich der Hals nicht verzieht und dadurch den Ton beeinflusst. Die Gitarre wird am Stimmwirbel verstimmt, nicht am Feinstimmer an der Brücke.
 
 
-#figure(image("assets/setup.jpg", width: 50%), caption: [Setup der Aufnahme])<figSetup>
+#figure(image("assets/setup.jpg"), caption: [Setup der Aufnahme])<figSetup>
 
 Die Aufnahmen erfolgen mit der Digital Audio Workstation (DAW) Cubase. Dabei wird in Mono, mit 16 Bit und 44,1 kHz aufgenommen. Zusätzlich wird das in Cubase integrierte Stimmgerät genutzt, um die Frequenz jeder Saite vor jedem Durchgang erneut exakt in die Ausgangsposition zu bringen.
 
 
 #figure(
-  image("assets/digital_setup.png", width: 50%),
+  image("assets/digital_setup.png"),
   caption: [Screenshot von Cubase mit Stimmgerät und integriertem Frequenzmessgerät],
 )<figCubase>
 
 Jeder Aufnahmeblock enthält die Roh-Audiodaten aller Saiten der Gitarre (E2, A2, D3, G3, B3 und E4). Die Saiten werden in dieser Reihenfolge gespielt. Die Färbung der Blöcke in der DAW visualisiert die Stärke und Richtung der Verstimmung:
 
-* Rottöne → Verstimmung zu tieferen Frequenzen,
-* Blautöne → Verstimmung zu höheren Frequenzen.
+- Rottöne → Verstimmung zu tieferen Frequenzen,
+- Blautöne → Verstimmung zu höheren Frequenzen.
 
 Jede Zeile in der Aufnahme entspricht einer Saite und einer Verstimmungsrichtung. Von oben nach unten ergibt sich die Reihenfolge:
 E2 nach oben, E2 nach unten, A2 nach oben, A2 nach unten, …, E4 nach oben, E4 nach unten.
@@ -566,7 +561,7 @@ Im Anschluss werden die einzelnen Audioblöcke so zugeschnitten, dass Transiente
 
 
 #figure(
-  image("assets/cutted_audio.png", width: 50%),
+  image("assets/cutted_audio.png"),
   caption: [Screenshot von Cubase mit zugeschnittenen Samples],
 )<figCuttedAudio>
 
@@ -576,15 +571,13 @@ Jeder zugeschnittene Block wird einzeln exportiert und in den entsprechenden Ord
 Da von dem oben geschriebenen Python-Programm in manchen Aufnahmen die Obertöne der Saite fälschlicherweise als Ton erkannt wurden, werden die Samples noch einmal gefiltert.
 Die folgende Abbildung zeigt eine Konsolenausgabe von dem Problem.
 
-<div style="border: 1px solid #ccc; padding: 1px;">
-    <img src="assets/need_to_clean_data.png" width="900"/>
-    <figcaption>Fig. 15 – Screenshot der Zeigt das Obertöne erkannt werden statt Grundfrequenzen.</figcaption>
-</div>
-
-#figure(image("assets/need_to_clean_data.png", width: 50%), caption: [Screenshot der Zeigt das Obertöne erkannt werden statt Grundfrequenzen])<figNeedToCleanData>
+#figure(
+  image("assets/need_to_clean_data.png"),
+  caption: [Screenshot der Zeigt das Obertöne erkannt werden statt Grundfrequenzen],
+)<figNeedToCleanData>
 Der Screenshot zeigt, dass nicht die Grundfrequenz als solche erkannt wird, sondern teilweise Obertöne als Grundfrequenz erkannt werden. \
 
-Die automatische Auswahl des Peaks anhand einer erwarteten Frequenz ist problematisch, da die Grundfrequenz einer Saite variieren kann (z. B. durch Verstimmen oder unterschiedliche Gitarrenstimmungen). Wird die Saite stark von einem Referenzwert abweichen, besteht die Gefahr, dass der falsche Peak erkannt wird. Eine explizite Übergabe der erwarteten Frequenz für jedes Sample wäre möglich, jedoch aufwendig und nicht praktikabel für die allgemeine Analyse. Deshalb wird für jede Saite ein Bandpassfilter erstellt, der die Obertöne reduziert. 
+Die automatische Auswahl des Peaks anhand einer erwarteten Frequenz ist problematisch, da die Grundfrequenz einer Saite variieren kann (z.B. durch Verstimmen oder unterschiedliche Gitarrenstimmungen). Wird die Saite stark von einem Referenzwert abweichen, besteht die Gefahr, dass der falsche Peak erkannt wird. Eine explizite Übergabe der erwarteten Frequenz für jedes Sample wäre möglich, jedoch aufwendig und nicht praktikabel für die allgemeine Analyse. Deshalb wird für jede Saite ein Bandpassfilter erstellt, der die Obertöne reduziert.
 
 Die folgenden Abbildungen dienten ursprünglich lediglich der Veranschaulichung der Filter und nicht der Spektren des Klanges; ein eventuelles Fehlen der Spektren beeinträchtigt daher die Aussagekraft der Darstellung nicht.
 
@@ -633,13 +626,13 @@ Die folgenden Abbildungen dienten ursprünglich lediglich der Veranschaulichung 
   ]),
 )
 === Laden der Daten
-Im folgenden Script werden die gesamten Audio-Samples geladen, um sie zu verarbeiten und zu visualisieren. Es wird das oben spezifizierte Datenformat zum Speichern der Daten genutzt. 
+Im folgenden Script werden die gesamten Audio-Samples geladen, um sie zu verarbeiten und zu visualisieren. Es wird das oben spezifizierte Datenformat zum Speichern der Daten genutzt.
 
-* Dimensionen:
-   * 0: `changing_string`
-   * 1: `impacted string`
-   * 2: Verstimmungsschritt
-* Eintrag = `frequency`.
+- Dimensionen:
+  - 0: `changing_string`
+  - 1: `impacted string`
+  - 2: Verstimmungsschritt
+- Eintrag = `frequency`.
 
 ```python
 # Experiment
@@ -667,7 +660,7 @@ counter
 ```
 
 === Aggregierung der Daten
-Gemessen wurden die tatsächlichen Frequenzen jeder Saite und wie sie sich in Abhängigkeit der Veränderung jeder anderen Saite ändern. Für unsere Analyse interessiert uns jedoch vor allem das Maß dieser Änderung. Daher werden alle Messwerte mit ihren jeweiligen Ausgangswerten verglichen – sowohl in Cent als auch in Hertz – um die Frequenzänderungen anschaulich darzustellen.
+Gemessen wurden die tatsächlichen Frequenzen jeder Saite und wie sie sich in Abhängigkeit der Veränderung jeder anderen Saite ändern. Für unsere Analyse interessiert uns jedoch vor allem das Maß dieser Änderung. Daher werden alle Messwerte mit ihren jeweiligen Ausgangswerten verglichen - sowohl in Cent als auch in Hertz - um die Frequenzänderungen anschaulich darzustellen.
 
 ```python
 
@@ -683,74 +676,75 @@ for changing_string in strings:
         for i in range(steps * 2 + 1):  # -4 bis 4
             cent_changes[changing_string][impacted_string][i] = frequency_difference_to_cent(
                 measured_data[changing_string][impacted_string][i], inital_value)
-            hz_changes[changing_string][impacted_string][i] = measured_data[changing_string][impacted_string][
-                                                                  i] - inital_value
+            hz_changes[changing_string][impacted_string][i] = measured_data[changing_string][impacted_string][i] - inital_value
 
 ```
 
 === Visualiserung der Daten
 
 === Diskussion der Ergebnisse
-Das System ist **elastisch**, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind. Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.  
+Das System ist *elastisch*, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind. Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.
 
-Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem **Korrelationskoeffizienten nach Bravais-Pearson** zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen. Eine hohe Korrelation bestätigt, dass die Annahme einer linearen Beziehung für kleine Änderungen gerechtfertigt ist.  
+Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem *Korrelationskoeffizienten nach Bravais-Pearson* zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen. Eine hohe Korrelation bestätigt, dass die Annahme einer linearen Beziehung für kleine Änderungen gerechtfertigt ist.
 
-Die Linearität ist wichtig, da sie die Grundlage für die Modellierung als **lineares Gleichungssystem** bildet. Nur dadurch können die Effekte der Verstimmung jeder Saite auf alle anderen Saiten mit einer **Matrix** erfasst und mathematisch gelöst werden.
+Die Linearität ist wichtig, da sie die Grundlage für die Modellierung als *lineares Gleichungssystem* bildet. Nur dadurch können die Effekte der Verstimmung jeder Saite auf alle anderen Saiten mit einer *Matrix* erfasst und mathematisch gelöst werden.
 
 == Mathematische Lösung
-Die Frequenzen der Saiten können als **Vektor** dargestellt werden:
+Die Frequenzen der Saiten können als *Vektor* dargestellt werden:
 
-$$
-\vec{f_0} = \begin{pmatrix} {f_{\text{E2}}} \\ {f_{\text{A2}}} \\ {f_{\text{D3}}} \\ {f_{\text{G3}}} \\ {f_{\text{B3}}} \\ {f_{\text{E4}}} \end{pmatrix},
-C = \begin{bmatrix} 
-1 & c_{12} & c_{13} & c_{14} & c_{15} & c_{16} \\ 
-c_{21} & 1 & c_{23} & c_{24} & c_{25} & c_{26} \\ 
-c_{31} & c_{32} & 1 & c_{34} & c_{35} & c_{36} \\ 
-c_{41} & c_{42} & c_{43} & 1 & c_{45} & c_{46} \\ 
-c_{51} & c_{52} & c_{53} & c_{54} & 1 & c_{56} \\ 
-c_{61} & c_{62} & c_{63} & c_{64} & c_{65} & 1 
-\end{bmatrix},
-\vec{g} = \begin{pmatrix} {\hat{f}_{\text{E2}}} \\ {\hat{f}_{\text{A2}}} \\ {\hat{f}_{\text{D3}}} \\ {\hat{f}_{\text{G3}}} \\ {\hat{f}_{\text{B3}}} \\ {\hat{f}_{\text{E4}}} \end{pmatrix}
-$$
+$
+  arrow(f_0) = vec(f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4")
+$
+$
+  C = mat(
+    1, c_(12), c_(13), c_(14), c_(15), c_(16);
+    c_(21), 1, c_(23), c_(24), c_(25), c_(26);
+    c_(31), c_(32), 1, c_(34), c_(35), c_(36);
+    c_(41), c_(42), c_(43), 1, c_(45), c_(46);
+    c_(51), c_(52), c_(53), c_(54), 1, c_(56);
+    c_(61), c_(62), c_(63), c_(64), c_(65), 1
+  ),
+  arrow(g) = vec(hat(f)_"E2", hat(f)_"A2", hat(f)_"D3", hat(f)_"G3", hat(f)_"B3", hat(f)_"E4")
+$
 
-- $\vec{f_0}$: Ausgangsfrequenzen der Saiten, gemessen z. B. mit einem digitalen Stimmgerät  
-- $C$: Verstimmungsmatrix, wobei $c_{ij}$ den **Verstimmungsfaktor** der Saite $i$ angibt, wenn die Saite $j$ um 1 Hz verstimmt wird  
-- $\vec{g}$: Ziel-Frequenzen nach der Verstimmung  
-Der Vektor  
+- $arrow(f_0)$: Ausgangsfrequenzen der Saiten, gemessen z.B. mit einem digitalen Stimmgerät
+- $C$: Verstimmungsmatrix, wobei $c_"ij"$ den *Verstimmungsfaktor* der Saite $i$ angibt, wenn die Saite $j$ um 1Hz verstimmt wird
+- $arrow(g)$: Ziel-Frequenzen nach der Verstimmung
+Der Vektor
 
-$$
-\vec{\Delta} = \begin{pmatrix} {\Delta_{\text{E2}}} \\ {\Delta_{\text{A2}}} \\ {\Delta_{\text{D3}}} \\ {\Delta_{\text{G3}}} \\ {\Delta_{\text{B3}}} \\ {\Delta_{\text{E4}}} \end{pmatrix}
-$$ 
+$
+  arrow(Delta) = vec(Delta_"E2", Delta_"A2", Delta_"D3", Delta_"G3", Delta_"B3", Delta_"E4")
+$
 
-gibt an, um wie viel jede Saite verstimmt werden muss. 
+gibt an, um wie viel jede Saite verstimmt werden muss.
 
-Die **effektive Verstimmung** wird durch die Multiplikation mit der Verstimmungsmatrix berechnet:  
+Die *effektive Verstimmung* wird durch die Multiplikation mit der Verstimmungsmatrix berechnet:
 
-$$
- C \cdot  \vec{\Delta}  = \vec{\Delta}_{\text{effective}}
-$$
+$
+  C dot arrow(Delta) = arrow(Delta)_"effective"
+$
 
-Damit die Ziel-Frequenzen $\vec{g}$ erreicht werden, gilt:  
+Damit die Ziel-Frequenzen $arrow(g)$ erreicht werden, gilt:
 
-$$
-\vec{g} = \vec{f_0} +  \vec{\Delta}_{\text{effective}} \quad \Rightarrow \quad \vec{\Delta}_{\text{effective}}  = \vec{g}-\vec{f_0}
-$$
+$
+  arrow(g) = arrow(f_0) + arrow(Delta)_"effective" quad arrow quad arrow(Delta)_"effective" = arrow(g)-arrow(f_0)
+$
 
-Um die Eingangsverstimmung $\vec{\Delta}$ zu bestimmen, muss das **Inverse der Matrix $C$** gebildet werden:  
+Um die Eingangsverstimmung $arrow(Delta)$ zu bestimmen, muss das *Inverse der Matrix $C$* gebildet werden:
 
-$$
- C \cdot \vec{\Delta}   = \vec{\Delta}_{\text{effective}}  \quad \Rightarrow \quad \vec{\Delta} = C^{-1} \cdot \vec{\Delta}_{\text{effective}} 
-$$
+$
+  C dot arrow(Delta) = arrow(Delta)_"effective" quad arrow quad arrow(Delta) = C^(-1) dot arrow(Delta)_"effective"
+$
 
-$$
-\vec{\Delta} = C^{-1} \cdot (\vec{g}-\vec{f_0})  
-$$
+$
+  arrow(Delta) = C^(-1) dot (arrow(g)-arrow(f_0))
+$
 
-$C^{-1}$ ist die Inverse der Verstimmungsmatrix.
+$C^(-1)$ ist die Inverse der Verstimmungsmatrix.
 
-Somit benötigt man für die Berechnung:  
-1. Ausgangsfrequenzen $\vec{f_0}$  
-2. Ziel-Frequenzen $\vec{g}$  
+Somit benötigt man für die Berechnung:
+1. Ausgangsfrequenzen $arrow(f_0)$
+2. Ziel-Frequenzen $arrow(g)$
 3. Verstimmungsmatrix $C$
 = Verfahrensweise
 
@@ -785,7 +779,7 @@ Bei der Fourier-Analyse wird das Signal ins Frequenzspektrum transformiert, um d
 - *Vorteile:* Robust gegenüber Harmonischen (Cepstrum), gute Integration in digitale Signalverarbeitungssysteme.
 - *Nachteile:* Eingeschränkte Genauigkeit bei niedrigen Frequenzen oder verrauschten Signalen.
 - *Referenzen:*
-  Noll, A. M. (1967). *Cepstrum pitch determination*. J. Acoust. Soc. Am., 41(2), 293–309.
+  Noll, A. M. (1967). *Cepstrum pitch determination*. J. Acoust. Soc. Am., 41(2), 293-309.
 
 === Moderne Deep-Learning-Ansätze
 
