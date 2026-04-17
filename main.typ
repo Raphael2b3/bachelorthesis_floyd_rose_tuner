@@ -11,15 +11,12 @@
   erstprüfer: "Prof. Konrad Schöbel",
   zweitprüfer: "Prof. Ulf Schemmert",
   date: "01.03.2026",
-  logos: ("assets/htwk-logo.png")
-,
+  logos: "assets/htwk-logo.png",
   abkürzungsverzeichnis: none,
   abbreviations: (),
   tabellenverzeichnis: none,
   abbildungsverzeichnis: none,
-
-) = {  
-  
+) = {
   // Save heading and body font families in variables.
   let body-font = "Linux Libertine"
   let sans-font = "Inria Sans"
@@ -28,14 +25,14 @@
   set text(font: body-font, lang: "de")
   show heading: set text(font: sans-font)
   set heading(numbering: "1.1")
-  
+
   v(0.2fr)
   align(center)[
     #image(logos, width: 50%)
   ]
   v(5fr)
   align(center)[
-    #text(size: 35pt)[*Bachlor Thesis*]  
+    #text(size: 35pt)[*Bachlor Thesis*]
   ]
   v(2fr)
   align(center)[
@@ -62,13 +59,13 @@
   // Table of contents.
   outline(depth: 3)
   pagebreak()
-  
+
   if abkürzungsverzeichnis == true {
     heading(depth: 1, "Abkürzungsverzeichnis", numbering: none, outlined: false)
     for (abbr, full) in abbreviations [
       *#abbr*: #full \
     ]
-  pagebreak()
+    pagebreak()
   } else {}
 
   if tabellenverzeichnis == true {
@@ -91,61 +88,51 @@
 
   // Main body.
   set par(justify: true)
-
 }
 #project()
 #let abbreviations = (
-  "String" : "String",
+  "String": "String",
 )
 
 = Motivation
 
-Es gibt ein Problem beim Stimmen von Floyd-Rose-Gitarren. Bei diesen Gitarren wird eine Saite zwischen dem Gitarrenkopf und einer bis zu einem gewissen Grad rotierbaren Brücke gespannt. An der Brücke halten unterhalb des Drehpunkts Federn dagegen, wenn man Saiten einspannt. Die Brücke wird gemeinhin als "Floating Bridge" bezeichnet, weil sie nicht wie herkömmliche Tremolos am Gitarrenkörper aufliegt sondern in der Luft schwebt. 
+Es gibt ein Problem beim Stimmen von Floyd-Rose-Gitarren. Bei diesen Gitarren wird eine Saite zwischen dem Gitarrenkopf und einer bis zu einem gewissen Grad rotierbaren Brücke gespannt. An der Brücke halten unterhalb des Drehpunkts Federn dagegen, wenn man Saiten einspannt. Die Brücke wird gemeinhin als "Floating Bridge" bezeichnet, weil sie nicht wie herkömmliche Tremolos am Gitarrenkörper aufliegt sondern in der Luft schwebt.
 
- #figure(image("assets/floydrose_frontside_neutral.jpg", height: 20%), caption: [Floyd-Rose-Tremolo Bild])<FRQuer>
+#figure(image("assets/floydrose_frontside_neutral.jpg", height: 20%), caption: [Floyd-Rose-Tremolo Bild])<FRQuer>
 
 Das Floyd-Rose-Tremolo hat einen Hebel, den man ziehen oder drücken kann. Beim Musizieren ändert das den Ton. Auch wenn diese Architektur neue Klänge ermöglicht, erschwert sie das Stimmen der Gitarre erheblich. Beim Stimmen erhöht oder verringert man die Spannung einer Saite, indem man deren Länge verändert. Demnach erhöht oder verringert sich die Auslenkung der Federn, da zum Beispiel bei geringerer Spannung der Saiten auch eine geringere Kraft auf die Federn wirkt. Das Resultat davon ist, dass sich der Winkel des Floyd-Rose-Tremolos verändert. Das führt dazu, dass die anderen Saiten verstimmt werden, wenn man eine Saite stimmt. Es gibt Erfahrungsberichte und Aufzeichnungen, wie man so eine Gitarre effizient stimmen kann. Dabei dauerte das Stimmen 8 Minuten @youtube_floyd_rose_tune2026. In Foren sprachen Nutzer von einer Stimmzeit von bis zu 20-30 Minuten, jenachdem wie Sauber und wieviele Saiten sie Stimmen mussten @ultimateguitar_floydrose_tuning_forum. Ziel der Arbeit ist eine App zu entwickeln, die diesen Stimmvorgang beschleunigt.
 
 = Grundlagen (Physik der Gitarre)
 
-== Physikalisches Model
-
-Die Brücke einer Gitarre kann bei einem Floyd-Rose-Tremolo bis zu einem gewissen Grad rotieren. Ein entsprechendes vereinfachtes Model ist in der folgenden Abbildung dargestellt.
+Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in einer bestimmten Frequenz. Beim Stimmen wickelt man die Saite um den Stimmwirbel, sodass sie sich dehnt und die Frequenz ändert. Dass Saiten elastisch sind, wird im folgendem Expriment gezeigt:
+#figure(
+  image("assets/gitarren_begriffe.png", height: 34%),
+  caption: [Begriffe einer Gitarre],
+)<figStimmwirbel>
 
 #figure(
-  image("assets/FloydRoseQuer.png",height: 34%),
-  caption: [Floyd-Rose-Model Quer],
-  alt: "Test"
-)<FRMQuer>
-#figure(
-  image("assets/FlyodRoseTop.png",height: 40%),
-  caption: [Floyd-Rose-Model Draufsicht],
-  alt: "Test"
-)<FRMTop>
-#figure(
-  image("assets/FRrealTop.png",height: 40%),
-  caption: [Floyd-Rose Draufsicht],
-  alt: "Test"
-)<FRTop>
-=== Experiment: Sind Stahlsaiten elastisch?
+  image("assets/stimmwirbel.png", height: 34%),
+  caption: [Gitarre Stimmwirbel],
+)<figStimmwirbel>
 
-In diesem Experiment wird untersucht, ob Stahlsaiten elastische Eigenschaften besitzen, vergleichbar mit einem sehr steifen Gummiband. Beim Stimmen der Saite, die im Wesentlichen aus Stahldraht besteht, wird diese um den Stimmwirbel aufgewickelt, wodurch ihre Zugspannung erhöht wird.
+== Experiment: Elastizität von Gitarrensaiten
 
-Plausibel wäre, dass sich Stahlsaiten dehnen können. Würde sich die Saite nicht dehnen, müsste sich stattdessen entweder die Brücke verschieben oder der Gitarrenhals elastisch verformen. In beiden Fällen wären die Bünde potenziell nicht mehr an ihrer vorgesehenen relativen Position, was zu Intonationsproblemen führen würde. 
-Außerdem würden die übrigen Saiten einen Großteil ihrer Spannung verlieren.  
+In diesem Experiment wird untersucht, ob Stahlsaiten elastische Eigenschaften besitzen, vergleichbar mit einem sehr steifen Gummiband. Beim Stimmen der Saite, die im Wesentlichen aus Stahldraht besteht, wird diese um den Stimmwirbel aufgewickelt.
+
+Plausibel wäre, dass sich Stahlsaiten dehnen können. Würde sich die Saite nicht dehnen, müsste sich stattdessen entweder die Brücke verschieben oder der Gitarrenhals elastisch verformen. In beiden Fällen wären die Bünde potenziell nicht mehr an ihrer vorgesehenen relativen Position, was zu Intonationsproblemen führen würde.
+Außerdem würden die übrigen Saiten einen Großteil ihrer Spannung verlieren.
 Aus der praktischen Erfahrung ist jedoch bekannt, dass herkömmliche Gitarren diese Probleme nicht aufweisen.
 
 Verhält sich jedoch jede Saite näherungsweise wie eine Feder, lässt sich erklären, wie sich die Gesamtspannung auf mehrere Saiten verteilt und weshalb einzelne Saiten unterschiedliche Spannungen aufweisen können.
 
-
-==== Materialien
+=== Materialien
 
 - Gitarre mit starrer Brücke (keine Floyd-Rose-Brücke, z. B. Yamaha Pacifica)
 - Tesafilm (zur Markierung der Saiten)
 
-==== Durchführung
+=== Durchführung
 
-Zunächst wurde die hohe E-Saite etwas tiefer gestimmt, sodass sie ungefähr die Frequenz der darunterliegenden H-Saite aufwies. Dabei wurde darauf geachtet, dass die Saite weiterhin eine ausreichende Grundspannung besaß.
+Zunächst wurde die hohe E-Saite tiefer gestimmt, sodass sie eine deutlich geringere Spannung annahm. Dabei wurde darauf geachtet, dass die Saite weiterhin eine ausreichende Grundspannung besaß.
 
 Anschließend wurden kleine Markierungen (Tesafilm) auf die hohe E-Saite geklebt. Die Markierungen wurden so positioniert, dass ihre Kante jeweils exakt mittig über einem Bund lag. Insgesamt wurden sechs Markierungen in unterschiedlichen Abständen zwischen Sattel und Brücke angebracht.
 
@@ -155,475 +142,241 @@ Im nächsten Schritt wurde die Spannung der hohen E-Saite erhöht, bis die dem S
 
 In der folgenden Tabelle sind Bilder, die Verschiebungen der Markierungen zeigen.
 #{
-  
-let fret-row(bund, img_pac, cap_pac, img_pac_t, cap_pac_t) = (
-  [#bund],
-  figure(image(img_pac, width: 8.5em), caption: [#cap_pac]),
-  figure(image(img_pac_t, width: 8.5em), caption: [#cap_pac_t])
-)
+  let fret-row(bund, img_pac, cap_pac, img_pac_t, cap_pac_t) = (
+    [#bund],
+    figure(image(img_pac, width: 8.5em), caption: [#cap_pac]),
+    figure(image(img_pac_t, width: 8.5em), caption: [#cap_pac_t]),
+  )
 
   set text(size: 8.5pt)
 
 
-table(
-  columns: (auto, 1fr, 1fr),
-  inset: 6pt,  
-  stroke: 0.5pt,
+  table(
+    columns: (auto, 1fr, 1fr),
+    inset: 6pt,
+    stroke: 0.5pt,
 
-  table.header(
-    [*Bund*],
-    [*Pacifica – Ruhe*],
-    [*Pacifica – Spannung*]
-  ),
+    table.header([*Bund*], [*Pacifica – Ruhe*], [*Pacifica – Spannung*]),
 
-  ..fret-row(1, "assets/p_1.jpeg", "Bund 1 – Ruhe", "assets/p_1t.jpeg", "Bund 1 – Spannung"),
+    ..fret-row(1, "assets/p_1.jpeg", "Bund 1 – Ruhe", "assets/p_1t.jpeg", "Bund 1 – Spannung"),
 
-  ..fret-row(2, "assets/p_2.jpeg", "Bund 2 – Ruhe", "assets/p_2t.jpeg", "Bund 2 – Spannung"),
+    ..fret-row(2, "assets/p_2.jpeg", "Bund 2 – Ruhe", "assets/p_2t.jpeg", "Bund 2 – Spannung"),
 
-  ..fret-row(4, "assets/p_4.jpeg", "Bund 4 – Ruhe", "assets/p_4t.jpeg", "Bund 4 – Spannung"),
+    ..fret-row(4, "assets/p_4.jpeg", "Bund 4 – Ruhe", "assets/p_4t.jpeg", "Bund 4 – Spannung"),
 
-  ..fret-row(6, "assets/p_6.jpeg", "Bund 6 – Ruhe", "assets/p_6t.jpeg", "Bund 6 – Spannung"),
+    ..fret-row(6, "assets/p_6.jpeg", "Bund 6 – Ruhe", "assets/p_6t.jpeg", "Bund 6 – Spannung"),
 
-  ..fret-row(8, "assets/p_8.jpeg", "Bund 8 – Ruhe", "assets/p_8t.jpeg", "Bund 8 – Spannung"),
+    ..fret-row(8, "assets/p_8.jpeg", "Bund 8 – Ruhe", "assets/p_8t.jpeg", "Bund 8 – Spannung"),
 
-  ..fret-row(12, "assets/p_12.jpeg", "Bund 12 – Ruhe", "assets/p_12t.jpeg", "Bund 12 – Spannung"),
+    ..fret-row(12, "assets/p_12.jpeg", "Bund 12 – Ruhe", "assets/p_12t.jpeg", "Bund 12 – Spannung"),
 
-  ..fret-row(16, "assets/p_16.jpeg", "Bund 16 – Ruhe", "assets/p_16t.jpeg", "Bund 16 – Spannung"),
+    ..fret-row(16, "assets/p_16.jpeg", "Bund 16 – Ruhe", "assets/p_16t.jpeg", "Bund 16 – Spannung"),
 
-  ..fret-row(22, "assets/p_22.jpeg", "Bund 22 – Ruhe", "assets/p_22t.jpeg", "Bund 22 – Spannung"),
-)
+    ..fret-row(22, "assets/p_22.jpeg", "Bund 22 – Ruhe", "assets/p_22t.jpeg", "Bund 22 – Spannung"),
+  )
 }
-==== Beobachtung
+=== Beobachtung
 
 Die Markierungen, die sich näher am Sattel befanden, legten eine deutlich größere Strecke zurück als jene in unmittelbarer Nähe der Brücke. Die beobachtete Verschiebung nahm kontinuierlich vom Sattel in Richtung Brücke ab.
 
 Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder lediglich eine kaum wahrnehmbare Bewegung. Dies spricht dafür, dass die beobachtete Verschiebung nicht durch ein Verformen des Instruments verursacht wurde, sondern auf eine tatsächliche Längenänderung der gespannten Saite zurückzuführen ist. Als die Saite wieder entspannt wurde, waren die Markierungen wieder an ihrer Ausgangsposition. Die Schwingungsfrequenz der Saite war auch wieder dieselbe wie zu Beginn.
 
-==== Fazit
+=== Fazit
 
-Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.  
+Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.
 Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixer Punkt wirkt, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich stärker wandern. Elastisch bedeutet, dass die Saite eigenständig wieder ihre Ursprungsform annimmt.
-
-Die Saite verhält sich dabei wie eine elastische Feder. Je näher ein Punkt an der fixierten Brücke liegt, desto geringer ist seine Bewegung.  
+Die Saite verhält sich wie eine elastische Feder. Je näher ein Punkt an der fixierten Brücke liegt, desto geringer ist seine Bewegung.
 Dies bestätigt, dass sich die Dehnung der Saite über ihre gesamte Länge verteilt, während der Fixpunkt an der Brücke nahezu ortsfest bleibt.
 
 
+== Physikalisches Model
+Im folgenden wird ein physikalisches Model der Gitarre beschrieben, um zu verstehen warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
 
-=== Mathematische Herleitung
-
-Die Gitarrensaite wird daher als Feder mit sehr hoher Federkonstante modelliert.
-
-Für eine realistischere Beschreibung des Gesamtsystems muss zusätzlich das Tremolosystem berücksichtigt werden,
-da dieses über die Rotation der Brücke unmittelbar mit den auf die Saiten wirkenden Kräften gekoppelt ist. (Siehe: @FRQuer)
-
-Die auf eine einzelne Saite $i$ wirkende Kraft ist die Zugkraft am Stimmwirbel, mit der die Saite auf eine definierte Vorspannung gebracht wird.
-Die Tremolofedern sind die Federn die unterhalb des Tremolos angebracht sind.
-
-#figure(image("assets/floydrose_backside_neutral.jpg", height: 20%), caption: [Tremolofedern])
-Die zur Ausdehnung der Tremolofedern erforderliche Kraft ist im Allgemeinen nicht identisch mit der
-Saitenspannung. Ursache hierfür ist die rotatorische Lagerung der Brücke, weshalb das entstehende
-Drehmoment explizit berücksichtigt werden muss.
-
-Für den Stimmvorgang ist maßgeblich, welche physikalischen Größen die Schwingungsfrequenz einer Saite bestimmen.
-Stimmen bedeutet, die Zugkraft einer Saite so einzustellen, dass sie mit einer vorgegebenen Eigenfrequenz schwingt.
-
+Die Gitarre wird als Funktion betrachtet, die 6 Aufwickelstrecken $arrow(Delta L) = vec(Delta L_1, dots.v, Delta L_i, dots.v, Delta L_6)$ auf einen Frequenzvektor $arrow(f) = vec(f_1, dots.v, f_i, dots.v, f_6)$ abbildet
+$arrow(Delta L) -> arrow(f)$, wobei jede komponente zu einer Saite gehört. Beim Stimmen muss $arrow(Delta L)$ so gewählt werden, dass genau die gewünschten Frequenzen erreicht werden.
+Das Ziel ist die Funktion $f(arrow(Delta L))$ zu bestimmen.
 Der Zusammenhang zwischen effektiver Saitenlänge $L_(S,i)$, Zugkraft $F_(S,i)$,
 linearer Massendichte $mu_i$ und Frequenz $f_i$ wird durch das Mersennesche Gesetz beschrieben
 @wiki_mersennes_laws:
 
 $
-f_i = 1 / (2 L_(S,i)) sqrt(F_(S,i) / mu_i)
+  f_i = 1 / (2 L_(S,i)) sqrt(F_(S,i) / mu_i)
 $<eqMersenne>
 
-Die effektive Saitenlänge ist der zwischen Sattel und Steg gespannte Abschnitt der Saite, der schwingt und die Tonhöhe bestimmt. Die Gesamtsaitenlänge ist größer, da zusätzliches Saitenmaterial zur Fixierung und Spannungseinstellung am Stimmwirbel benötigt wird; diese aufgewickelten Abschnitte sind nicht schwingend und beeinflussen weder die Tonerzeugung noch die Grundfrequenz, sondern haben ausschließlich eine mechanische Funktion - siehe @FRMTop.
+Zunächst wird die Saitenkraft $F_(S,i)$ als Funktion der Aufwickelstrecken $arrow(Delta L)$ bestimmt. Die Kraft die auf die Saite wirkt, wird durch das Hooksche Gesetz beschrieben @wiki_hookes_law:
 
-Dabei ist zu beachten, dass die effektive Saitenlänge $L_(S,i)$ keine konstante Größe ist. Sie hängt von der Auslenkung der Tremolofedern ab, welche wiederum durch die Gesamtkraft aller Saiten bestimmt wird.
-In der Realität hat jede Saite eine eigene Schwingendesaitenlänge, wie in @FRTop zu sehen ist.  
+$ F_(S,i) = (L_(S,i) - L_(0S,i)) dot k_(S,i) $<eqSaitenkraft>
 
-In einem Gitarrensystem wirken sechs Saiten gleichzeitig auf die Brücke. Mechanisch entspricht dies einer Parallelschaltung von Federn, wobei für parallel geschaltete Federn sich sowohl die Kräfte als auch die Federkonstanten addieren 
-@leifiphysik_kombination_federn. Die Summe der Kräfte ist die auf die Brücke wirkende Gesamtkraft $F_B$:
-
+$L_(0S,i)$ beschreibt die unbelastete Saitenlänge im Abschnitt zwischen Sattel und Brücke. Diese Länge wird durch die Aufwickelstrecke $Delta L_i$ beeinflusst. $L'_(0S,i)$ sei die initiale unbelastete Saitenlänge.
 
 $
-F_B = sum_(i=1)^6 F_(S,i) = sum_(i=1)^6(L_(S,i) - L_(0S,i)) dot k_(S,i)
-$<eqBrückenkraft>
-da
-$
-F_(S,i) = (L_(S,i) - L_(0S,i)) dot k_(S,i)
-$<eqSaitenkraft>
-
-wobei $L_(0S,i)$ die unbelastete Saitenlänge im Abschnitt zwischen Sattel und Brücke beschreibt.
+  L_(0S,i) = L'_(0S,i) - Delta L_i
+$<eqUnbelasteteSaitenlänge>
 
 
-Für die Tremolofedern gilt analog:
+#figure(
+  image("assets/FloydRoseQuer.png"),
+  caption: [Floyd-Rose-Model Quer],
+)<FRMQuer>
 
-$
-F_hat(F) = (L_hat(F) - L_(0hat(F))) dot k_hat(F)
-$<eqTremolofederkraft>
+#figure(image("assets/floydrose_backside_neutral.jpg", height: 20%), caption: [Tremolofedern])<FRFedern>
 
-Die Saite wird beim Stimmen um eine Strecke $Delta L_i$ aufgewickelt, was die unbelastete Saitenlänge beeinflusst und welche die einzige direkt steuerbare Variable beim Stimmen ist.  Sei $ arrow(Delta L) = vec(Delta L_1, dots.v, Delta L_i, dots.v, Delta L_6) $ der Vektor, der für jede Saite die jeweilige Aufwickelstrecke beschreibt.
-Unter dieser Definition lässt sich die resultierende Brückenkraft als Funktion von $arrow(Delta L)$
-formulieren zu
 
-$
-F_B (arrow(Delta L))
-= sum_(i=1)^6 (L_(S,i) - L'_(0S,i) + Delta L_i) dot k_(S,i)
-$
+In @FRQuer, @FRMQuer und @FRFedern ist zusehen, wie die Brücke die Tremolofedern und die Saiten über einen Drehmoment koppelt.  Die Tremolofedern dienen unterhalb der Brücke als Gegenkraft zu der Saitenspannung.
 
-Die zentrale zu bestimmende Größe ist hierbei $L_(S,i)$, da sie direkt $F_(S,i)$ beeinflusst und man somit alle Variablen für @eqMersenne bestimmen kann.
 
-Zu diesem Zweck wird zunächst die Brücke modelliert, da diese $L_(S,i)$ direkt beeinflusst. Die Brücke wird als starrer, gewinkelter Hebel betrachtet.
+#grid(
+  columns: 2,
+  inset: 6pt,
+  grid.cell([
+    #figure(
+      image("assets/FlyodRoseTop.png"),
+      caption: [Floyd-Rose-Model Draufsicht],
+    ) <FRMTop>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/FRrealTop.png"),
+      caption: [Floyd-Rose Draufsicht],
+    )<FRTop>
+  ]),
+)
+
+
+In der Realität hat jede Saite ihre eigene Saitelänge, wie in @FRMTop und @FRTop zu sehen ist. Sie variieren zwar nur minimal haben aber einen Einfluss auf die rotatorische Projektion der Kräfte.
+
+Die Brücke wird als starrer, gewinkelter Hebel betrachtet, siehe @FRMQuer.
 Die Drehachse liege im Koordinatenursprung.
-Die Vektoren $arrow(h_hat(F))$ (Hebelarm der Feder) und $arrow(h_(S,i))$ (Hebelarm der Saite)
+Die Vektoren $arrow(h_hat(F))$ (Hebelarm der Feder) und $arrow(h_(S,i))$ (Hebelarm der Saite i)
 schließen konstruktionsbedingt einen konstanten Winkel $alpha_i$ ein.
-Die Beträge $h_hat(F)$ und $h_(S,i)$ sind systemspezifische Konstanten.
+Die Beträge $h_hat(F)$ und $h_(S,i)$ sind systemspezifische Konstanten. Jede Saite erhält seinen eigenen Hebelarm $arrow(h_(S,i))$, um den aufbau wie in @FRTop und @FRMTop korrekt zu modellieren. Die Tremolofedern haben nur einen Hebelarm $arrow(h_hat(F))$ in diesem Modell.
 
 Es sei
 $
-arrow(h_hat(F))(beta) = h_hat(F) vec(cos(beta), sin(beta))
+  arrow(h_hat(F))(beta) = h_hat(F) vec(cos(beta), sin(beta))
 $
 
 Dann folgt
 
 $
-arrow(h_(S,i))(beta) = h_(S,i) vec(cos(beta+alpha_i), sin(beta+alpha_i))
+  arrow(h_(S,i))(beta) = h_(S,i) vec(cos(beta+alpha_i), sin(beta+alpha_i))
 $
 
 
-Sei $arrow(P_S)$ die Position des Sattels.
-Die effektive Saitenlänge ergibt sich zu
+Sei $arrow(P_S)$ die konstante Position des Sattels.
+Die effektive Saitenlänge und Tremolofederlänge ergeben sich zu
 
 $
-L_(S,i) (beta) = abs(arrow(h_(S,i))(beta) - arrow(P_S))
-$
-
-wobei $arrow(P_S)$ konstant ist.
-Analog gilt für die Tremolofeder:
+  L_(S,i) (beta) = abs(arrow(h_(S,i))(beta) - arrow(P_S))
+$ <eqSaitenlänge>
 
 $
-L_F (beta) = abs(arrow(h_hat(F))(beta) - arrow(P_F))
-$
+  L_hat(F) (beta) = abs(arrow(h_hat(F))(beta) - arrow(P_hat(F)))
+$ <eqTremolofederlänge>
 
-Nun soll $beta$ bestimmt werden, welcher sich aus dem Kräftegleichgewicht und der darausfolgenden Hebelposition ergibt. Nach den Gesetzen der Statik trägt ausschließlich der zur jeweiligen Hebelarmrichtung orthogonale Kraftanteil zum Drehmoment bei.
+Nun soll $beta$ bestimmt werden, welcher sich aus dem Kräftegleichgewicht und der darausfolgenden Hebelposition ergibt. Nach den Gesetzen der Statik trägt ausschließlich der zur jeweiligen Hebelarmrichtung orthogonale Kraftanteil zum Drehmoment bei @hebel_wikipedia.
 Im stationären Gleichgewicht gilt das Drehmomentgleichgewicht:
 
 $
-F_(B bot) =  sum^6_(i=1) F_(S,i, bot h_(S,i)) dot h_(S,i) = F_(hat(F) bot h_hat(F)) dot h_hat(F)
-$
+  sum^6_(i=1) F_(S,i, bot h_(S,i)) dot h_(S,i) = F_(hat(F) bot h_hat(F)) dot h_hat(F)
+$ <eqBrückenkraftgleichgewicht>
 
 Dabei bezeichnen $F_(S,i, bot h_(S,i))$ und  $F_(hat(F) bot h_hat(F))$ jeweils die Anteile der Kräfte
-$arrow(F_(S,i, bot h_(S,i)))$ und $arrow(F_hat(F))$, die orthogonal zu den Hebelarmen $arrow(h_(S,i))$ und $arrow(h_hat(F))$ wirken.
+$arrow(F_(S,i))$ und $arrow(F_hat(F))$, die orthogonal zu den Hebelarmen $arrow(h_(S,i))$ und $arrow(h_hat(F))$ wirken. Auf der linken Seite von @eqBrückenkraftgleichgewicht müssen die Kräfte der 6 Saiten aufaddiert werden, da sich die Kräfte parallelgeschalteter Federn addieren @leifiphysik_kombination_federn.
 
+Zunächst wird der Richtungsvektor von $F_(S,i)$, $h_(S,i)$, $F_hat(F)$ und $h_hat(F)$ normiert, wobei $P_hat(F)$ der Punkt ist, an dem die Tremolofeder an der Gitarre befestigt ist.
+
+$
+  arrow(e_F_(S,i)) = (arrow(P_S) - arrow(h_(S,i))) / abs(arrow(P_S) - arrow(h_(S,i)))
+$
+$
+  arrow(e_h_(S,i)) = vec(cos(beta+alpha_i), sin(beta+alpha_i))
+$
+$
+  arrow(e_F_hat(F)) = (arrow(P_hat(F)) - arrow(h_hat(F))) / abs(arrow(P_hat(F)) - arrow(h_hat(F)))
+$
+$
+  arrow(e_h_hat(F)) = vec(cos(beta), sin(beta))
+$
 Aus der orthogonalen Projektion eines Vektors $arrow(a)$ bezüglich eines Vektors $arrow(b)$ folgt @technikermathe_orthogonale_zerlegung_vektoren:
 
 $
-F_(S,i, bot h_(S,i))
-= F_(S,i) dot sqrt(1 - (arrow(F_(S,i))/abs(arrow(F_(S,i))) dot arrow(h_(S,i))/abs(arrow(h_(S,i))))^2)
+  F_(S,i bot h_(S,i))
+  = F_(S,i) dot sqrt(1 - (arrow(e_F_(S,i)) dot arrow(e_h_(S,i)))^2)
+$
+$
+  = F_(S,i) dot sin(angle.arc(arrow(e_F_(S,i)), arrow(e_h_(S,i))))
 $
 
 Analog ergibt sich für die Tremolofeder:
-
 $
-F_(hat(F) bot h_hat(F))
-= F_(hat(F)) dot sqrt(1 - (arrow(F_(hat(F)))/abs(arrow(F_(hat(F)))) dot arrow(h_hat(F))/abs(arrow(h_hat(F))))^2)
+  F_(hat(F), bot h_hat(F))
+  = F_hat(F) dot sqrt(1 - (arrow(e_F_hat(F)) dot arrow(e_h_hat(F)))^2)
 $
-
-TODO: 
-1. Überprüfe die Richtigkeit des Orthogonalen Anteils
-2. Begründe die unterschiedlichen Tremelo Hebelarme anhand @FRMTop und @FRTop
-3. Begründe das die gegenkraft gleich der summen der einzelnen Saiten ist
-4. Versuche im endergebnis die Formel nach $arrow(f)(arrow(f))$ zu substituieren und die Ableitung/Jacobi Matrix zu bilden. Die terme sollten alle gleich aussehen für jede komponente. 
-5. nutze für die Substitution. das Mersennsche gesetz
-= chill
-
-
 $
-arrow(a)_(bot arrow(b)) = arrow(a) - arrow(a)_(parallel arrow(b))
-$
-
-mit
-
-$
-arrow(a)_(parallel arrow(b))
-= (arrow(a) dot arrow(b)) / (abs(arrow(b))^2) dot arrow(b)
+  = F_hat(F) dot sin(angle.arc(arrow(e_F_hat(F)), arrow(e_h_hat(F))))
 $
 
 
-Der normierte Richtungsvektor der Brückenkraft ist gegeben durch
+Das Kräftegleichgewicht lässt sich damit schreiben als:
 
 $
-arrow(e)_(F_B)
-= (arrow(P_S) - arrow(h_(S,i))) / abs(arrow(P_S) - arrow(h_(S,i)))
-$
+  sum^6_(i=1) F_(S,i) sin(angle.arc(arrow(e_F_(S,i)), arrow(e_h_(S,i)))) dot h_(S,i) = F_(hat(F)) sin(angle.arc(arrow(e_F_hat(F)), arrow(e_h_hat(F)))) dot h_hat(F)
+$ <eqBrückenkraftgleichgewichtMitSinus>
 
-Der Kraftvektor lautet damit:
-
-$
-arrow(F_B) = F_B dot arrow(e)_(F_B)
-$
-
-Der normierte Richtungsvektor des Hebelarms ergibt sich aus:
-
-$
-arrow(e)_(h_(S,i)) = arrow(h_(S,i)) / abs(arrow(h_(S,i))) = vec(cos(beta), sin(beta))
-$
-
-
-
-
-Da $arrow(e)_(h_(S,i))$ normiert ist, gilt $abs(arrow(e)_(h_(S,i)))^2 = 1$.
-Setzt man $arrow(a) = arrow(F_B)$ und $arrow(b) = arrow(e)_(h_(S,i))$, so folgt:
-
-$
-arrow(F_B)_(bot arrow(e)_(h_(S,i))) =
-arrow(F_B) - (arrow(F_B) dot arrow(e)_(h_(S,i))) dot arrow(e)_(h_(S,i))
-$
-
-Da im Drehmomentgleichgewicht lediglich der Betrag der orthogonalen Kraft relevant ist,
-betrachten wir den Betrag dieses Vektors:
-
-$
-F_(S bot arrow(h_(S,i))) =
-abs(
-arrow(F_B) - (arrow(F_B) dot arrow(e)_(h_(S,i))) dot arrow(e)_(h_(S,i))
-)
-$
-
-Einsetzen von $arrow(F_B) = F_B dot arrow(e)_(F_B)$ ergibt:
-
-$
-F_(S bot arrow(h_(S,i))) =
-abs(
-F_B dot arrow(e)_(F_B)
-- (F_B dot arrow(e)_(F_B) dot arrow(e)_(h_(S,i))) dot arrow(e)_(h_(S,i))
-)
-$
-
-Faktorisiert nach $F_B$:
-
-$
-F_(S bot arrow(h_(S,i))) =
-F_B dot
-abs(
-arrow(e)_(F_B)
-- (arrow(e)_(F_B) dot arrow(e)_(h_(S,i))) dot arrow(e)_(h_(S,i))
-)
-$
-
-Der Ausdruck in den Betragsstrichen beschreibt den Betrag der orthogonalen Komponente
-des normierten Richtungsvektors $arrow(e)_(F_B)$ bezüglich des normierten Hebelarmvektors
-$arrow(e)_(h_(S,i))$.
-
-Die orthogonale Komponente ergibt sich aus der Vektorzerlegung in einen parallelen und
-einen orthogonalen Anteil:
-
-$
-abs(arrow(e)_(F_B bot arrow(e)_(h_(S,i)))) =
-abs(
-arrow(e)_(F_B)
-- (arrow(e)_(F_B) dot arrow(e)_(h_(S,i))) dot arrow(e)_(h_(S,i))
-)
-$
-
-Da $arrow(e)_(F_B)$ und $arrow(e)_(h_(S,i))$ normiert sind, kann auf den Satz des Pythagoras
-zurückgegriffen werden. Für den Betrag der orthogonalen Komponente gilt damit:
-
-$
-abs(arrow(e)_(F_B bot arrow(e)_(h_(S,i))))^2 =
-abs(arrow(e)_(F_B))^2
-- abs((arrow(e)_(F_B) dot arrow(e)_(h_(S,i))) dot arrow(e)_(h_(S,i)))^2
-$
-
-Wegen $abs(arrow(e)_(F_B)) = 1$ folgt unmittelbar:
-
-$
-abs(arrow(e)_(F_B bot arrow(e)_(h_(S,i))))^2 =
-1
-- abs((arrow(e)_(F_B) dot arrow(e)_(h_(S,i))) dot arrow(e)_(h_(S,i)))^2
-$
-
-Unter Verwendung der Definition des Skalarprodukts
-
-$
-arrow(u) dot arrow(v)
-= abs(arrow(u)) abs(arrow(v)) cos(angle.arc(arrow(u), arrow(v)))
-$
-
-ergibt sich:
-
-$
-abs(arrow(e)_(F_B bot arrow(e)_(h_(S,i))))^2 =
-1
-- abs(
-abs(arrow(e)_(F_B))
-abs(arrow(e)_(h_(S,i)))
-cos(angle.arc(arrow(e)_(F_B), arrow(e)_(h_(S,i))))
-dot arrow(e)_(h_(S,i))
-)^2
-$
-
-Da beide Richtungsvektoren normiert sind, vereinfacht sich der Ausdruck zu:
-
-$
-abs(arrow(e)_(F_B bot arrow(e)_(h_(S,i))))^2 =
-1
-- cos^2(angle.arc(arrow(e)_(F_B), arrow(e)_(h_(S,i))))
-$
-
-Mit der trigonometrischen Identität $1 = sin^2(x) + cos^2(x)$ folgt schließlich:
-
-$
-abs(arrow(e)_(F_B bot arrow(e)_(h_(S,i)))) =
-abs(sin(angle.arc(arrow(e)_(F_B), arrow(e)_(h_(S,i)))))
-$
-
-Setzt man dieses Ergebnis in die Definition des wirksamen Kraftanteils ein, erhält man:
-
-$
-F_(S bot arrow(h_(S,i))) =
-F_B dot abs(sin(angle.arc(arrow(e)_(F_B), arrow(e)_(h_(S,i)))))
-$
-
-Der Winkel zwischen den beiden Richtungsvektoren lässt sich über das Skalarprodukt ausdrücken:
-
-$
-angle.arc(arrow(e)_(F_B), arrow(e)_(h_(S,i))) =
-arccos(arrow(e)_(F_B) dot arrow(e)_(h_(S,i)))
-$
-
-Alternativ kann der Ausdruck rein algebraisch formuliert werden.
-Unter Verwendung der Identität $sin(arccos(x)) = sqrt(1 - x^2)$ ergibt sich:
-
-Da $arrow(e)_(h_(S,i))$ normiert ist, folgt:
-
-
-
-Diese Terme gehen in das Drehmomentgleichgewicht ein:
-
-$
-h_hat(F) dot F_F dot sqrt(1 - (arrow(e)_(F_F) dot arrow(e)_(h_hat(F)))^2)
-=
-h_(S,i) dot F_B dot sqrt(1 - (arrow(e)_(F_B) dot arrow(e)_(h_(S,i)))^2)
-$
-
-Diese Gleichung ist im Allgemeinen nichtlinear und bestimmt den Rotationswinkel $beta$ der Brücke.
+Der nächste Schritt wäre, diesen Ausdruck nach $beta(arrow(Delta L))$ umzustellen, um die Hebelposition zu bestimmen. Allerdings ist dies nicht analytisch möglich, da $beta$ in den Sinusfunktionen und den Hebelarmvektoren auf beiden Seiten der Gleichung vorkommt. Es liegt ein nichtlineares Gleichungssystem vor, das numerisch gelöst werden muss.
 
 Bringt man sie in die Form einer Nullstellengleichung, erhält man
 
 $
-0 = g(beta) =
-h_hat(F) dot F_F dot sqrt(1 - (arrow(e)_(F_F)(beta) dot arrow(e)_(h_hat(F))(beta))^2)
--
-h_(S,i) dot F_B dot sqrt(1 - (arrow(e)_(F_B)(beta) dot arrow(e)_(h_(S,i))(beta))^2)
+  0 = g(beta; arrow(Delta L)) = sum^6_(i=1) F_(S,i) sin(angle.arc(arrow(e_F_(S,i)), arrow(e_h_(S,i)))) dot h_(S,i) - F_(hat(F)) sin(angle.arc(arrow(e_F_hat(F)), arrow(e_h_hat(F)))) dot h_hat(F)
 $
 
 Damit liegt ein eindimensionales nichtlineares Optimierungs- bzw. Nullstellenproblem vor, mit dem sich der Rotationswinkel $beta$ numerisch bestimmen lässt.
 
 Aus dem so berechneten Winkel ergeben sich transitiv die abhängigen Größen
-$
-h_hat(F) (beta); h_(S,i) (beta); L_(S,i) (beta)
-$
-und daraus schließlich die Brückenkraft
-$
-F_B (arrow(Delta L)).
-$
+$h_(S,i) (beta)$, $L_(S,i)(beta)$ und $F_(S,i) (arrow(Delta L))$.
 
-
-Die lineare Massendichte $mu_i$ wird durch die Länge der Saite beeinflusst.  Ziel ist es daher, die lineare Massendichte als Funktion der Aufwickelstrecken $arrow(Delta L)$ zu bestimmen, also $mu_i (arrow( Delta L))$.
-
+$mu_i$ ist von der Aufwickelstrecke $arrow(Delta L)$ abhängig.
 Im Allgemeinen gilt für Saite $i$:
 
 $
-mu_i = m_i / L_"S,i,Total"
+  mu_i = m_i / L_"S,i,Total"
 $
 
-Dabei bezeichnet $m_i$ die Gesamtmasse der Saite $i$ und $L_"S,i,Total"$ die Gesamtlänge der Saite. 
-Wird die Saite aufgezogen, bewegt sich die Brücke um eine Strecke $Delta h$ in Richtung Sattel. Wäre die Federkonstante der Brücke $k_F = 0$, würde sich die Saite ohne Widerstand bewegen und die Brückenbewegung entspräche exakt der Aufwickelstrecke:
-
+Dabei bezeichnet $m_i$ die Gesamtmasse der Saite $i$ und $L_"S,i,Total"$ die Gesamtlänge der Saite.
+Wird die Saite aufgezogen, bewegt sich die Brücke um eine Strecke $Delta h$ in Richtung Sattel.
 $
-Delta h = Delta L_i
+  L_"S,i,Total" (arrow(Delta L)) = ???
 $
-
-In der Realität gilt jedoch $k_F > 0$. Die Saite muss sich daher zusätzlich dehnen, um die Federkraft der Brücke auszugleichen. Diese Dehnung wirkt der Aufwickelrichtung entgegen. Es gilt somit:
-
-$
-Delta h(arrow(Delta L)) = Delta L_i - d_i (arrow(Delta L))
-$
-
-wobei $d_i (arrow(Delta L))$ der Längenanteil ist, um den sich die Saite elastisch dehnt.
-
-Die Länge der schwingenden Saite lässt sich daher schreiben als:
-
-$
-L_(S,i) (arrow(Delta L)) = L'_"0S,i" - Delta h(arrow(Delta L))
-$
-
-Setzt man den Ausdruck für $Delta h$ ein, ergibt sich im allgemeinen Fall:
-
-$
-L_(S,i) (arrow(Delta L)) = L'_"0S,i" - Delta L_i + d_i (arrow(Delta L))
-$
-
-Daraus folgt für die Verlängerung der Saite:
-
-$
-d_i (arrow(Delta L)) = L_(S,i) (arrow(Delta L)) - L'_"0S,i" + Delta L_i
-$
-
-
-Die Gesamt länge ergibt sich somit zu 
-$
-L_"S,i,Total" (arrow(Delta L)) = L'_"0S,i" + L'_"0M,i" + d_i (arrow(Delta L))
-$
-$
-L_"S,i,Total" (arrow(Delta L)) = L_(S,i) (arrow(Delta L))+ L'_"0M,i" + Delta L_i
-$
-
-wobei $L'_"0M,i"$ die initiale Strecke der Saite hinter dem Sattel beschreibt ($Delta L_i = 0)$. 
 
 Die lineare Massendichte ergibt sich somit zu:
 
 $
-mu_i (arrow(Delta L)) = m_i/(L_(S,i) (arrow(Delta L)) + L'_"0M,i" + Delta L_i)
+  mu_i (arrow(Delta L)) = m_i/(???)
 $
 
 Darauf aufbauend lässt sich eine Abbildung definieren, die die Aufwickelstrecke jeder Saite auf einen Frequenzvektor abbildet:
 
 $
-f_i (arrow(Delta L)) =
-1 / (2 dot L_(S,i) (arrow(Delta L)))
-sqrt((F_"S,i" (arrow(Delta L)) )/ (mu_i (arrow(Delta L))))
+  f_i (arrow(Delta L)) =
+  1 / (2 dot L_(S,i) (arrow(Delta L)))
+  sqrt((F_"S,i" (arrow(Delta L)) )/ (mu_i (arrow(Delta L))))
 $
 
 
-Setzt man die Definitionen für $F_"S,i" (arrow(Delta L))$und $mu_i (arrow(Delta L))$ ein, erhält man:
+== Fazit
+Es wird ersichtlich, dass die Aufwickelstrecken der Saiten die Frequenzen aller Saiten beeinflussen. Dass erklärt, warum das Stimmen einer Floyd-Rose-Gitarre so schwierig ist.
 
-$
-f_i (arrow(Delta L)) =
-1 / (2 dot L_(S,i) (arrow(Delta L)))
-sqrt(((L_(S,i) (arrow(Delta L))- L'_(0S,i) + Delta L_i) dot k_(S,i))/ (
-m_i/(L_(S,i) (arrow(Delta L)) + L'_"0M,i" + Delta L_i)
-))
-$
-Nach Vereinfachen:
-$
-f_i (arrow(Delta L)) =
-1 / (2 dot L_(S,i) (arrow(Delta L)))
-sqrt(((L_(S,i) (arrow(Delta L))- L'_(0S,i) + Delta L_i) dot k_(S,i) dot (L_(S,i) (arrow(Delta L)) + L'_"0M,i" + Delta L_i))/ 
-m_i
-)
-$
+Beim Stimmen werden die Aufwickelstrecken nur in kleinen Schritten verändert. In diesem Fall verhält sich das System näherungsweise linear, da die Taylor-Approximation für sehr kleine Änderungen gilt. Da das System physikalisch ist, können wir das System als stetig betrachten.
 
 == Experiment: Nachweis Linearität
 
-Für kleine Auslenkungen $Delta x$ gilt aufgrund der Taylor-Approximation eine annähernd lineare Beziehung zwischen Zugkraft und Dehnung.  
-Im Folgenden wird daher ein Experiment vorgestellt, dass die angenommene Lineariät der Saite überprüft.
+Diese Linearität soll nun experimentell überprüft werden.
 
-Das Folgende Experiment zeigt, das näherungsweise Lineare Verstimmungsverhalten der Floyd-Rose Gitarre.
+Hierbei werden die Frequenzänderungen der Saiten gemessen, wenn eine andere Saite verstimmt wird.
 
-Es wird ein Experiment durchgeführt, bei dem die Frequenzänderungen der Saiten gemessen werden, wenn eine andere Saite verstimmt wird.
-
-=== Vorgehensweise 
+=== Vorgehensweise
 Zunächst wird jede Saite in eine Ausgangsposition gebracht. Eine Standard-Gitarrenstimmung ist E–A–D–G–B–e. Da eine Gitarre aufgrund menschlicher Ungenauigkeiten nicht perfekt gestimmt werden kann, werden die Ausgangsfrequenzen der Saiten zunächst gemessen und aufgezeichnet.
 
 Anschließend wird jeweils eine Saite um ein beliebiges $Delta$ verstimmt. Dieses $Delta$ wird so gewählt, dass die Verstimmung deutlich hörbar ist. Auch dieses $Delta$ wird gemessen und dokumentiert.
@@ -633,25 +386,288 @@ Jede Saite wird in vier Schritten nach oben und vier Schritten nach unten versti
 === Ziel
 
 Das Ziel des Experiments ist es zu beobachten, ob das System
-- hinreichend linear ist (was nach der Theorie nicht zu erwarten)
-- elastisch ist.
-
-Elastizität bedeutet hier, dass die Frequenz einer Saite wieder in ihren Ausgangszustand zurückkehrt, sobald die Saite selbst wieder in die Ausgangslage gebracht wird. Um dies zu überprüfen, werden nach allen Verstimmungsschritten die Endfrequenzen mit den Anfangswerten verglichen.
-Um die Theorie zu überprüfen, wird ein Experiment durchgeführt, bei dem die Frequenzänderungen der Saiten gemessen werden, wenn eine andere Saite verstimmt wird.
-
-Zunächst wird jede Saite in eine Ausgangsposition gebracht. Eine Standard-Gitarrenstimmung ist E–A–D–G–B–E. Da eine Gitarre aufgrund menschlicher Ungenauigkeiten nicht perfekt gestimmt werden kann, werden die Ausgangsfrequenzen der Saiten zunächst gemessen und aufgezeichnet.
-
-Anschließend wird jeweils eine Saite um ein beliebiges $Delta$ verstimmt. Dieses $Delta$ wird so gewählt, dass die Verstimmung deutlich hörbar ist. Auch dieses $Delta$ wird gemessen und dokumentiert.
-
-Jede Saite wird in vier Schritten nach oben und vier Schritten nach unten verstimmt. Für jeden Schritt wird die Frequenz aller anderen Saiten gemessen und aufgezeichnet.
-
-Das Ziel des Experiments ist es zu beobachten, ob das System
 - hinreichend linear ist
 - elastisch ist.
 
 Elastizität bedeutet hier, dass die Frequenz einer Saite wieder in ihren Ausgangszustand zurückkehrt, sobald die Saite selbst wieder in die Ausgangslage gebracht wird. Um dies zu überprüfen, werden nach allen Verstimmungsschritten die Endfrequenzen mit den Anfangswerten verglichen.
 
 Zur Frequenzmessung wird ein Python-Programm eingesetzt, das mithilfe der Fourier-Transformation die Schwingungsfrequenzen bestimmt. Die Visualisierung erfolgt ebenfalls mit Python, wobei die Bibliothek matplotlib.pyplot für die Darstellung der Graphen genutzt wird.
+
+Insgesamt werden 324 gelabelte Audio-Samples aufgenommen:
+
+* Es gibt 6 Saiten,
+* jede Saite beeinflusst alle 6 Saiten,
+* jede Saite wird dabei in 4 Schritten nach oben und 4 Schritte nach unten verstimmt,
+* hinzu kommt noch die Ausgangsposition.
+Damit ergibt sich die Anzahl der Messungen zu
+$324 = 6 dot 6 dot (4 dot 2+1)$.
+
+=== Frequenzmessung
+
+Die Audio-Samples werden mit Hilfe der Fourier Transformation in den Frequenzbereich transformiert. Die Frequenz mit der höchsten Amplitude wird als die Frequenz der Saite angenommen.
+Der Python Code um von einer Audio-Datei die Frequenz zu erhalten ist im folgenden definiert:
+
+```python
+import numpy as np
+from scipy.fftpack import rfft
+from scipy.io import wavfile
+from scipy.signal import find_peaks
+import matplotlib.pyplot as plt
+from ipywidgets import HBox, VBox, interactive, Layout, Checkbox, fixed
+import random
+from sklearn.linear_model import LinearRegression
+
+def get_samples(filepath):
+    fs, data = wavfile.read(filepath)  # Load the data
+    if len(data.shape) > 1:  # Stereo → Mono
+        data = data.mean(axis=1)
+    return data, fs
+
+def get_peak_frequency(spectrum, samplerate, min_prominence=1000):
+    # Betragsspektrum
+    magnitude = np.abs(spectrum)
+    # Peaks finden (optional: Mindestprominenz gegen Rauschen)
+    peaks, _ = find_peaks(magnitude, prominence=min_prominence)
+    if len(peaks) == 0:
+        return None  # Falls keine Peaks erkannt werden
+    # Index des höchsten Peaks
+    peak_idx = peaks[np.argmax(magnitude[peaks])]
+    # Frequenz berechnen
+    frequency = peak_idx * (samplerate / (2 * len(spectrum)))
+    return frequency
+
+def get_frequency_from_file(filepath, min_prominence=1000):
+    samples, samplerate = get_samples(filepath)
+    spectrum = rfft(samples)
+    return get_peak_frequency(spectrum, samplerate, min_prominence=min_prominence)
+```
+
+=== Visualisierung der Messdaten
+
+Die Visualisierung zeigt die Frequenz der Saiten in Abhängigkeit von der Verstimmung. Zum Visualisieren wird Matplotlib und IPyWidgets verwendet.
+Die Daten zum Visualisieren werden wie folgt strukturiert:
+
+```json
+data = {
+    'E2': {                              // The first key represents the String that is detuned
+        'E2': [200Hz,220Hz,...,330Hz],                          // The second key represents the string on which the impact is measured
+                                         // The Value is a List of the length 8. on Index 0 is the measurement where the detuned string was tuned the lowest.
+        'D3': [340Hz,330Hz,...,300Hz]),
+        ...,
+        'E4': [...])
+    },
+    ...
+    'E4': {
+        'E2': [...]),
+        'A2': [...]),
+        ...,
+        'E4': [...])
+    }
+}
+```
+Die Namen der Saiten sind wie folgt definiert:
+1. E2
+2. A2
+3. D3
+4. G3
+5. B3
+6. E4
+
+Das folgende Programm ermöglicht es uns die Daten zu visualisieren. Es gibt 6 Abbildungen mit jewails 6 Plots. Jede Abbildung zeigt wie sich alle Saiten verstimmen, wenn sich eine andere Saite verändert. Pro Abbildung wird eine Checkbox für jede Saite erstellt, die es uns ermöglicht, die Daten für jede Saite einzeln anzuzeigen. Da interessant ist, ob die Verstimmung logarithmisch ist, wird die Änderung der Frequenz in Cent und in Hz dargestellt.
+
+Im Folgenden werden erstmal zufällige Messdaten zum testen der Visualisierung generiert:
+
+```python
+nStrings = 6
+steps = 4
+step_range = range(-steps, steps + 1)
+strings = ["E2", "A2", "D3", "G3", "B3", "E4"]
+# Verstimmung jeder anderen seite für jede Saite für alle Verstimmungsschritte
+example_dataset = {  # Dummy Data
+    string: {other_string: np.array([400 + (-_ * random.random() if other_string != string else _) for _ in step_range])
+             for other_string in strings}
+    for string in strings
+}
+
+def visualisation(df, string, label, **args):
+    for other_string in strings:
+        if other_string in args.keys() and args[other_string]:
+            ## Lineare Regression
+            x = df[string][string]
+            y = df[string][other_string]
+            #m,b = np.polyfit(x, y, 1)
+            #plt.plot(x, m*x+b, label=f"Linear Fit {m}x+{b} {other_string}")
+            plt.plot(df[string][string], df[string][other_string], label=other_string)
+    plt.title("Impact on String when detuning String " + string)
+    plt.xlabel(f"Detuning of String {string} in {label}")
+    plt.ylabel(f"Frequency of other Strings in {label}")
+     # Koordinatengitter hinzufügen
+    plt.grid(True)
+    plt.legend()
+
+def visualize_all(data, label): # Adds Checkboxes for every Sample
+    widget_list = []
+    for string in strings:
+        checkboxes = {string: Checkbox(value=True, label=string, indent=False) for string in strings}
+        widget = interactive(visualisation, df=fixed(data), string=fixed(string), label=fixed(label), **checkboxes)
+        controls = HBox(widget.children[:-1])  # Horizontale Box für die Checkboxes
+        output = widget.children[-1]
+        w = VBox([controls, output], layout=Layout(margin="10px"))
+        widget_list.append(w)
+    row1 = HBox(widget_list[:3])
+    row2 = HBox(widget_list[3:])
+    output = VBox([row1, row2])
+    display(output)
+```
+
+=== Durchführung
+```
+Die Audio-Dateien sind im Ordner `audio` zu finden.
+Die Ordnerstruktur ist wie folgt:
+
+
+    audio/<variable_saite>/<beeinflusste_saite>/<verstimmungsschritt>.wav
+
+    audio
+    ├── E2 # Ändernde Saite
+      ├── E2 # Beinflusste Saite
+        ├─── -4.wav
+        ├─── ...
+        ├─── 4.wav
+      ├─── ...
+      ├─── E4
+    ├── ...
+    ├── E4
+
+```
+=== Setup
+Die Gitarre wird per Klinkenkabel an eine Audio-Interface-Karte angeschlossen und mit einer Abtastrate von 44,1 kHz aufgenommen. Die Abbildung zeigt die Positionierung der Gitarre, die so gewählt wurde, dass sich der Hals nicht verzieht und dadurch den Ton beeinflusst. Die Gitarre wird am Stimmwirbel verstimmt, nicht am Feinstimmer an der Brücke.
+
+
+#figure(image("assets/setup.jpg", width: 50%), caption: [Setup der Aufnahme])<figSetup>
+
+Die Aufnahmen erfolgen mit der Digital Audio Workstation (DAW) Cubase. Dabei wird in Mono, mit 16 Bit und 44,1 kHz aufgenommen. Zusätzlich wird das in Cubase integrierte Stimmgerät genutzt, um die Frequenz jeder Saite vor jedem Durchgang erneut exakt in die Ausgangsposition zu bringen.
+
+
+#figure(
+  image("assets/digital_setup.png", width: 50%),
+  caption: [Screenshot von Cubase mit Stimmgerät und integriertem Frequenzmessgerät],
+)<figCubase>
+
+Jeder Aufnahmeblock enthält die Roh-Audiodaten aller Saiten der Gitarre (E2, A2, D3, G3, B3 und E4). Die Saiten werden in dieser Reihenfolge gespielt. Die Färbung der Blöcke in der DAW visualisiert die Stärke und Richtung der Verstimmung:
+
+* Rottöne → Verstimmung zu tieferen Frequenzen,
+* Blautöne → Verstimmung zu höheren Frequenzen.
+
+Jede Zeile in der Aufnahme entspricht einer Saite und einer Verstimmungsrichtung. Von oben nach unten ergibt sich die Reihenfolge:
+E2 nach oben, E2 nach unten, A2 nach oben, A2 nach unten, …, E4 nach oben, E4 nach unten.
+
+Im Anschluss werden die einzelnen Audioblöcke so zugeschnitten, dass Transienten und das Ausklingen der Saite entfernt werden. Transienten sind kurze, perkussive Geräusche mit hohem Pegel, die beim Anschlag entstehen und die Frequenzanalyse verfälschen würden.
+
+
+#figure(
+  image("assets/cutted_audio.png", width: 50%),
+  caption: [Screenshot von Cubase mit zugeschnittenen Samples],
+)<figCuttedAudio>
+
+Jeder zugeschnittene Block wird einzeln exportiert und in den entsprechenden Ordner der oben beschriebenen Struktur verschoben.
+
+=== Clean Up
+Da von dem oben geschriebenen Python-Programm in manchen Aufnahmen die Obertöne der Saite fälschlicherweise als Ton erkannt wurden, werden die Samples noch einmal gefiltert.
+Die folgende Abbildung zeigt eine Konsolenausgabe von dem Problem.
+
+<div style="border: 1px solid #ccc; padding: 1px;">
+    <img src="assets/need_to_clean_data.png" width="900"/>
+    <figcaption>Fig. 15 – Screenshot der Zeigt das Obertöne erkannt werden statt Grundfrequenzen.</figcaption>
+</div>
+
+#figure(image("assets/need_to_clean_data.png", width: 50%), caption: [Screenshot der Zeigt das Obertöne erkannt werden statt Grundfrequenzen])<figNeedToCleanData>
+Der Screenshot zeigt, dass nicht die Grundfrequenz als solche erkannt wird, sondern teilweise Obertöne als Grundfrequenz erkannt werden. \
+
+Die automatische Auswahl des Peaks anhand einer erwarteten Frequenz ist problematisch, da die Grundfrequenz einer Saite variieren kann (z. B. durch Verstimmen oder unterschiedliche Gitarrenstimmungen). Wird die Saite stark von einem Referenzwert abweichen, besteht die Gefahr, dass der falsche Peak erkannt wird. Eine explizite Übergabe der erwarteten Frequenz für jedes Sample wäre möglich, jedoch aufwendig und nicht praktikabel für die allgemeine Analyse. Deshalb wird für jede Saite ein Bandpassfilter erstellt, der die Obertöne reduziert. 
+
+Die folgenden Abbildungen dienten ursprünglich lediglich der Veranschaulichung der Filter und nicht der Spektren des Klanges; ein eventuelles Fehlen der Spektren beeinträchtigt daher die Aussagekraft der Darstellung nicht.
+
+=== Bandpassfilter
+#grid(
+  columns: 2,
+  inset: 6pt,
+
+  grid.cell([
+    #figure(
+      image("assets/bandpass_e2.png"),
+      caption: [Bandpass für E2],
+    )<figBandpassE2>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/bandpass_a2.png"),
+      caption: [Bandpass für A2],
+    )<figBandpassA2>
+  ]),
+
+  grid.cell([
+    #figure(
+      image("assets/bandpass_d3.png"),
+      caption: [Bandpass für D3],
+    )<figBandpassD3>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/bandpass_g3.png"),
+      caption: [Bandpass für G3],
+    )<figBandpassG3>
+  ]),
+
+  grid.cell([
+    #figure(
+      image("assets/bandpass_b3.png"),
+      caption: [Bandpass für B3],
+    )<figBandpassB3>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/bandpass_e4.png"),
+      caption: [Bandpass für E4],
+    )<figBandpassE4>
+  ]),
+)
+=== Laden der Daten
+Im folgenden Script werden die gesamten Audio-Samples geladen, um sie zu verarbeiten und zu visualisieren. Es wird das oben spezifizierte Datenformat zum Speichern der Daten genutzt. 
+
+* Dimensionen:
+   * 0: `changing_string`
+   * 1: `impacted string`
+   * 2: Verstimmungsschritt
+* Eintrag = `frequency`.
+
+```python
+# Experiment
+measured_data = {}
+filenames = [f"{i}.wav" for i in step_range]
+counter = 0
+for changing_string in strings:
+    for impacted_string in strings:
+        #f0 = get_frequency_from_file(f"audio/{changing_string}/{impacted_string}/0.wav")
+
+        for filename in filenames:
+            frequency = get_frequency_from_file(f"audio/{changing_string}/{impacted_string}/{filename}")
+
+            print(
+                f"Saite: {changing_string}, Beeinflusste Saite: {impacted_string}, Verstimmungsschritt: {filename}, Frequenz: {frequency}")
+            counter+=1
+            if changing_string not in measured_data:
+                measured_data[changing_string] = {}
+
+            if impacted_string not in measured_data[changing_string]:
+                measured_data[changing_string][impacted_string] = []
+
+            measured_data[changing_string][impacted_string].append(frequency)
+counter
+```
+
+### Aggregierung der Daten
+Gemessen wurden die tatsächlichen Frequenzen jeder Saite und wie sie sich in Abhängigkeit der Veränderung jeder anderen Saite ändern. Für unsere Analyse interessiert uns jedoch vor allem das Maß dieser Änderung. Daher werden alle Messwerte mit ihren jeweiligen Ausgangswerten verglichen – sowohl in Cent als auch in Hertz – um die Frequenzänderungen anschaulich darzustellen.
 
 == Lösung
 
@@ -662,7 +678,7 @@ Inverse Matrix etc
 == Ablauf eines Stimmvorgangs
 Um nun eine Gitarre zustimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Dazu muss zunächst die Ausgangslage der Gitarre bestimmt werden. Dann wird die 1. Saite verstimmt und der Einfluss dieser Saite auf die anderen 5. Saiten gemessen. Dann werden die nächsten Saiten nach diesem Schema verstimmt und gemessen. Anhand diesen änderungen wird die Verstimmungsmatrix berechnet. Anschließend wird der Zustand der Gitarre ermittelt und es wird für jede Saite ein delta Frequenz berechnet, um die die Gitarre verstimmt werden muss. Der Nutzer muss dann jede Saite verstimmen sodass die Delta Frequenz 0 ist.
 
-Um das umzusetzen benötigen wir ein Verfahren um die Frequenz der Angespielten Saite zu ermitteln.
+Um das umzusetzen benötigt man ein Verfahren um die Frequenz der Angespielten Saite zu ermitteln.
 
 In der Regel wird auch ein Verfahren benötigt um das Signal zu Filtern sodass es weniger Anfällig für störgeräusche ist.
 
@@ -675,7 +691,7 @@ Für die Implementierung eines Tuners auf mobilen Geräten ist die präzise und 
 Die Idee der Autokorrelation besteht darin, dass ein Signal mit einer Periode von $tau$, wenn es mit sich selbst gefaltet wird, bei vielfachen von $tau$ maxima aufweisen wird. Wenn man nun den ersten von null verschiedenen x Wert wählt der bei einem Peak ist, hat man mit hoher Wahrscheinlichkeit, das Richtige $Tau$ und mit seinem Inversen die Frequenz des Signals.
 
 $
-r_t(tau) = sum_(j=t+1)^(t+W) x_j x_(j+tau)
+  r_t(tau) = sum_(j=t+1)^(t+W) x_j x_(j+tau)
 $
 
 wo bei $r_t(tau)$ die Autokorrelationsfunktion von der Verzögerung $tau$ berechnet zum Zeitindex $t$ und $W$ ist die Integrationsfenstergröße.@YIN
@@ -689,7 +705,7 @@ Der YIN-Algorithmus ist eine Weiterentwicklung der Autokorrelation. Sie fügt ex
 Bei der Fourier-Analyse wird das Signal ins Frequenzspektrum transformiert, um das Spektrum nach der Grundfrequenz zu durchsuchen. Die Cepstrum-Analyse erweitert diesen Ansatz, indem das logarithmierte Spektrum erneut transformiert wird, um periodische Muster zu detektieren. Eine Analyse hat gezeigt, dass Jedoch Fourier-Analysen fehleranfällig sind und eine hohe sampling rate benötigen. @FFT_NEEDS_HIGH_SAMPLING
 - *Vorteile:* Robust gegenüber Harmonischen (Cepstrum), gute Integration in digitale Signalverarbeitungssysteme.
 - *Nachteile:* Eingeschränkte Genauigkeit bei niedrigen Frequenzen oder verrauschten Signalen.
-- *Referenzen:*  
+- *Referenzen:*
   Noll, A. M. (1967). *Cepstrum pitch determination*. J. Acoust. Soc. Am., 41(2), 293–309.
 
 === Moderne Deep-Learning-Ansätze
@@ -698,7 +714,7 @@ Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional- oder Recurrent Ne
 
 - *Vorteile:* Sehr robust bei Polyphonie, Hintergrundgeräuschen und unterschiedlichen Instrumenten.
 - *Nachteile:* Hoher Rechenaufwand, Trainingsdaten erforderlich, auf Mobilgeräten ressourcenintensiv.
-- *Referenz:*  
+- *Referenz:*
   Kim, J., & Bello, J. P. (2019). *CREPE: A Convolutional Representation for Pitch Estimation*. ISMIR 2019. [arXiv:1802.06291](https://arxiv.org/abs/1802.06291)
 
 
@@ -707,7 +723,7 @@ Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional- oder Recurrent Ne
 1. Filterung durch die Anpassung der Parameter in Frequenzanalyse
 2. Bandpass Filter durch FFT
 
-= Software Entwicklung/Implementierung 
+= Software Entwicklung/Implementierung
 == User Journeys
 == Anforderungen
 == Konzeption und Design
