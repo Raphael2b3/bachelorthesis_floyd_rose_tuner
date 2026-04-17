@@ -797,21 +797,93 @@ Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional- oder Recurrent Ne
 2. Bandpass Filter durch FFT
 
 = Software Entwicklung/Implementierung
+Die Software soll nach Buch- Mobile App Engineering
+implementiert werden.
 == User Journeys
+=== Gerhard Gitarrist
+Gerhard Gitarrist möchte seine Floyd Rose Tremolo Gitarre stimmen,
+
+er weiß von der App und lädt diese runter. Als er die App zum ersten mal startet, weiß er nicht direkt wie die App funktioniert.
+Deswegen findet er einen Link zu einem erklär Video. Und ein Erklär text. Er hat aber keine Lust sich
+das anzugucken und er möchte sofort loslegen. Er findet ein Knopf der ihm direkt zur Stimmpage
+weiterleitet.
+
+Die App erklärt ihm, das zu nächst das stimmgerät auf seine Gitarre angepasst werden muss.
+Dann passiert das:
+Die App fordert ihn auf die E-Saite zu spielen, und dann alle anderen.
+
+Dann fordert die App ihn auf die E-Saite um ein gewisses Maß zu verstimmen.
+
+Es gibt ein Positives Feedback wenn er es geschafft hat. Dann soll er jede andere
+Saite einmal Anspielen. Als er ausversehen die Falsche Saite spielt, hat er die möglichtkeit auf
+den button, vorherige Saite zu klicken.
+
+Das selbe passiert dann mit jeder anderen Saite.
+
+Die App fragt, ihn ob er die Konfiguration speichern will sodass er diesen
+prozess nicht wieder machen muss. Es gibt ein Textfeld auf dem er die
+Konfiguration gleich benennen kann. Mit zwei button, Speichern und Abbrechen.
+
+Es öffnet sich nun das Stimmgerät. Oben sieht er welche Konfiguration ausgewählt ist.
+Er soll die E seite zu einer bestimmten Frequenz stimmen.
+Das gleiche auch mit allen anderen Saiten.
+
+Jetzt ist seine Gitarre gestimmt.
+
+=== Arnold Abbrächer
+
+Arnold Abbrecher möchte seine Floyd Rose Tremolo Gitarre stimmen.
+
+er besitzt die App bereits.
+Als er die App Startet, öffnet sich direkt das Stimmgerät mit der letzten konfiguration.
+
+Er findet die Information, dass wenn die Gitarre neue Saiten bekommt, oder es
+eine andere Gitarre ist, dass das Stimmgerät neu Konfiguriert werden muss.
+
+Er klickt auf neue konfiguration.
+
+Nun Startet sich der Prozess, der Konfiguration.
+
+Er möchte den Prozess wegen äußeren einflüssen Abbrechen.
+
+Dazu klickt er auf abbrechen.
+
+
+=== Norman Normaler
+
+Norman Normaler Gitarrist möchte sei Normale Gitarre stimmen.
+
+Er besitzt die App bereits.
+Als er die App Startet, öffnet sich direkt das Stimmgerät mit der letzten konfiguration.
+
+Er kann in der Navigation auf Standart Tuner klicken und kommt zu einem Normalen
+stimmgerät. und stimmt die Gitarre so.
+
+
 == Anforderungen
+Aus User Stories ableiten
 == Konzeption und Design
+Screenshots von der App einfügen
 == Architektur
+Backend der App konzepieren. Pipeline model etc
 == Implementierung
+Auswahl von Frameworks und Libaries:
+- Flutter
+- Riverpod
+- etc..
+Verlinkung des Gitrepositories
 = Evaluation
+
 == Funktionsfähigkeit des Algorithmuses
 == Erfüllung der Requirements aus SWE
 == Usertests
 = Ausblick
 == Mehrere Saiten gleichzeitig Messen
+Fourie Transformation, 6 Peaks erkennen und die obertöne rausrechnen.
 == Implementierung für VST und Digital Audio Workstations (Plugin)
-
+VST und CLAP Plugin implementieren, in C++
 = Literatur
-
 Buch- Mobile App Engineering
+
 
 #bibliography("bib.bib")
