@@ -346,8 +346,9 @@ $
 
 Dabei bezeichnet $m_i$ die Gesamtmasse der Saite $i$ und $L_"S,i,Total"$ die Gesamtlänge der Saite.
 Die Gesamtlänge setzt sich zusammen aus der effektiven Saitenlänge $L_(S,i)$ und der Teil der Saite der hinter dem Sattel liegt,
-wie in @figStimmwirbel und @FRMTop zu sehen ist. Diese Strecke sei
-$L_(M,i) = L_(0M,i)+Delta L_i$.
+wie in @figStimmwirbel und @FRMTop zu sehen ist.
+
+Diese Strecke sei $L_(M,i) = L_(0M,i)+Delta L_i$.
 
 $
   L_"S,i,Total" (arrow(Delta L)) = L_(S,i) (arrow(Delta L)) + L_(0M,i) + Delta L_i
