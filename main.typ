@@ -666,13 +666,92 @@ for changing_string in strings:
 counter
 ```
 
-### Aggregierung der Daten
+=== Aggregierung der Daten
 Gemessen wurden die tatsächlichen Frequenzen jeder Saite und wie sie sich in Abhängigkeit der Veränderung jeder anderen Saite ändern. Für unsere Analyse interessiert uns jedoch vor allem das Maß dieser Änderung. Daher werden alle Messwerte mit ihren jeweiligen Ausgangswerten verglichen – sowohl in Cent als auch in Hertz – um die Frequenzänderungen anschaulich darzustellen.
 
-== Lösung
+```python
 
-Inverse Matrix etc
+hz_changes = {  # Dummy Data
+    string: {other_string: np.array([float(0) for _ in step_range]) for other_string in strings}
+    for string in strings
+}
+cent_changes = hz_changes.copy()
 
+for changing_string in strings:
+    for impacted_string in strings:
+        inital_value = measured_data[changing_string][impacted_string][steps]
+        for i in range(steps * 2 + 1):  # -4 bis 4
+            cent_changes[changing_string][impacted_string][i] = frequency_difference_to_cent(
+                measured_data[changing_string][impacted_string][i], inital_value)
+            hz_changes[changing_string][impacted_string][i] = measured_data[changing_string][impacted_string][
+                                                                  i] - inital_value
+
+```
+
+=== Visualiserung der Daten
+
+=== Diskussion der Ergebnisse
+Das System ist **elastisch**, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind. Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.  
+
+Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem **Korrelationskoeffizienten nach Bravais-Pearson** zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen. Eine hohe Korrelation bestätigt, dass die Annahme einer linearen Beziehung für kleine Änderungen gerechtfertigt ist.  
+
+Die Linearität ist wichtig, da sie die Grundlage für die Modellierung als **lineares Gleichungssystem** bildet. Nur dadurch können die Effekte der Verstimmung jeder Saite auf alle anderen Saiten mit einer **Matrix** erfasst und mathematisch gelöst werden.
+
+== Mathematische Lösung
+Die Frequenzen der Saiten können als **Vektor** dargestellt werden:
+
+$$
+\vec{f_0} = \begin{pmatrix} {f_{\text{E2}}} \\ {f_{\text{A2}}} \\ {f_{\text{D3}}} \\ {f_{\text{G3}}} \\ {f_{\text{B3}}} \\ {f_{\text{E4}}} \end{pmatrix},
+C = \begin{bmatrix} 
+1 & c_{12} & c_{13} & c_{14} & c_{15} & c_{16} \\ 
+c_{21} & 1 & c_{23} & c_{24} & c_{25} & c_{26} \\ 
+c_{31} & c_{32} & 1 & c_{34} & c_{35} & c_{36} \\ 
+c_{41} & c_{42} & c_{43} & 1 & c_{45} & c_{46} \\ 
+c_{51} & c_{52} & c_{53} & c_{54} & 1 & c_{56} \\ 
+c_{61} & c_{62} & c_{63} & c_{64} & c_{65} & 1 
+\end{bmatrix},
+\vec{g} = \begin{pmatrix} {\hat{f}_{\text{E2}}} \\ {\hat{f}_{\text{A2}}} \\ {\hat{f}_{\text{D3}}} \\ {\hat{f}_{\text{G3}}} \\ {\hat{f}_{\text{B3}}} \\ {\hat{f}_{\text{E4}}} \end{pmatrix}
+$$
+
+- $\vec{f_0}$: Ausgangsfrequenzen der Saiten, gemessen z. B. mit einem digitalen Stimmgerät  
+- $C$: Verstimmungsmatrix, wobei $c_{ij}$ den **Verstimmungsfaktor** der Saite $i$ angibt, wenn die Saite $j$ um 1 Hz verstimmt wird  
+- $\vec{g}$: Ziel-Frequenzen nach der Verstimmung  
+Der Vektor  
+
+$$
+\vec{\Delta} = \begin{pmatrix} {\Delta_{\text{E2}}} \\ {\Delta_{\text{A2}}} \\ {\Delta_{\text{D3}}} \\ {\Delta_{\text{G3}}} \\ {\Delta_{\text{B3}}} \\ {\Delta_{\text{E4}}} \end{pmatrix}
+$$ 
+
+gibt an, um wie viel jede Saite verstimmt werden muss. 
+
+Die **effektive Verstimmung** wird durch die Multiplikation mit der Verstimmungsmatrix berechnet:  
+
+$$
+ C \cdot  \vec{\Delta}  = \vec{\Delta}_{\text{effective}}
+$$
+
+Damit die Ziel-Frequenzen $\vec{g}$ erreicht werden, gilt:  
+
+$$
+\vec{g} = \vec{f_0} +  \vec{\Delta}_{\text{effective}} \quad \Rightarrow \quad \vec{\Delta}_{\text{effective}}  = \vec{g}-\vec{f_0}
+$$
+
+Um die Eingangsverstimmung $\vec{\Delta}$ zu bestimmen, muss das **Inverse der Matrix $C$** gebildet werden:  
+
+$$
+ C \cdot \vec{\Delta}   = \vec{\Delta}_{\text{effective}}  \quad \Rightarrow \quad \vec{\Delta} = C^{-1} \cdot \vec{\Delta}_{\text{effective}} 
+$$
+
+$$
+\vec{\Delta} = C^{-1} \cdot (\vec{g}-\vec{f_0})  
+$$
+
+$C^{-1}$ ist die Inverse der Verstimmungsmatrix.
+
+Somit benötigt man für die Berechnung:  
+1. Ausgangsfrequenzen $\vec{f_0}$  
+2. Ziel-Frequenzen $\vec{g}$  
+3. Verstimmungsmatrix $C$
 = Verfahrensweise
 
 == Ablauf eines Stimmvorgangs
