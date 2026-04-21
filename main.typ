@@ -589,9 +589,12 @@ TODO
 
 
 = Software Entwicklung/Implementierung
+
 Die Software soll nach Buch- Mobile App Engineering
 implementiert werden.
 Im Rahmen der Anforderungsanalyse und der nutzerzentrierten Gestaltung der mobilen Tuning-App wurden drei repräsentative User Journeys erarbeitet. Diese beschreiben typische Nutzungsszenarien unterschiedlicher Nutzergruppen und dienen der Validierung der funktionalen sowie der interaktionsbezogenen Anforderungen. Die Journeys wurden auf Basis der erstellten Personas und der identifizierten Pain Points entwickelt und berücksichtigen sowohl Erstnutzung als auch wiederkehrende Nutzungsszenarien.
+== User Journeys
+
 === Gerhard Gitarrist (Erstnutzer mit Floyd-Rose-Tremolo-Gitarre)
 Gerhard Gitarrist besitzt eine Floyd-Rose-Tremolo-Gitarre und möchte diese präzise stimmen.
 Er hat von der App erfahren und lädt sie aus dem App Store herunter.
@@ -647,6 +650,10 @@ Verlinkung des Gitrepositories
 Fourie Transformation, 6 Peaks erkennen und die obertöne rausrechnen.
 == Implementierung für VST und Digital Audio Workstations (Plugin)
 VST und CLAP Plugin implementieren, in C++
+== Synthetischen Ton zur kontrolle abspielen um zu hören ob die korrekte Frequenz erfasst wurde.
+== Erkennen welche Saite gespielt wird, annahme 6 Saiten
+Wenn der user die gitarre stimmt, dann wollen wir erkennen welche saite er
+// gerade er verändert und automatisch switchen.
 = Literatur
 Buch- Mobile App Engineering
 
