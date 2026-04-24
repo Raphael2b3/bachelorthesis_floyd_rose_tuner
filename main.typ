@@ -32,7 +32,7 @@
   ]
   v(5fr)
   align(center)[
-    #text(size: 35pt)[*Bachlor Thesis*]
+    #text(size: 35pt)[*Bachelor Thesis*]
   ]
   v(2fr)
   align(center)[
@@ -587,7 +587,20 @@ TODO
 1. Filterung durch die Anpassung der Parameter in Frequenzanalyse
 2. Signale werden gestreamt, und müssen ausgelesen werden, deswegen wird ein moving average Filter implementiert umd die Frequenzschwankungen zu glätten und das ablesen zu erleichtern.
 
+== Auswahl des verfahrens zur schätzung der verstimmungskooeffizenten
 
+Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände (in
+-Richtung) zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet, wenn nur die Antwortvariable (
+) fehlerbehaftet ist und die Prädiktorvariable (
+) als exakt betrachtet wird.
+Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet, wenn sowohl die Antwortvariable (
+) als auch die Prädiktorvariable (
+) Messfehler enthalten.
+Wikipedia
+Wikipedia
++2
+
+Da auch die X Werte fehler in der Messung enthalten, wird die Orthogonale Regression verwendet.
 = Software Entwicklung/Implementierung
 
 Die Software soll nach Buch- Mobile App Engineering
@@ -627,11 +640,12 @@ Er besitzt die App bereits und startet sie.
 Wie bei Arnold öffnet sich direkt das Stimmgerät mit der zuletzt verwendeten Konfiguration.Da Norman keine Floyd-Rose-Gitarre stimmen möchte, sondern lediglich eine schnelle Standardstimmung benötigt, navigiert er über die untere Navigationsleiste zum Menüpunkt „Standard Tuner“. Die App wechselt nahtlos in den vereinfachten Stimmmodus, der auf die klassische chromatische Stimmfunktion ohne spezielle Floyd-Rose-Kalibrierung zurückgreift.Norman spielt nun nacheinander die Saiten an und stimmt sie manuell auf die Standardtonhöhen (E-A-D-G-H-e).
 Die App zeigt dabei in Echtzeit die aktuelle Frequenz sowie eine visuelle Hilfestellung (Zeiger bzw. Farbverlauf). Sobald alle Saiten korrekt gestimmt sind, erhält er eine Erfolgsmeldung. Norman kann die App anschließend direkt schließen, ohne weitere Konfigurationsschritte durchlaufen zu müssen.
 
-
 == Anforderungen
 Aus User Stories ableiten
 == Konzeption und Design
 Screenshots von der App einfügen
+#image("assets/image.png")
+das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
 == Architektur
 Backend der App konzepieren. Pipeline model etc
 == Implementierung
@@ -646,6 +660,10 @@ Verlinkung des Gitrepositories
 == Erfüllung der Requirements aus SWE
 == Usertests
 = Ausblick
+== Usability Verbessern
+Die App nutzt noch für nutzer zu komplizierte Begriffe.
+== Indikator was noch nicht überprüft wurde
+Ein Indikator könnte sein, dass die App anzeigt, welche Saiten bereits überprü
 == Mehrere Saiten gleichzeitig Messen
 Fourie Transformation, 6 Peaks erkennen und die obertöne rausrechnen.
 == Implementierung für VST und Digital Audio Workstations (Plugin)
