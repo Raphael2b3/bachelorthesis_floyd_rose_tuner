@@ -20,8 +20,4 @@ Korrektur mit rechtschreibung tools rüber gehen lassen
 
 In App:
 
-dont override with actual provider on tab change,
-
-when moving to other effecting string go to sample index 0
-
 remove circular dependencies in providers and clean up architectures.
