@@ -2,6 +2,7 @@
 // It takes your content and some metadata and formats it.
 // Go ahead and customize it to your liking!
 #set math.equation(numbering: "(1)")
+#set heading(numbering: "1.1")
 #let project(
   title: "Entwicklung einer Mobilen Applikation zur effizienten Stimmung einer Floyd-Rose-Gitarre",
   subtitle: none,
@@ -24,7 +25,7 @@
   // Set body font family.
   set text(font: body-font, lang: "de")
   show heading: set text(font: sans-font)
-  set heading(numbering: "1.1")
+
 
   v(0.2fr)
   align(center)[
@@ -93,7 +94,6 @@
 #let abbreviations = (
   "String": "String",
 )
-#set heading(numbering: "1.1)")
 = Motivation
 
 Es gibt ein Problem beim Stimmen von Floyd-Rose-Gitarren. Bei diesen Gitarren wird eine Saite zwischen dem Gitarrenkopf und einer bis zu einem gewissen Grad rotierbaren Brücke gespannt. An der Brücke halten unterhalb des Drehpunkts Federn dagegen, wenn man Saiten einspannt. Die Brücke wird gemeinhin als "Floating Bridge" bezeichnet, weil sie nicht wie herkömmliche Tremolos am Gitarrenkörper aufliegt sondern in der Luft schwebt.
@@ -395,47 +395,6 @@ Die Namen der Saiten sind wie folgt definiert:
 6. E4
 
 === Ergebnisse
-==== Absolute Visualisierung der Frequenzänderungen
-#grid(
-  columns: 2,
-  grid.cell([
-    #figure(
-      image("assets/plot_E2_Hz.png"),
-      caption: [Einluss der E2 Saite auf die anderen Saiten],
-    ) <absoluteE2>
-  ]),
-  grid.cell([
-    #figure(
-      image("assets/plot_A2_Hz.png"),
-      caption: [Einluss der A2 Saite auf die anderen Saiten],
-    ) <absoluteA2>
-  ]),
-  grid.cell([
-    #figure(
-      image("assets/plot_D3_Hz.png"),
-      caption: [Einluss der D3 Saite auf die anderen Saiten],
-    ) <absoluteD3>
-  ]),
-  grid.cell([
-    #figure(
-      image("assets/plot_G3_Hz.png"),
-      caption: [Einluss der G3 Saite auf die anderen Saiten],
-    ) <absoluteG3>
-  ]),
-  grid.cell([
-    #figure(
-      image("assets/plot_B3_Hz.png"),
-      caption: [Einluss der B3 Saite auf die anderen Saiten],
-    ) <absoluteB3>
-  ]),
-  grid.cell([
-    #figure(
-      image("assets/plot_E4_Hz.png"),
-      caption: [Einluss der E4 Saite auf die anderen Saiten],
-    ) <absoluteE4>
-  ]),
-)
-
 ==== Relative Visualisierung der Frequenzänderungen
 #grid(
   columns: 2,
@@ -476,6 +435,13 @@ Die Namen der Saiten sind wie folgt definiert:
     ) <relativeE4>
   ]),
 )
+==== Korrelationskoeffizienten und Fehler
+
+#figure(
+  image("assets/pearson_correlation.png"),
+  caption: [Pearson-Korrelationskoeffizienten zwischen gemessenen und erwarteten Frequenzänderungen],
+) <relativeB3>
+
 Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.
 
 === Diskussion der Ergebnisse
@@ -504,6 +470,13 @@ $
 - $arrow(f_0)$: Ausgangsfrequenzen der Saiten, gemessen z.B. mit einem digitalen Stimmgerät
 - $C$: Verstimmungsmatrix, wobei $c_"ij"$ den Verstimmungsfaktor der Saite $i$ angibt, wenn die Saite $j$ um 1Hz verstimmt wird
 - $arrow(g)$: Ziel-Frequenzen nach der Verstimmung
+
+Die Verstimmungsmatrix aus dem Experiment sieht so aus:
+
+#figure(
+  image("assets/detuning_matrix_example.png", height: 40%),
+  caption: [Verstimmungsmatrix Beispiel C],
+) <distortionMatrix>
 Der Vektor
 
 $
@@ -657,8 +630,21 @@ Verlinkung des Gitrepositories
 = Evaluation
 
 == Funktionsfähigkeit des Algorithmuses
+Die App konnte erfolgreich die Gitarre stimmen.
 == Erfüllung der Requirements aus SWE
 == Usertests
+=== User 0
+Die App wurde in einem Ruhigen Zimmer, mit verstärkter Gitarre ohne Verzerrungseffekt getestet. Hierbei wurden die Frequenzen der Saiten korrekt erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es gab kleine Schwierigkeiten bei dem Erkennen der Fundamental frequenz. Da diese etwas schwankten.
+
+Innerhalb von ungefähr 7 Minuten war die Gitarre gestimmt.
+
+=== User 1
+Hier bei wurde die App auf einer Jam Session vorgestellt. Beim versuch die Frequenz der E Gitarre zu messen, wurde nicht die Korrekte Fundamentalfrequenz erkannt, sondern der Oberton mit Faktor 2. Gerade weil es in der Umgebung laut war und die Gitarre einen Verzerrungseffekt hatte, bei dem Obertöne verstärkt werden.
+Der Stimmvorgang wurde Abgebrochen.
+
+Für so ein Scenario muss die Erkennung der Fundamentalfrequenz stabiler sein.
+
+
 = Ausblick
 == Usability Verbessern
 Die App nutzt noch für nutzer zu komplizierte Begriffe.

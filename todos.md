@@ -1,6 +1,8 @@
 Korrelationskoeffizient angeben für Messdaten, und relativer fehler
 
-Tabellen und nummerische werte für die matrix mit farben?
+im Notebook orthogonale regression nutzen um fehler zu extrahieren und zu dokumentieren.
+
+Detuning Matrix Visualierung Achsen beschriften: Rows sind beeinflussende Saiten, Cols sind die beeinflussten Saiten.
 
 Samples - Begriff optimieren
 
