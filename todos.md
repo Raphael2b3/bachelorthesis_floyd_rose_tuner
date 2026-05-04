@@ -1,8 +1,5 @@
-Korrelationskoeffizient angeben für Messdaten, und relativer fehler
+relativer fehler extrahieren und zu dokumentieren.
 
-im Notebook orthogonale regression nutzen um fehler zu extrahieren und zu dokumentieren.
-
-Detuning Matrix Visualierung Achsen beschriften: Rows sind beeinflussende Saiten, Cols sind die beeinflussten Saiten.
 
 Samples - Begriff optimieren
 

@@ -560,20 +560,19 @@ TODO
 1. Filterung durch die Anpassung der Parameter in Frequenzanalyse
 2. Signale werden gestreamt, und müssen ausgelesen werden, deswegen wird ein moving average Filter implementiert umd die Frequenzschwankungen zu glätten und das ablesen zu erleichtern.
 
-== Auswahl des verfahrens zur schätzung der verstimmungskooeffizenten
+== Auswahl des Verfahrens zur Schätzung der Verstimmungskooeffizenten
 
-Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände (in
--Richtung) zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet, wenn nur die Antwortvariable (
-) fehlerbehaftet ist und die Prädiktorvariable (
-) als exakt betrachtet wird.
-Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet, wenn sowohl die Antwortvariable (
-) als auch die Prädiktorvariable (
-) Messfehler enthalten.
-Wikipedia
-Wikipedia
-+2
+Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände in
+$Y$-Richtung zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet,
+wenn nur die Antwortvariable $Y$
+fehlerbehaftet ist und die Prädiktorvariable $X$ als exakt betrachtet wird.
 
-Da auch die X Werte fehler in der Messung enthalten, wird die Orthogonale Regression verwendet.
+Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten 
+senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet, 
+wenn sowohl die Antwortvariable $Y$ als auch die Prädiktorvariable $X$ Messfehler enthalten. @orthogonale_regression
+
+
+Da auch die $X$ Werte fehler in der Messung enthalten, wird die Orthogonale Regression verwendet.
 = Software Entwicklung/Implementierung
 
 Die Software soll nach Buch- Mobile App Engineering
