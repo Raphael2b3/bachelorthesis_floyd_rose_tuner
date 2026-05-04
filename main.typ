@@ -592,8 +592,16 @@ wenn sowohl die Antwortvariable $Y$ als auch die Prädiktorvariable $X$ Messfehl
 Da auch die $X$ Werte fehler in der Messung enthalten, wird die Orthogonale Regression verwendet.
 = Software Entwicklung/Implementierung
 
-Die Software soll nach Buch- Mobile App Engineering
-implementiert werden.
+Die Software soll nach dem Buch "Mobile App Engineering" @mobileAppEngineering entwickelt werden.
+
+Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in diesem Rahmen entwickelte App ist zwar keine _Enterprise App_, aber die Prinzipien der Softwareentwicklung, die in diesem Buch beschrieben werden, sind dennoch anwendbar. Es werden insbesondere die Prinzipien der Anforderungsanalyse und der nutzerzentrierten Gestaltung.
+
+Damit die App frühzeitig auf sovielen Geräten wie möglich verwendet werden kann, wird die App mit einem Cross-Plattform-Framework entwickelt. Es gibt verschiedene Frameworks, die für die Entwicklung von Cross-Plattform-Apps verwendet werden können, wie zum Beispiel React Native, Dot Net Maui (ehemals Xamarin) und Flutter.
+
+Aufgrund von eigener Erfahrungen mit React Native, Dot Net Maui (ehermals Xamarin) und Flutter wurde Flutter ausgewählt.
+Flutter bot eine bessere Performance als React Native, und das Designen von Benutzeroberflächen war mit Flutter einfacher als mit Dot Net Maui. Die Developer Experience ist bei Flutter besonders gut.
+
+== Anforderungen
 Im Rahmen der Anforderungsanalyse und der nutzerzentrierten Gestaltung der mobilen Tuning-App wurden drei repräsentative User Journeys erarbeitet. Diese beschreiben typische Nutzungsszenarien unterschiedlicher Nutzergruppen und dienen der Validierung der funktionalen sowie der interaktionsbezogenen Anforderungen. Die Journeys wurden auf Basis der erstellten Personas und der identifizierten Pain Points entwickelt und berücksichtigen sowohl Erstnutzung als auch wiederkehrende Nutzungsszenarien.
 == User Journeys
 
