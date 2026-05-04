@@ -100,11 +100,11 @@ Es gibt ein Problem beim Stimmen von Floyd-Rose-Gitarren. Bei diesen Gitarren wi
 
 #figure(image("assets/floydrose_frontside_neutral.jpg", height: 20%), caption: [Floyd-Rose-Tremolo Bild])<FRQuer>
 
-Das Floyd-Rose-Tremolo hat einen Hebel, den man ziehen oder drücken kann. Beim Musizieren ändert das den Ton. Auch wenn diese Architektur neue Klänge ermöglicht, erschwert sie das Stimmen der Gitarre erheblich. Beim Stimmen erhöht oder verringert man die Spannung einer Saite, indem man deren Länge verändert. Demnach erhöht oder verringert sich die Auslenkung der Federn, da zum Beispiel bei geringerer Spannung der Saiten auch eine geringere Kraft auf die Federn wirkt. Das Resultat davon ist, dass sich der Winkel des Floyd-Rose-Tremolos verändert. Das führt dazu, dass die anderen Saiten verstimmt werden, wenn man eine Saite stimmt. Es gibt Erfahrungsberichte und Aufzeichnungen, wie man so eine Gitarre effizient stimmen kann. Dabei dauerte das Stimmen 8 Minuten @youtube_floyd_rose_tune2026. In Foren sprachen Nutzer von einer Stimmzeit von bis zu 20-30 Minuten, jenachdem wie Sauber und wieviele Saiten sie Stimmen mussten @ultimateguitar_floydrose_tuning_forum. Ziel der Arbeit ist eine App zu entwickeln, die diesen Stimmvorgang beschleunigt.
+Das Floyd-Rose-Tremolo hat einen Hebel, den man ziehen oder drücken kann. Beim Musizieren ändert das den Ton. Auch wenn diese Architektur neue Klänge ermöglicht, erschwert sie das Stimmen der Gitarre erheblich. Beim Stimmen erhöht oder verringert man die Spannung einer Saite, indem man deren Länge verändert. Demnach erhöht oder verringert sich die Auslenkung der Federn, da zum Beispiel bei geringerer Spannung der Saiten auch eine geringere Kraft auf die Federn wirkt. Das Resultat ist, dass sich der Winkel des Floyd-Rose-Tremolos verändert. Das führt dazu, dass die anderen Saiten verstimmt werden, wenn man eine Saite stimmt. Es gibt Erfahrungsberichte und Aufzeichnungen, wie man eine solche Gitarre effizient stimmen kann. Dabei dauerte das Stimmen 8 Minuten @youtube_floyd_rose_tune2026. In Foren sprachen Nutzer von einer Stimmzeit von bis zu 20-30 Minuten, je nachdem, wie sauber und wie viele Saiten sie stimmen mussten @ultimateguitar_floydrose_tuning_forum. Ziel der Arbeit ist eine App zu entwickeln, die diesen Stimmvorgang beschleunigt.
 
 = Grundlagen (Physik der Gitarre)
 
-Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in einer bestimmten Frequenz. Beim Stimmen wickelt man die Saite um den Stimmwirbel, sodass sie sich dehnt und die Frequenz ändert. Dass Saiten elastisch sind, wird im folgendem Expriment gezeigt:
+Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in einer bestimmten Frequenz. Beim Stimmen wickelt man die Saite um den Stimmwirbel, sodass sie sich dehnt und die Frequenz ändert. Dass Saiten elastisch sind, wird im folgenden Experiment gezeigt:
 #figure(
   image("assets/gitarren_begriffe.png", height: 34%),
   caption: [Begriffe einer Gitarre],
@@ -189,10 +189,10 @@ Die Saite verhält sich wie eine elastische Feder. Je näher ein Punkt an der fi
 Dies bestätigt, dass sich die Dehnung der Saite über ihre gesamte Länge verteilt, während der Fixpunkt an der Brücke nahezu ortsfest bleibt.
 
 
-== Physikalisches Model
-Im folgenden wird ein physikalisches Model der Gitarre beschrieben, um zu verstehen warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
+== Physikalisches Modell
+Im Folgenden wird ein physikalisches Modell der Gitarre beschrieben, um zu verstehen warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
 
-Die Gitarre wird als Funktion betrachtet, die 6 Aufwickelstrecken $arrow(Delta L) = vec(Delta L_1, dots.v, Delta L_i, dots.v, Delta L_6)$ auf einen Frequenzvektor $arrow(f) = vec(f_1, dots.v, f_i, dots.v, f_6)$ abbildet
+Die Gitarre wird Abbildung modelliert, die 6 Aufwickelstrecken $arrow(Delta L) = vec(Delta L_1, dots.v, Delta L_i, dots.v, Delta L_6)$ auf einen Frequenzvektor $arrow(f) = vec(f_1, dots.v, f_i, dots.v, f_6)$ abbildet
 $arrow(Delta L) -> arrow(f)$, wobei jede komponente zu einer Saite gehört. Beim Stimmen muss $arrow(Delta L)$ so gewählt werden, dass genau die gewünschten Frequenzen erreicht werden.
 Das Ziel ist die Funktion $f(arrow(Delta L))$ zu bestimmen.
 Der Zusammenhang zwischen effektiver Saitenlänge $L_(S,i)$, Zugkraft $F_(S,i)$,
@@ -216,13 +216,13 @@ $<eqUnbelasteteSaitenlänge>
 
 #figure(
   image("assets/FloydRoseQuer.png"),
-  caption: [Floyd-Rose-Model Quer],
+  caption: [Floyd-Rose-Modell Quer],
 )<FRMQuer>
 
 #figure(image("assets/floydrose_backside_neutral.jpg", height: 20%), caption: [Tremolofedern])<FRFedern>
 
 
-In @FRQuer, @FRMQuer und @FRFedern ist zusehen, wie die Brücke die Tremolofedern und die Saiten über einen Drehmoment koppelt.  Die Tremolofedern dienen unterhalb der Brücke als Gegenkraft zu der Saitenspannung.
+In @FRQuer, @FRMQuer und @FRFedern ist zu sehen, wie die Brücke die Tremolofedern und die Saiten über einen Drehmoment koppelt.  Die Tremolofedern dienen unterhalb der Brücke als Gegenkraft zu der Saitenspannung.
 
 
 #grid(
@@ -231,7 +231,7 @@ In @FRQuer, @FRMQuer und @FRFedern ist zusehen, wie die Brücke die Tremolofeder
   grid.cell([
     #figure(
       image("assets/FlyodRoseTop.png"),
-      caption: [Floyd-Rose-Model Draufsicht],
+      caption: [Floyd-Rose-Modell Draufsicht],
     ) <FRMTop>
   ]),
   grid.cell([
@@ -243,13 +243,13 @@ In @FRQuer, @FRMQuer und @FRFedern ist zusehen, wie die Brücke die Tremolofeder
 )
 
 
-In der Realität hat jede Saite ihre eigene Saitelänge, wie in @FRMTop und @FRTop zu sehen ist. Sie variieren zwar nur minimal haben aber einen Einfluss auf die rotatorische Projektion der Kräfte.
+In der Realität hat jede Saite ihre eigene Saitenlänge, wie in @FRMTop und @FRTop zu sehen ist. Sie variieren zwar nur minimal haben aber einen Einfluss auf die rotatorische Projektion der Kräfte.
 
 Die Brücke wird als starrer, gewinkelter Hebel betrachtet, siehe @FRMQuer.
 Die Drehachse liege im Koordinatenursprung.
 Die Vektoren $arrow(h_hat(F))$ (Hebelarm der Feder) und $arrow(h_(S,i))$ (Hebelarm der Saite i)
 schließen konstruktionsbedingt einen konstanten Winkel $alpha_i$ ein.
-Die Beträge $h_hat(F)$ und $h_(S,i)$ sind systemspezifische Konstanten. Jede Saite erhält seinen eigenen Hebelarm $arrow(h_(S,i))$, um den aufbau wie in @FRTop und @FRMTop korrekt zu modellieren. Die Tremolofedern haben nur einen Hebelarm $arrow(h_hat(F))$ in diesem Modell.
+Die Beträge $h_hat(F)$ und $h_(S,i)$ sind systemspezifische Konstanten. Jede Saite erhält ihren eigenen Hebelarm $arrow(h_(S,i))$, um den aufbau wie in @FRTop und @FRMTop korrekt zu modellieren. Die Tremolofedern erhalten in diesem Modell einen gemeinsamen Hebelarm $arrow(h_hat(F))$.
 
 Es sei
 $
@@ -274,7 +274,7 @@ $
   L_hat(F) (beta) = abs(arrow(h_hat(F))(beta) - arrow(P_hat(F)))
 $ <eqTremolofederlänge>
 
-Nun soll $beta$ bestimmt werden, welcher sich aus dem Kräftegleichgewicht und der darausfolgenden Hebelposition ergibt. Nach den Gesetzen der Statik trägt ausschließlich der zur jeweiligen Hebelarmrichtung orthogonale Kraftanteil zum Drehmoment bei @hebel_wikipedia.
+Nun soll die Variable $beta$ bestimmt werden, die sich aus dem Kräftegleichgewicht und der darausfolgenden Hebelposition ergibt. Nach den Gesetzen der Statik trägt ausschließlich der zur jeweiligen Hebelarmrichtung orthogonale Kraftanteil zum Drehmoment bei @hebel_wikipedia.
 Im stationären Gleichgewicht gilt das Drehmomentgleichgewicht:
 
 $
@@ -344,7 +344,7 @@ $
   mu_i = m_i / L_"S,i,Total"
 $
 
-Dabei bezeichnet $m_i$ die Gesamtmasse der Saite $i$ und $L_"S,i,Total"$ die Gesamtlänge der Saite.
+Dabei bezeichnet $m_i$ die Gesamtmasse und $L_"S,i,Total"$ die Gesamtlänge der Saite $i$.
 Die Gesamtlänge setzt sich zusammen aus der effektiven Saitenlänge $L_(S,i)$ und der Teil der Saite der hinter dem Sattel liegt,
 wie in @figStimmwirbel und @FRMTop zu sehen ist.
 
@@ -372,7 +372,7 @@ $
 
 
 === Fazit
-Es wird ersichtlich, dass die Aufwickelstrecken der Saiten die Frequenzen aller Saiten beeinflussen. Dass erklärt, warum das Stimmen einer Floyd-Rose-Gitarre so schwierig ist.
+Es wird ersichtlich, dass die Aufwickelstrecken der Saiten die Frequenzen aller Saiten beeinflussen. Das erklärt, warum das Stimmen einer Floyd-Rose-Gitarre so schwierig ist.
 
 Beim Stimmen werden die Aufwickelstrecken nur in kleinen Schritten verändert. In diesem Fall verhält sich das System näherungsweise linear, da die Taylor-Approximation für sehr kleine Änderungen gilt. Da das System physikalisch ist, können wir das System als stetig betrachten.
 
@@ -516,7 +516,7 @@ Somit benötigt man für die Berechnung:
 = Verfahrensweise
 
 == Ablauf eines Stimmvorgangs
-Um nun eine Gitarre zustimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Dazu muss zunächst die Ausgangslage der Gitarre bestimmt werden. Dann wird die 1. Saite verstimmt und der Einfluss dieser Saite auf die anderen 5. Saiten gemessen. Dann werden die nächsten Saiten nach diesem Schema verstimmt und gemessen. Anhand diesen änderungen wird die Verstimmungsmatrix berechnet. Anschließend wird der Zustand der Gitarre ermittelt und es wird für jede Saite ein delta Frequenz berechnet, um die die Saiten verstimmt werden müssen. Der Nutzer muss dann jede Saite verstimmen sodass die Delta Frequenz 0 ist.
+Um nun eine Gitarre zu stimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Dazu muss zunächst die Ausgangslage der Gitarre bestimmt werden. Dann wird die 1. Saite verstimmt und der Einfluss dieser Saite auf die anderen 5. Saiten gemessen. Dann werden die nächsten Saiten nach diesem Schema verstimmt und gemessen. Anhand dieser Änderungen wird die Verstimmungsmatrix berechnet. Anschließend wird der Zustand der Gitarre ermittelt und es wird für jede Saite eine Delta-Frequenz berechnet, um die die Saiten verstimmt werden müssen. Der Nutzer muss dann jede Saite verstimmen, sodass die Delta Frequenz 0 ist.
 
 Um das umzusetzen benötigt man ein Verfahren um die Frequenz der Angespielten Saite zu ermitteln.
 
@@ -526,21 +526,21 @@ Für die Implementierung eines Tuners auf mobilen Geräten ist die präzise und 
 
 
 === Autokorrelation
-Die Idee der Autokorrelation besteht darin, dass ein Signal mit einer Periode von $tau$, wenn es mit sich selbst gefaltet wird, bei vielfachen von $tau$ maxima aufweisen wird. Wenn man nun den ersten von null verschiedenen x Wert wählt der bei einem Hochpunkt ist, hat man mit hoher Wahrscheinlichkeit, das Richtige $Tau$ und mit seinem Inversen die Frequenz des Signals.
+Die Idee der Autokorrelation besteht darin, dass ein Signal mit einer Periode von $tau$, wenn es mit sich selbst gefaltet wird, bei vielfachen von $tau$ Maxima aufweisen wird. Wenn man nun den ersten von null verschiedenen x Wert wählt, der bei einem Hochpunkt ist, hat man mit hoher Wahrscheinlichkeit, das Richtige $Tau$ und mit seinem Inversen die Frequenz des Signals.
 
 $
   r_t(tau) = sum_(j=t+1)^(t+W) x_j x_(j+tau)
 $
 
-wo bei $r_t(tau)$ die Autokorrelationsfunktion von der Verzögerung $tau$ berechnet zum Zeitindex $t$ und $W$ ist die Integrationsfenstergröße.@YIN
+wobei $r_t(tau)$ die Autokorrelationsfunktion von der Verzögerung $tau$ berechnet zum Zeitindex $t$ und $W$ ist die Integrationsfenstergröße.@YIN
 
 === YIN-Algorithmus
 
-Der YIN-Algorithmus ist eine Weiterentwicklung der Autokorrelation. Sie fügt extra Fehlerreduktionsschritte hinzu. So wird zum Beispiel durch die "Difference function" eine Imunität gegenüber schwankenden Amplituden erzeugt und uninteressante $tau$ werden rausgefiltert.@YIN Der Algorithmus wird in vielen Stimmgeräten verwendet.
+Der YIN-Algorithmus ist eine Weiterentwicklung der Autokorrelation. Sie fügt extra Fehlerreduktionsschritte hinzu. So wird zum Beispiel durch die "Difference function" eine Immunität gegenüber schwankenden Amplituden erzeugt und uninteressante $tau$ werden herausgefiltert.@YIN Der Algorithmus wird in vielen Stimmgeräten verwendet.
 
 === Fourier- und Cepstrum-Analyse
 
-Bei der Fourier-Analyse wird das Signal ins Frequenzspektrum transformiert, um das Spektrum nach der Grundfrequenz zu durchsuchen. Die Cepstrum-Analyse erweitert diesen Ansatz, indem das logarithmierte Spektrum erneut transformiert wird, um periodische Muster zu detektieren. Eine Analyse hat gezeigt, dass jedoch Fourier-Analysen fehleranfällig sind und eine hohe sampling rate benötigen. @FFT_NEEDS_HIGH_SAMPLING
+Bei der Fourier-Analyse wird das Signal ins Frequenzspektrum transformiert, um das Spektrum nach der Grundfrequenz zu durchsuchen. Die Cepstrum-Analyse erweitert diesen Ansatz, indem das logarithmierte Spektrum erneut transformiert wird, um periodische Muster zu detektieren. Eine Analyse hat gezeigt, dass jedoch Fourier-Analysen fehleranfällig sind und eine hohe Sampling-Rate benötigen. @FFT_NEEDS_HIGH_SAMPLING
 Ein Vorteil von Cepstrum ist die Robustheit gegenüber harmonischen Obertönen und eine gute Integration in digitale Signalverarbeitungssysteme.
 Ein Nachteil ist die eingeschränkte Genauigkeit bei niedrigen Frequenzen oder verrauschten Signalen, da die Cepstrum-Analyse auf der Annahme basiert, dass das Signal periodisch ist und dass die Obertöne harmonisch sind. In realen Situationen können diese Annahmen jedoch nicht immer erfüllt sein, was zu Fehlern bei der Schätzung der Grundfrequenz führen kann. @Noll1967Cepstrum
 
@@ -550,7 +550,7 @@ Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional- oder Recurrent Ne
 
 Vorteile sind die hohe Robustheit bei Polyphonie, Hintergrundgeräuschen und unterschiedlichen Instrumenten.
 
-Nachteikle sind der hohe Rechenaufwand, die Notwendigkeit großer Trainingsdatensätze und die Ressourcenintensität auf Mobilgeräten. @Kim2019CREPE
+Nachteile sind der hohe Rechenaufwand, die Notwendigkeit großer Trainingsdatensätze und die Ressourcenintensität auf Mobilgeräten. @Kim2019CREPE
 
 === Auswahl des Verfahrens
 Für die Implementierung wird der YIN-Algorithmus gewählt, da er eine gute Balance zwischen Genauigkeit und Rechenaufwand bietet. Er ist speziell für die Schätzung der Grundfrequenz entwickelt worden und bietet eine robuste Leistung bei verschiedenen Signalbedingungen. Hinzu kommt, dass er bereits in vielen Stimmgeräten erfolgreich eingesetzt wird und bereits Implementierungen in verschiedenen Programmiersprachen verfügbar sind.
@@ -560,15 +560,15 @@ TODO
 1. Filterung durch die Anpassung der Parameter in Frequenzanalyse
 2. Signale werden gestreamt, und müssen ausgelesen werden, deswegen wird ein moving average Filter implementiert umd die Frequenzschwankungen zu glätten und das ablesen zu erleichtern.
 
-== Auswahl des Verfahrens zur Schätzung der Verstimmungskooeffizenten
+== Auswahl des Verfahrens zur Schätzung der Verstimmungskoeffizienten
 
 Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände in
 $Y$-Richtung zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet,
 wenn nur die Antwortvariable $Y$
 fehlerbehaftet ist und die Prädiktorvariable $X$ als exakt betrachtet wird.
 
-Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten 
-senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet, 
+Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten
+senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet,
 wenn sowohl die Antwortvariable $Y$ als auch die Prädiktorvariable $X$ Messfehler enthalten. @orthogonale_regression
 
 
@@ -613,15 +613,15 @@ Wie bei Arnold öffnet sich direkt das Stimmgerät mit der zuletzt verwendeten K
 Die App zeigt dabei in Echtzeit die aktuelle Frequenz sowie eine visuelle Hilfestellung (Zeiger bzw. Farbverlauf). Sobald alle Saiten korrekt gestimmt sind, erhält er eine Erfolgsmeldung. Norman kann die App anschließend direkt schließen, ohne weitere Konfigurationsschritte durchlaufen zu müssen.
 
 == Anforderungen
-Aus User Stories ableiten
+Aus User Journeys ableiten
 == Konzeption und Design
 Screenshots von der App einfügen
 #image("assets/image.png")
 das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
 == Architektur
-Backend der App konzepieren. Pipeline model etc
+Backend der App konzipieren. Pipeline Modelletc
 == Implementierung
-Auswahl von Frameworks und Libaries:
+Auswahl von Frameworks und Libraries:
 - Flutter
 - Riverpod
 - etc..
@@ -629,34 +629,34 @@ Verlinkung des Gitrepositories
 = Evaluation
 
 == Funktionsfähigkeit des Algorithmuses
-Die App konnte erfolgreich die Gitarre stimmen.
+Mit der App konnte die Gitarre erfolgreich  gestimmt werden.
 == Erfüllung der Requirements aus SWE
-== Usertests
-=== User 0
-Die App wurde in einem Ruhigen Zimmer, mit verstärkter Gitarre ohne Verzerrungseffekt getestet. Hierbei wurden die Frequenzen der Saiten korrekt erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es gab kleine Schwierigkeiten bei dem Erkennen der Fundamental frequenz. Da diese etwas schwankten.
+== Nutzertests
+=== Nutzer 0
+Die App wurde in einem ruhigen Zimmer, mit verstärkter Gitarre ohne Verzerrungseffekt getestet. Hierbei wurden die Frequenzen der Saiten korrekt erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es gab kleine Schwierigkeiten bei dem Erkennen der Fundamental frequenz. Da diese etwas schwankten.
 
 Innerhalb von ungefähr 7 Minuten war die Gitarre gestimmt.
 
-=== User 1
-Hier bei wurde die App auf einer Jam Session vorgestellt. Beim versuch die Frequenz der E Gitarre zu messen, wurde nicht die Korrekte Fundamentalfrequenz erkannt, sondern der Oberton mit Faktor 2. Gerade weil es in der Umgebung laut war und die Gitarre einen Verzerrungseffekt hatte, bei dem Obertöne verstärkt werden.
-Der Stimmvorgang wurde Abgebrochen.
+=== Nutzer 1
+Hierbei wurde die App auf einer Jam Session vorgestellt. Beim Versuch, die Frequenz der E Gitarre zu messen, wurde nicht die korrekte Fundamentalfrequenz erkannt, sondern der Oberton mit Faktor 2. Gerade weil es in der Umgebung laut war und die Gitarre einen Verzerrungseffekt hatte, bei dem Obertöne verstärkt werden.
+Der Stimmvorgang wurde abgebrochen.
 
-Für so ein Scenario muss die Erkennung der Fundamentalfrequenz stabiler sein.
+Für so ein Szenario muss die Erkennung der Fundamentalfrequenz stabiler sein.
 
 
 = Ausblick
 == Usability Verbessern
-Die App nutzt noch für nutzer zu komplizierte Begriffe.
+Die App nutzt noch zu komplizierte Begriffe für die Nutzer.
 == Indikator was noch nicht überprüft wurde
-Ein Indikator könnte sein, dass die App anzeigt, welche Saiten bereits überprü
+Ein Indikator könnte sein, dass die App anzeigt, welche Saiten bereits überprüft wurden.
 == Mehrere Saiten gleichzeitig Messen
-Fourie Transformation, 6 Peaks erkennen und die obertöne rausrechnen.
+Fourier Transformation, 6 Peaks erkennen und die obertöne rausrechnen.
 == Implementierung für VST und Digital Audio Workstations (Plugin)
 VST und CLAP Plugin implementieren, in C++
-== Synthetischen Ton zur kontrolle abspielen um zu hören ob die korrekte Frequenz erfasst wurde.
+== Synthetischen Ton zur Kontrolle abspielen um zu hören ob die korrekte Frequenz erfasst wurde.
 == Erkennen welche Saite gespielt wird, annahme 6 Saiten
-Wenn der user die gitarre stimmt, dann wollen wir erkennen welche saite er
-// gerade er verändert und automatisch switchen.
+Wenn der Nutzer die Gitarre stimmt, dann wollen wir erkennen welche Saite er verändert und automatisch switchen. Annahme ist, dass er bereits ungefähr an der richtigen Frequenz ist.
+
 = Literatur
 Buch- Mobile App Engineering
 
