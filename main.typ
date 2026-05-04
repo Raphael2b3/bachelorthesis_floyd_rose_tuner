@@ -456,14 +456,15 @@ Die Namen der Saiten sind wie folgt definiert:
 #figure(
   image("assets/pearson_correlation.png"),
   caption: [Pearson-Korrelationskoeffizienten zwischen gemessenen und erwarteten Frequenzänderungen],
-) <relativeB3>
+) <correlations>
 
 Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.
 
 === Diskussion der Ergebnisse
 Das System ist elastisch, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind.
 
-Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem *Korrelationskoeffizienten nach Bravais-Pearson* zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen. Eine hohe Korrelation bestätigt, dass die Annahme einer linearen Beziehung für kleine Änderungen gerechtfertigt ist.
+Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem Korrelationskoeffizienten nach Bravais-Pearson @wiki_bravais_pearson zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen.
+In @correlations sind die Korrelationskoeffizienten für jede Saite dargestellt. Der Betrag aller Werte liegt über 0.98, was auf eine sehr starke positive Korrelation hinweist. Das rechtfertigt die Annahme einer linearen Beziehung für kleine Änderungen.
 
 == Mathematische Lösung
 Die Frequenzen der Saiten können als Vektor dargestellt werden:
@@ -487,7 +488,7 @@ $
 - $C$: Verstimmungsmatrix, wobei $c_"ij"$ den Verstimmungsfaktor der Saite $i$ angibt, wenn die Saite $j$ um 1Hz verstimmt wird
 - $arrow(g)$: Ziel-Frequenzen nach der Verstimmung
 
-Die Verstimmungsmatrix aus dem Experiment sieht so aus:
+Die Verstimmungsmatrix aus dem Experiment ist in @distortionMatrix dargestellt:
 
 #figure(
   image("assets/detuning_matrix_example.png", height: 40%),
