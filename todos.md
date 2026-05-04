@@ -1,8 +1,5 @@
 relativer fehler extrahieren und zu dokumentieren.
 
-
-Samples - Begriff optimieren
-
 Figma Erwähnen
 
 Implementierung:
@@ -14,9 +11,6 @@ Hochschule - Projekt3, Studiengang,
 Korrektur mit rechtschreibung tools rüber gehen lassen
 
 In App:
-
-Sample View listview
-
-Saiten namen
+Samples - Begriff optimieren
 
 Markt Anteil Android als begründung nutzen
