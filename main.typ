@@ -88,29 +88,31 @@ In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeige
 
   set text(size: 8.5pt)
 
+  figure(
+    table(
+      columns: (auto, 1fr, 1fr),
+      inset: 6pt,
+      stroke: 0.5pt,
 
-  table(
-    columns: (auto, 1fr, 1fr),
-    inset: 6pt,
-    stroke: 0.5pt,
+      table.header([*Bund*], [*Pacifica - Ruhe*], [*Pacifica - Spannung*]),
 
-    table.header([*Bund*], [*Pacifica - Ruhe*], [*Pacifica - Spannung*]),
+      ..fret-row(1, "assets/p_1.jpeg", "Bund 1 - Ruhe", "assets/p_1t.jpeg", "Bund 1 - Spannung"),
 
-    ..fret-row(1, "assets/p_1.jpeg", "Bund 1 - Ruhe", "assets/p_1t.jpeg", "Bund 1 - Spannung"),
+      ..fret-row(2, "assets/p_2.jpeg", "Bund 2 - Ruhe", "assets/p_2t.jpeg", "Bund 2 - Spannung"),
 
-    ..fret-row(2, "assets/p_2.jpeg", "Bund 2 - Ruhe", "assets/p_2t.jpeg", "Bund 2 - Spannung"),
+      ..fret-row(4, "assets/p_4.jpeg", "Bund 4 - Ruhe", "assets/p_4t.jpeg", "Bund 4 - Spannung"),
 
-    ..fret-row(4, "assets/p_4.jpeg", "Bund 4 - Ruhe", "assets/p_4t.jpeg", "Bund 4 - Spannung"),
+      ..fret-row(6, "assets/p_6.jpeg", "Bund 6 - Ruhe", "assets/p_6t.jpeg", "Bund 6 - Spannung"),
 
-    ..fret-row(6, "assets/p_6.jpeg", "Bund 6 - Ruhe", "assets/p_6t.jpeg", "Bund 6 - Spannung"),
+      ..fret-row(8, "assets/p_8.jpeg", "Bund 8 - Ruhe", "assets/p_8t.jpeg", "Bund 8 - Spannung"),
 
-    ..fret-row(8, "assets/p_8.jpeg", "Bund 8 - Ruhe", "assets/p_8t.jpeg", "Bund 8 - Spannung"),
+      ..fret-row(12, "assets/p_12.jpeg", "Bund 12 - Ruhe", "assets/p_12t.jpeg", "Bund 12 - Spannung"),
 
-    ..fret-row(12, "assets/p_12.jpeg", "Bund 12 - Ruhe", "assets/p_12t.jpeg", "Bund 12 - Spannung"),
+      ..fret-row(16, "assets/p_16.jpeg", "Bund 16 - Ruhe", "assets/p_16t.jpeg", "Bund 16 - Spannung"),
 
-    ..fret-row(16, "assets/p_16.jpeg", "Bund 16 - Ruhe", "assets/p_16t.jpeg", "Bund 16 - Spannung"),
-
-    ..fret-row(22, "assets/p_22.jpeg", "Bund 22 - Ruhe", "assets/p_22t.jpeg", "Bund 22 - Spannung"),
+      ..fret-row(22, "assets/p_22.jpeg", "Bund 22 - Ruhe", "assets/p_22t.jpeg", "Bund 22 - Spannung"),
+    ),
+    caption: [Elastizität von Gitarrensaiten],
   )
 }<table1>
 
@@ -312,17 +314,20 @@ Diese Linearität wurde bereits experimentell in der _Projekt 3_ Arbeit des Auto
 Zunächst wurde jede Saite in eine Ausgangsposition gebracht. Die Ausgangsfrequenzen der Saiten wurden in Hertz gemessen.
 Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) verstimmt. Dieses $Delta$ wurde so gewählt, dass die Verstimmung deutlich hörbar ist. Für jeden Schritt wurde die Frequenz aller anderen Saiten gemessen.
 
-#table(
-  columns: (auto, auto, auto),
-  inset: 8pt,
-  stroke: .5pt,
-  [*Nr.*], [*Saite*], [*Frequenz*],
-  [1], [E2 = E-Saite], [82.41 Hz],
-  [2], [A2 = A-Saite], [110 Hz],
-  [3], [D3 = D-Saite], [146.83 Hz],
-  [4], [G3 = G-Saite], [196 Hz],
-  [5], [B3 = B-Saite], [246.94 Hz],
-  [6], [E4 = hohe E-Saite], [329.63 Hz],
+#figure(
+  table(
+    columns: (auto, auto, auto),
+    inset: 8pt,
+    stroke: .5pt,
+    [*Nr.*], [*Saite*], [*Frequenz*],
+    [1], [E2 = E-Saite], [82.41 Hz],
+    [2], [A2 = A-Saite], [110 Hz],
+    [3], [D3 = D-Saite], [146.83 Hz],
+    [4], [G3 = G-Saite], [196 Hz],
+    [5], [B3 = B-Saite], [246.94 Hz],
+    [6], [E4 = hohe E-Saite], [329.63 Hz],
+  ),
+  caption: "Saitennamen mit Frequenzen",
 )<tableSaitenNamen>
 === Ergebnisse
 ==== Relative Visualisierung der Frequenzänderungen
@@ -369,7 +374,7 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
 
 #figure(
   image("assets/pearson_correlation.png"),
-  caption: [Pearson-Korrelationskoeffizienten zwischen gemessenen und erwarteten Frequenzänderungen],
+  caption: [Pearson-Korrelationskoeffizienten der Messdaten],
 ) <correlations>
 
 Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.
@@ -406,7 +411,7 @@ Die Verstimmungsmatrix aus dem Experiment ist in @distortionMatrix dargestellt:
 
 #figure(
   image("assets/detuning_matrix_example.png", height: 40%),
-  caption: [Verstimmungsmatrix Beispiel C],
+  caption: [Verstimmungsmatrix Beispiel],
 ) <distortionMatrix>
 Der Vektor
 
@@ -621,9 +626,7 @@ VST und CLAP Plugin implementieren, in C++
 == Erkennen welche Saite gespielt wird, annahme 6 Saiten
 Wenn der Nutzer die Gitarre stimmt, dann wollen wir erkennen welche Saite er verändert und automatisch switchen. Annahme ist, dass er bereits ungefähr an der richtigen Frequenz ist.
 
-= Literatur
-Buch- Mobile App Engineering
-
+#pagebreak()
 #heading(depth: 1, "Abkürzungsverzeichnis", numbering: none, outlined: false)
 
 / Sattel: Ein fester Punkt am Gitarrenhals (vlg. @figBegriffe).
@@ -642,6 +645,12 @@ Buch- Mobile App Engineering
   image("assets/gitarren_begriffe.png", height: 34%),
   caption: [Begriffe einer Gitarre],
 )<figBegriffe>
+#pagebreak()
+#heading(depth: 1, "Abbildungsverzeichnis", numbering: none, outlined: false)
+#outline(
+  title: none,
+  target: figure.where(kind: image),
+)
 
 #pagebreak()
 #heading(depth: 1, "Tabellenverzeichnis", numbering: none, outlined: false)
