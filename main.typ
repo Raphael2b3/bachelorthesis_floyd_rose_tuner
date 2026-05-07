@@ -90,6 +90,7 @@
   // Main body.
   set par(justify: true)
 }
+#set page(numbering: "1")
 #project()
 #let abbreviations = (
   "String": "String",
@@ -106,6 +107,8 @@
 / E | A | D | G | B | hohe E - Saite: Die Namen der sechs Saiten einer Gitarre, von der tiefsten (E) bis zur höchsten (hohe E).
 
 / Bund: Ein Metallstift, der quer über den Gitarrenhals verläuft und die Saiten in Abschnitte unterteilt, um verschiedene Töne zu erzeugen, wenn die Saite auf den Bund gedrückt wird.
+
+/ MAUI: Multi-platform App UI
 #figure(
   image("assets/gitarren_begriffe.png", height: 34%),
   caption: [Begriffe einer Gitarre],
@@ -522,7 +525,7 @@ $
 
 $
   arrow(Delta) = C^(-1) dot (arrow(g)-arrow(f_0))
-$
+$ <eqFloydRoseTuner>
 
 $C^(-1)$ ist die Inverse der Verstimmungsmatrix.
 
@@ -530,14 +533,39 @@ Somit benötigt man für die Berechnung:
 1. Ausgangsfrequenzen $arrow(f_0)$
 2. Ziel-Frequenzen $arrow(g)$
 3. Verstimmungsmatrix $C$
-= Verfahrensweise
 
-== Ablauf eines Stimmvorgangs
-Um nun eine Gitarre zu stimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Dazu muss zunächst die Ausgangslage der Gitarre bestimmt werden. Dann wird die 1. Saite verstimmt und der Einfluss dieser Saite auf die anderen 5. Saiten gemessen. Dann werden die nächsten Saiten nach diesem Schema verstimmt und gemessen. Anhand dieser Änderungen wird die Verstimmungsmatrix berechnet. Anschließend wird der Zustand der Gitarre ermittelt und es wird für jede Saite eine Delta-Frequenz berechnet, um die die Saiten verstimmt werden müssen. Der Nutzer muss dann jede Saite verstimmen, sodass die Delta Frequenz 0 ist.
+= Ablauf eines Stimmvorgangs
 
-Um das umzusetzen benötigt man ein Verfahren um die Frequenz der Angespielten Saite zu ermitteln.
+Der Ablauf eines Stimmvorgangs beschreibt welche Schritte durchlaufen müssen um letztendlich die Gitarre zustimmen. Im folgenden wird der Schritte beschrieben und mit welchem Konkreten verfahren der Schritt umgesetzt werden soll.
 
-== Wahl des Verfahrens für die Frequenzanalyse
+== Initierung - Bestimmung der Verstimmungsmatrix
+Um nun eine Gitarre zu stimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Das muss für eine Gitarre nur einmal gemacht werden.
+
+Für jeden Eintrag der Matrix benötigt man mindestens 2 Messpunkte um die Steigung zu bestimmen. Die Außnahme sind die Diagonalen Elemente, da die Steigung dort immer 1 ist.
+
+Der eine Messpunkt beschreibt die Ausganslage der Gitarre und die Folgenden das Verhalten wenn sich eine Saite verändert. Um Die Präzision zu erhöhen kann eine quasi beliebige Anzahl von Messpunkten aufgenommen werden. Um daraus die korrekte Steigung zu bestimmen benötigen wir ein Lineares Regressionsverfahren.
+
+=== Auswahl des Verfahren
+
+/ Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände in $Y$-Richtung zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet, wenn nur die Antwortvariable $Y$ fehlerbehaftet ist und die Prädiktorvariable $X$ als exakt betrachtet wird.
+
+/ Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet, wenn sowohl die Antwortvariable $Y$ als auch die Prädiktorvariable $X$ Messfehler enthalten. @orthogonale_regression
+
+
+Da auch die $X$ Werte Fehler in der Messung enthalten, wird die *Orthogonale Regression* verwendet.
+
+== Stimmen der Gitarre
+
+Man defininiert, welche Zielfrequenz die Gitarre haben soll. Es gibt unterschiedliche _Stimmungen_ bei Gitarren, da sie manche _Akkorde_ verinfachen oder erst möglich machen.
+
+Dann misst man einmalig den Zustand der Gitarre. Um den Frequenzvektor zu erhalten. Mit einer Implementierung von @eqFloydRoseTuner wird dann Bestimmt um wieviel Herz welche Saite verstimmt werden muss.
+
+== Überprüfung
+Zum Schluss wird überprüft, ob die Gitarre gestimmt wurde, mit einem Herkömmlichen Stimmgerät.
+
+= Grundlegende Verfahren
+Es gibt verfahren die für die Umsetzung notwendig sind.
+== Bestimmung der Fundamentalfrequenz
 
 Für die Implementierung eines Tuners auf mobilen Geräten ist die präzise und effiziente Bestimmung der Grundfrequenz (Fundamental Frequency, F0) entscheidend. Im Folgenden werden gängige Verfahren vorgestellt und hinsichtlich Genauigkeit, Rechenaufwand und Anwendungsbereich bewertet.
 
@@ -573,33 +601,33 @@ Nachteile sind der hohe Rechenaufwand, die Notwendigkeit großer Trainingsdatens
 Für die Implementierung wird der YIN-Algorithmus gewählt, da er eine gute Balance zwischen Genauigkeit und Rechenaufwand bietet. Er ist speziell für die Schätzung der Grundfrequenz entwickelt worden und bietet eine robuste Leistung bei verschiedenen Signalbedingungen. Hinzu kommt, dass er bereits in vielen Stimmgeräten erfolgreich eingesetzt wird und bereits Implementierungen in verschiedenen Programmiersprachen verfügbar sind.
 
 == Filter
-TODO
-1. Filterung durch die Anpassung der Parameter in Frequenzanalyse
-2. Signale werden gestreamt, und müssen ausgelesen werden, deswegen wird ein moving average Filter implementiert umd die Frequenzschwankungen zu glätten und das ablesen zu erleichtern.
+Damit die Fundamental Frequenz besser erfasst werden kann, ist es Sinnvoll, das Signal vorher zu bereinigen und störgeräusche zu Filtern.
+=== Bandpass
+Da der YIN-Algorithmus verwindet wird, kann man durch die Anpassung seiner Parameter, den effekt eines Bandpasses erzielen. Verringert man die Samplingrate, so werden höhere Frequenzen nicht mehr erkannt. Das liegt an dem _Nyquist–Shannon sampling theorem_@nyquist_shannon_wikipedia.
+um die Tief Frequenz zu filtern, kann man nun die Samplelänge beeinflussen. Mit $f = 1/T$ darf die Samplelänge nicht länger sein als $T_"max"=1/f_"lowest"$.
+Die frequzenz bereich einer Gitarre liegt ungefähr zwischen $50 "Hz" - 350 "Hz"$
+=== Moving Average für gestreamte Messdaten
+Mit einem Mikrofon werden auch Geräusche der Umwelt aufgenommen. Das Führt zu Schwankungen in der Frequenz Messung. Damit die Visualisierung dieser Messdaten nicht zu sehr ruckeln und _smoother_ werden kann man den Average, der letzten N Messdaten nehmen und diesen Anzeigen.
 
-== Auswahl des Verfahrens zur Schätzung der Verstimmungskoeffizienten
+=== Volume Threshhold
 
-Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände in
-$Y$-Richtung zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet,
-wenn nur die Antwortvariable $Y$
-fehlerbehaftet ist und die Prädiktorvariable $X$ als exakt betrachtet wird.
+Damit die Fundamentalfrequenz nicht ständig ermittelt wird, ist es Sinnvoll diese nur zuaktivieren, wenn das Signal eine Gewisse mindest Lautstärke erreicht.
+$
+  "dB" = 20 * log("rms" / 32768) / ln(10),
+$
 
-Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten
-senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet,
-wenn sowohl die Antwortvariable $Y$ als auch die Prädiktorvariable $X$ Messfehler enthalten. @orthogonale_regression
-
-
-Da auch die $X$ Werte fehler in der Messung enthalten, wird die Orthogonale Regression verwendet.
 = Software Entwicklung/Implementierung
 
 Die Software soll nach dem Buch "Mobile App Engineering" @mobileAppEngineering entwickelt werden.
 
 Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in diesem Rahmen entwickelte App ist zwar keine _Enterprise App_, aber die Prinzipien der Softwareentwicklung, die in diesem Buch beschrieben werden, sind dennoch anwendbar. Es werden insbesondere die Prinzipien der Anforderungsanalyse und der nutzerzentrierten Gestaltung.
 
-Damit die App frühzeitig auf sovielen Geräten wie möglich verwendet werden kann, wird die App mit einem Cross-Plattform-Framework entwickelt. Es gibt verschiedene Frameworks, die für die Entwicklung von Cross-Plattform-Apps verwendet werden können, wie zum Beispiel React Native, Dot Net Maui (ehemals Xamarin) und Flutter.
+Damit die App frühzeitig auf sovielen Geräten wie möglich verwendet werden kann, wird die App mit einem Cross-Plattform-Framework entwickelt. Es gibt verschiedene Frameworks, die für die Entwicklung von Cross-Plattform-Apps verwendet werden können, wie zum Beispiel React Native @reactnative_dev, .NET MAUI (ehemals Xamarin)@dotnet_maui und Flutter @flutter_dev.
 
 Aufgrund von eigener Erfahrungen mit React Native, Dot Net Maui (ehermals Xamarin) und Flutter wurde Flutter ausgewählt.
 Flutter bot eine bessere Performance als React Native, und das Designen von Benutzeroberflächen war mit Flutter einfacher als mit Dot Net Maui. Die Developer Experience ist bei Flutter besonders gut.
+
+Somit wird das _Cross-Compiling_ Paradigma angewandt. Die App benötigt Zugriff auf das Mikrofon des Endgeräts und wird in Echtzeit Frequenzanalysen und weitere mathematische Operationen durchführen. Mit Flutter sieht die App auf jedem Gerät gleich aus. In dem Buch "Mobile App Engineering" (Jahr 2017) @mobileAppEngineering wurden Nachteile von _Cross-Compiling_ aufgezählt die heute von Flutter gelöst werden.
 
 == Anforderungen
 Im Rahmen der Anforderungsanalyse und der nutzerzentrierten Gestaltung der mobilen Tuning-App wurden drei repräsentative User Journeys erarbeitet. Diese beschreiben typische Nutzungsszenarien unterschiedlicher Nutzergruppen und dienen der Validierung der funktionalen sowie der interaktionsbezogenen Anforderungen. Die Journeys wurden auf Basis der erstellten Personas und der identifizierten Pain Points entwickelt und berücksichtigen sowohl Erstnutzung als auch wiederkehrende Nutzungsszenarien.
