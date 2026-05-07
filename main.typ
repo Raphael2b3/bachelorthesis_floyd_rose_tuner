@@ -1,32 +1,15 @@
-// The project function defines how your document looks.
-// It takes your content and some metadata and formats it.
-// Go ahead and customize it to your liking!
-#set math.equation(numbering: "(1)")
-#set heading(numbering: "1.1")
 #let project(
-  title: "Entwicklung einer Mobilen Applikation zur effizienten Stimmung einer Floyd-Rose-Gitarre",
+  title: "Entwicklung einer Mobilen Applikation zur effizienten Stimmung einer \n Floyd-Rose-Gitarre",
   subtitle: none,
   author: "Raphael Schütz",
   matrikelnummer: "82832",
   semester: "7",
   erstprüfer: "Prof. Konrad Schöbel",
   zweitprüfer: "Prof. Ulf Schemmert",
-  date: "01.03.2026",
+  date: "09.06.2026",
   logos: "assets/htwk-logo.png",
-  abkürzungsverzeichnis: none,
-  abbreviations: (),
-  tabellenverzeichnis: none,
-  abbildungsverzeichnis: none,
+  abbildungsverzeichnis: true,
 ) = {
-  // Save heading and body font families in variables.
-  let body-font = "Linux Libertine"
-  let sans-font = "Inria Sans"
-
-  // Set body font family.
-  set text(font: body-font, lang: "de")
-  show heading: set text(font: sans-font)
-
-
   v(0.2fr)
   align(center)[
     #image(logos, width: 50%)
@@ -58,61 +41,21 @@
 
 
   // Table of contents.
-  outline(depth: 3)
+  outline(depth: 5)
   pagebreak()
-
-  if abkürzungsverzeichnis == true {
-    heading(depth: 1, "Abkürzungsverzeichnis", numbering: none, outlined: false)
-    for (abbr, full) in abbreviations [
-      *#abbr*: #full \
-    ]
-    pagebreak()
-  } else {}
-
-  if tabellenverzeichnis == true {
-    heading(depth: 1, "Tabellenverzeichnis", numbering: none, outlined: false)
-    outline(
-      title: none,
-      target: figure.where(kind: table),
-    )
-    pagebreak()
-  } else {}
-
-  if abbildungsverzeichnis == true {
-    heading(depth: 1, "Abbildungsverzeichnis", numbering: none, outlined: false)
-    outline(
-      title: none,
-      target: figure.where(kind: image),
-    )
-    pagebreak()
-  } else {}
-
-  // Main body.
-  set par(justify: true)
 }
+
+// Set body font family.
+#set text(lang: "de")
+#set math.equation(numbering: "(1)")
+#set heading(numbering: "1.1")
 #set page(numbering: "1")
+// Main body.
+#set par(justify: true)
+#show heading: set block(below: 2em)
+
 #project()
-#let abbreviations = (
-  "String": "String",
-)
-= Glossar
 
-/ Sattel: Ein fester Punkt am Gitarrenhals (vlg. @figBegriffe).
-/ Brücke: Ein fester Punkt am Gitarrenkörper, an dem die Saiten befestigt sind (vlg. @figBegriffe).
-/ Saite: Ein Dünner Draht, der zwischen Sattel und Brücke einer Gitarre gespannt ist und beim Anschlagen schwingt, um Töne zu erzeugen.
-/ Tremolo: Eine spezielle Art von Gitarrenbrücke, die es ermöglicht, die Tonhöhe der Saiten durch Bewegung eines Hebels zu verändern.
-/ Floyd-Rose: Erfinder des gleichnamigen Tremolosystems, das in vielen E-Gitarren verwendet wird.
-/ Stimmen einer Gitarre: Der Prozess, bei dem die Spannung der Saiten angepasst wird, um die gewünschten Tonhöhen zu erreichen.
-/ Stimmwirbel: ein drehbarer Stift aus Metall oder Holz an Saiteninstrumenten, um den das Ende einer Saite gewickelt wird.
-/ E | A | D | G | B | hohe E - Saite: Die Namen der sechs Saiten einer Gitarre, von der tiefsten (E) bis zur höchsten (hohe E).
-
-/ Bund: Ein Metallstift, der quer über den Gitarrenhals verläuft und die Saiten in Abschnitte unterteilt, um verschiedene Töne zu erzeugen, wenn die Saite auf den Bund gedrückt wird.
-
-/ MAUI: Multi-platform App UI
-#figure(
-  image("assets/gitarren_begriffe.png", height: 34%),
-  caption: [Begriffe einer Gitarre],
-)<figBegriffe>
 
 = Motivation
 
@@ -131,36 +74,11 @@ Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in
   caption: [Gitarre Stimmwirbel],
 )<figStimmwirbel>
 
-#pagebreak()
 == Experiment: Elastizität von Gitarrensaiten
 
-Dieses Experiment stammt aus meiner Arbeit für das Modul "Projekt 3" aus dem Telekommunikationsinformatik-Studium an der HTWK-Leipzig @Schuetz2026FloydRose. Es wird hier erneut präsentiert, um die elastischen Eigenschaften von Gitarrensaiten zu demonstrieren.
+Die Ergebnisse des Experiments stammen aus der Arbeit des Autors, welche im Ramen des Moduls "Projekt 3" aus dem Telekommunikationsinformatik-Studium an der HTWK-Leipzig @Schuetz2026FloydRose angefertigt wurde.
 
-In diesem Experiment
-wird untersucht, ob Stahlsaiten elastische Eigenschaften besitzen, vergleichbar mit einem sehr steifen Gummiband. Beim Stimmen der Saite, die im Wesentlichen aus Stahldraht besteht, wird diese um den Stimmwirbel aufgewickelt.
-
-Plausibel wäre, dass sich Stahlsaiten dehnen können. Würde sich die Saite nicht dehnen, müsste sich stattdessen entweder die Brücke verschieben oder der Gitarrenhals elastisch verformen. In beiden Fällen wären die Bünde potenziell nicht mehr an ihrer vorgesehenen relativen Position, was zu Intonationsproblemen führen würde.
-Außerdem würden die übrigen Saiten einen Großteil ihrer Spannung verlieren.
-Aus der praktischen Erfahrung ist jedoch bekannt, dass herkömmliche Gitarren diese Probleme nicht aufweisen.
-
-Verhält sich jedoch jede Saite näherungsweise wie eine Feder, lässt sich erklären, wie sich die Gesamtspannung auf mehrere Saiten verteilt und weshalb einzelne Saiten unterschiedliche Spannungen aufweisen können.
-
-=== Materialien
-
-- Gitarre mit starrer Brücke (keine Floyd-Rose-Brücke, z. B. Yamaha Pacifica)
-- Tesafilm (zur Markierung der Saiten)
-
-=== Durchführung
-
-Zunächst wurde die hohe E-Saite tiefer gestimmt, sodass sie eine deutlich geringere Spannung annahm. Dabei wurde darauf geachtet, dass die Saite weiterhin eine ausreichende Grundspannung besaß.
-
-Anschließend wurden kleine Markierungen (Tesafilm) auf die hohe E-Saite geklebt. Die Markierungen wurden so positioniert, dass ihre Kante jeweils exakt mittig über einem Bund lag. Insgesamt wurden sechs Markierungen in unterschiedlichen Abständen zwischen Sattel und Brücke angebracht.
-
-Zusätzlich wurde auf den übrigen Saiten jeweils eine Kontrollmarkierung auf denselben Bund angebracht. Dies diente als Referenz, um mögliche Verschiebungen infolge des Stimmvorgangs beurteilen zu können. Die Bundstäbe fungierten dabei als feste Referenzpositionen.
-
-Im nächsten Schritt wurde die Spannung der hohen E-Saite erhöht, bis die dem Sattel nächstgelegene Markierung einen deutlich sichtbaren Abstand zum darunterliegenden Bund aufwies. Anschließend wurde untersucht, wie stark sich die übrigen Markierungen relativ zu ihren jeweiligen Referenzbünden verschoben hatten.
-
-In der folgenden Tabelle sind Bilder, die Verschiebungen der Markierungen zeigen.
+In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeigen:
 #{
   let fret-row(bund, img_pac, cap_pac, img_pac_t, cap_pac_t) = (
     [#bund],
@@ -194,20 +112,14 @@ In der folgenden Tabelle sind Bilder, die Verschiebungen der Markierungen zeigen
 
     ..fret-row(22, "assets/p_22.jpeg", "Bund 22 - Ruhe", "assets/p_22t.jpeg", "Bund 22 - Spannung"),
   )
-}
-=== Beobachtung
+}<table1>
 
 Die Markierungen, die sich näher am Sattel befanden, legten eine deutlich größere Strecke zurück als jene in unmittelbarer Nähe der Brücke. Die beobachtete Verschiebung nahm kontinuierlich vom Sattel in Richtung Brücke ab.
 
 Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder lediglich eine kaum wahrnehmbare Bewegung. Dies spricht dafür, dass die beobachtete Verschiebung nicht durch ein Verformen des Instruments verursacht wurde, sondern auf eine tatsächliche Längenänderung der gespannten Saite zurückzuführen ist. Als die Saite wieder entspannt wurde, waren die Markierungen wieder an ihrer Ausgangsposition. Die Schwingungsfrequenz der Saite war auch wieder dieselbe wie zu Beginn.
 
-=== Fazit
-
 Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.
-Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixer Punkt wirkt, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich stärker wandern. Elastisch bedeutet, dass die Saite eigenständig wieder ihre Ursprungsform annimmt.
-Die Saite verhält sich wie eine elastische Feder. Je näher ein Punkt an der fixierten Brücke liegt, desto geringer ist seine Bewegung.
-Dies bestätigt, dass sich die Dehnung der Saite über ihre gesamte Länge verteilt, während der Fixpunkt an der Brücke nahezu ortsfest bleibt.
-
+Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixer Punkt wirkt, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich stärker wandern.
 
 == Physikalisches Modell
 Im Folgenden wird ein physikalisches Modell der Gitarre beschrieben, um zu verstehen warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
@@ -389,30 +301,29 @@ $
 $
 
 
-=== Fazit
 Es wird ersichtlich, dass die Aufwickelstrecken der Saiten die Frequenzen aller Saiten beeinflussen. Das erklärt, warum das Stimmen einer Floyd-Rose-Gitarre so schwierig ist.
 
 Beim Stimmen werden die Aufwickelstrecken nur in kleinen Schritten verändert. In diesem Fall verhält sich das System näherungsweise linear. Da das System physikalisch ist, können wir das System als stetig betrachten.
 
 == Experiment: Nachweis Linearität
-Das Experiment stammt ebenfalls aus meiner Arbeit für das Modul "Projekt 3" aus dem Telekommunikationsinformatik-Studium an der HTWK-Leipzig @Schuetz2026FloydRose. Der Vollständigkeit halber werden die Ergebnisse hier erneut präsentiert.
-
-Diese Linearität soll nun experimentell überprüft werden. Hierbei werden die Frequenzänderungen der Saiten gemessen, wenn eine andere Saite verstimmt wird.
+Diese Linearität wurde bereits experimentell in der _Projekt 3_ Arbeit des Autors @Schuetz2026FloydRose überprüft.
 
 === Vorgehensweise
-Zunächst wird jede Saite in eine Ausgangsposition gebracht. Die Ausgangsfrequenzen der Saiten werden zunächst in Hertz gemessen.
-Anschließend wird jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) verstimmt. Dieses $Delta$ wird so gewählt, dass die Verstimmung deutlich hörbar ist. Jede Saite wird in vier Schritten nach oben und unten verstimmt. Für jeden Schritt wird die Frequenz aller anderen Saiten gemessen.
+Zunächst wurde jede Saite in eine Ausgangsposition gebracht. Die Ausgangsfrequenzen der Saiten wurden in Hertz gemessen.
+Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) verstimmt. Dieses $Delta$ wurde so gewählt, dass die Verstimmung deutlich hörbar ist. Für jeden Schritt wurde die Frequenz aller anderen Saiten gemessen.
 
-Die Messdaten wurden aus @Schuetz2026FloydRose  Experiment stammt ursprünglich aus meiner Arbeit für das Modul "Projekt 3" aus dem Telekommunikationsinformatik-Studium an der HTWK-Leipzig @Schuetz2026FloydRose. Es werden die selben Messdaten verwendet. Allerdings wurde
-
-Die Namen der Saiten sind wie folgt definiert:
-1. E2 = E-Saite
-2. A2 = A-Saite
-3. D3 = D-Saite
-4. G3 = G-Saite
-5. B3 = B-Saite
-6. E4 = hohe E-Saite
-
+#table(
+  columns: (auto, auto, auto),
+  inset: 8pt,
+  stroke: .5pt,
+  [*Nr.*], [*Saite*], [*Frequenz*],
+  [1], [E2 = E-Saite], [82.41 Hz],
+  [2], [A2 = A-Saite], [110 Hz],
+  [3], [D3 = D-Saite], [146.83 Hz],
+  [4], [G3 = G-Saite], [196 Hz],
+  [5], [B3 = B-Saite], [246.94 Hz],
+  [6], [E4 = hohe E-Saite], [329.63 Hz],
+)<tableSaitenNamen>
 === Ergebnisse
 ==== Relative Visualisierung der Frequenzänderungen
 #grid(
@@ -545,7 +456,7 @@ Für jeden Eintrag der Matrix benötigt man mindestens 2 Messpunkte um die Steig
 
 Der eine Messpunkt beschreibt die Ausganslage der Gitarre und die Folgenden das Verhalten wenn sich eine Saite verändert. Um Die Präzision zu erhöhen kann eine quasi beliebige Anzahl von Messpunkten aufgenommen werden. Um daraus die korrekte Steigung zu bestimmen benötigen wir ein Lineares Regressionsverfahren.
 
-=== Auswahl des Verfahren
+Dabei kommen folgende Verfahren in Frage:
 
 / Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände in $Y$-Richtung zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet, wenn nur die Antwortvariable $Y$ fehlerbehaftet ist und die Prädiktorvariable $X$ als exakt betrachtet wird.
 
@@ -613,7 +524,7 @@ Mit einem Mikrofon werden auch Geräusche der Umwelt aufgenommen. Das Führt zu 
 
 Damit die Fundamentalfrequenz nicht ständig ermittelt wird, ist es Sinnvoll diese nur zuaktivieren, wenn das Signal eine Gewisse mindest Lautstärke erreicht.
 $
-  "dB" = 20 * log("rms" / 32768) / ln(10),
+  "dB" = 20 dot log("rms" / 32768) / ln(10),
 $
 
 = Software Entwicklung/Implementierung
@@ -669,7 +580,7 @@ Die App zeigt dabei in Echtzeit die aktuelle Frequenz sowie eine visuelle Hilfes
 Aus User Journeys ableiten
 == Konzeption und Design
 Screenshots von der App einfügen
-#image("assets/image.png")
+//#image("assets/image.png")
 das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
 == Architektur
 Backend der App konzipieren. Pipeline Modelletc
@@ -713,5 +624,32 @@ Wenn der Nutzer die Gitarre stimmt, dann wollen wir erkennen welche Saite er ver
 = Literatur
 Buch- Mobile App Engineering
 
+#heading(depth: 1, "Abkürzungsverzeichnis", numbering: none, outlined: false)
+
+/ Sattel: Ein fester Punkt am Gitarrenhals (vlg. @figBegriffe).
+/ Brücke: Ein fester Punkt am Gitarrenkörper, an dem die Saiten befestigt sind (vlg. @figBegriffe).
+/ Saite: Ein Dünner Draht, der zwischen Sattel und Brücke einer Gitarre gespannt ist und beim Anschlagen schwingt, um Töne zu erzeugen.
+/ Tremolo: Eine spezielle Art von Gitarrenbrücke, die es ermöglicht, die Tonhöhe der Saiten durch Bewegung eines Hebels zu verändern.
+/ Floyd-Rose: Erfinder des gleichnamigen Tremolosystems, das in vielen E-Gitarren verwendet wird.
+/ Stimmen einer Gitarre: Der Prozess, bei dem die Spannung der Saiten angepasst wird, um die gewünschten Tonhöhen zu erreichen.
+/ Stimmwirbel: ein drehbarer Stift aus Metall oder Holz an Saiteninstrumenten, um den das Ende einer Saite gewickelt wird.
+/ E | A | D | G | B | hohe E - Saite: Die Namen der sechs Saiten einer Gitarre, von der tiefsten (E) bis zur höchsten (hohe E).
+
+/ Bund: Ein Metallstift, der quer über den Gitarrenhals verläuft und die Saiten in Abschnitte unterteilt, um verschiedene Töne zu erzeugen, wenn die Saite auf den Bund gedrückt wird.
+
+/ MAUI: Multi-platform App UI
+#figure(
+  image("assets/gitarren_begriffe.png", height: 34%),
+  caption: [Begriffe einer Gitarre],
+)<figBegriffe>
+
+#pagebreak()
+#heading(depth: 1, "Tabellenverzeichnis", numbering: none, outlined: false)
+#outline(
+  title: none,
+  target: figure.where(kind: table),
+)
+#pagebreak()
 
 #bibliography("bib.bib")
+
