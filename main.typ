@@ -52,7 +52,7 @@
 #set page(numbering: "1")
 // Main body.
 #set par(justify: true)
-#show heading: set block(below: 2em)
+#show heading: set block(below: 1.3em)
 
 #project()
 
@@ -76,7 +76,7 @@ Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in
 
 == Experiment: Elastizität von Gitarrensaiten
 
-Die Ergebnisse des Experiments stammen aus der Arbeit des Autors, welche im Ramen des Moduls "Projekt 3" aus dem Telekommunikationsinformatik-Studium an der HTWK-Leipzig @Schuetz2026FloydRose angefertigt wurde.
+Die Ergebnisse des Experiments stammen aus der Arbeit des Autors, welche im Rahmen des Moduls "Projekt 3" aus dem Telekommunikationsinformatik-Studium an der HTWK-Leipzig @Schuetz2026FloydRose angefertigt wurden.
 
 In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeigen:
 #{
@@ -87,7 +87,7 @@ In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeige
   )
 
   set text(size: 8.5pt)
-
+  show figure: set block(breakable: true)
   figure(
     table(
       columns: (auto, 1fr, 1fr),
@@ -127,7 +127,7 @@ Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die 
 Im Folgenden wird ein physikalisches Modell der Gitarre beschrieben, um zu verstehen warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
 
 Die Gitarre wird als Abbildung modelliert, die 6 Aufwickelstrecken $arrow(Delta L) = vec(Delta L_1, dots.v, Delta L_i, dots.v, Delta L_6)$ auf einen Frequenzvektor $arrow(f) = vec(f_1, dots.v, f_i, dots.v, f_6)$ abbildet
-$arrow(Delta L) -> arrow(f)$, wobei jede komponente zu einer Saite gehört. Beim Stimmen muss $arrow(Delta L)$ so gewählt werden, dass genau die gewünschten Frequenzen erreicht werden.
+$arrow(Delta L) -> arrow(f)$, wobei jede Komponente zu einer Saite gehört. Beim Stimmen muss $arrow(Delta L)$ so gewählt werden, dass genau die gewünschten Frequenzen erreicht werden.
 Das Ziel ist die Funktion $f(arrow(Delta L))$ zu bestimmen.
 Der Zusammenhang zwischen effektiver Saitenlänge $L_(S,i)$, Zugkraft $F_(S,i)$,
 linearer Massendichte $mu_i$ und Frequenz $f_i$ wird durch das Mersennesche Gesetz beschrieben
@@ -419,7 +419,7 @@ $
   arrow(Delta) = vec(Delta_"E2", Delta_"A2", Delta_"D3", Delta_"G3", Delta_"B3", Delta_"E4")
 $
 
-gibt an, um wie viel jede Saite verstimmt werden muss.
+gibt an, um wie viel Hertz jede Saite verstimmt werden muss.
 
 Die effektive Verstimmung wird durch die Multiplikation mit der Verstimmungsmatrix berechnet:
 
@@ -441,7 +441,7 @@ $
 
 $
   arrow(Delta) = C^(-1) dot (arrow(g)-arrow(f_0))
-$ <eqFloydRoseTuner>
+$
 
 $C^(-1)$ ist die Inverse der Verstimmungsmatrix.
 
@@ -450,102 +450,207 @@ Somit benötigt man für die Berechnung:
 2. Ziel-Frequenzen $arrow(g)$
 3. Verstimmungsmatrix $C$
 
+== Praktische Umwandlung
+
+Für die praktische Anwendung ist die absolute Zielfrequenz jeder Saite entscheidend, da ein Musiker direkt auf einen Frequenzwert stimmen kann, ohne eine mentale Addition durchführen zu müssen.
+
+Da die Saiten sequentiell in der Reihenfolge E2 $arrow$ A2 $arrow$ D3 $arrow$
+G3 $arrow$ B3 $arrow$ E4 gestimmt werden, beeinflusst jede Verstimmung einer
+Saite $j$ über die Verstimmungsmatrix $C$ alle nachfolgenden Saiten $i >= j$.
+Dieser Kaskadeneffekt muss bei der Berechnung der absoluten Zielfrequenzen
+berücksichtigt werden.
+
+Für die erste Saite E2 ergibt sich die Zielfrequenz zu:
+
+$
+  f_"E2" = f_"0,E2" + Delta_"E2" dot C_"11"
+$
+
+Da E2 bereits auf den Sollwert gestimmt wurde, muss dessen Einfluss auf alle
+nachfolgenden Saiten eingerechnet werden. Die Zielfrequenz von A2 lautet
+dementsprechend:
+
+$
+  f_"A2" = f_"0,A2" + Delta_"A2" dot C_"22" + Delta_"E2" dot C_"21"
+$
+
+Analog ergibt sich für D3:
+
+$
+  f_"D3" = f_"0,D3" + Delta_"D3" dot C_"33" + Delta_"A2" dot C_"32"
+  + Delta_"E2" dot C_"31"
+$
+
+Dieses Muster lässt sich verallgemeinern. Die absolute Zielfrequenz der $N$-ten
+Saite berechnet sich als:
+
+$
+  f_N = f_"0,N" + sum_(i=1)^(N) Delta_i dot C_(N\,i)
+$<eqFloydRoseTuner>
+
+Hierbei wird vorausgesetzt, dass die Saiten stets in aufsteigender Reihenfolge
+von E2 nach E4 gestimmt werden, sodass die Verstimmungseinflüsse bereits
+gestimmter Saiten vollständig bekannt sind und in die Berechnung der
+nachfolgenden Zielfrequenzen einfließen können.
 = Ablauf eines Stimmvorgangs
 
-Der Ablauf eines Stimmvorgangs beschreibt welche Schritte durchlaufen müssen um letztendlich die Gitarre zustimmen. Im folgenden wird der Schritte beschrieben und mit welchem Konkreten verfahren der Schritt umgesetzt werden soll.
+Im Folgenden wird der Ablauf zum Stimmen einer Floyd-Rose-Gitarre beschrieben
+sowie die dafür erforderlichen Verfahren erläutert.
 
-== Initierung - Bestimmung der Verstimmungsmatrix
-Um nun eine Gitarre zu stimmen, muss zunächst die Verstimmungsmatrix, der zu stimmenden Gitarre ermittelt werden. Das muss für eine Gitarre nur einmal gemacht werden.
+== Initierung -- Bestimmung der Verstimmungsmatrix
+Vor dem eigentlichen Stimmvorgang muss die gitarrenspezifische
+Verstimmungsmatrix $C$ einmalig ermittelt werden. Da sie eine physikalische
+Eigenschaft des jeweiligen Instruments beschreibt, ist diese Kalibrierung nur
+beim erstmaligen Einsatz der Methode notwendig.
 
-Für jeden Eintrag der Matrix benötigt man mindestens 2 Messpunkte um die Steigung zu bestimmen. Die Außnahme sind die Diagonalen Elemente, da die Steigung dort immer 1 ist.
+Zur Bestimmung jedes Matrixeintrags werden mindestens zwei Messpunkte benötigt,
+um die lineare Steigung zu ermitteln. Die Diagonalelemente $C_"ii" = 1$ sind
+definitionsgemäß bekannt und müssen nicht gemessen werden.
 
-Der eine Messpunkt beschreibt die Ausganslage der Gitarre und die Folgenden das Verhalten wenn sich eine Saite verändert. Um Die Präzision zu erhöhen kann eine quasi beliebige Anzahl von Messpunkten aufgenommen werden. Um daraus die korrekte Steigung zu bestimmen benötigen wir ein Lineares Regressionsverfahren.
+Der erste Messpunkt beschreibt den Ausgangszustand der Gitarre; alle weiteren
+Messpunkte erfassen das Verhalten der übrigen Saiten bei gezielter Veränderung
+einer einzelnen Saite. Durch eine höhere Anzahl an Messpunkten lässt sich die
+Schätzgenauigkeit der Steigung beliebig steigern. Zur Auswertung wird ein
+lineares Regressionsverfahren eingesetzt.
 
-Dabei kommen folgende Verfahren in Frage:
+Dabei kommen folgende Verfahren in Betracht:
 
-/ Kleinste Quadrate (OLS): Minimiert die Summe der quadrierten vertikalen Abstände in $Y$-Richtung zwischen den Datenpunkten und der Regressionsgeraden. Sie wird verwendet, wenn nur die Antwortvariable $Y$ fehlerbehaftet ist und die Prädiktorvariable $X$ als exakt betrachtet wird.
+/ Methode der kleinsten Quadrate (OLS): Minimiert die Summe der quadrierten
+  vertikalen Abstände in $Y$-Richtung zwischen den Datenpunkten und der
+  Regressionsgeraden. Sie setzt voraus, dass ausschließlich die Antwortvariable
+  $Y$ fehlerbehaftet ist, während die Prädiktorvariable $X$ als exakt gilt.
 
-/ Orthogonale Regression (Deming-Regression): Minimiert die Summe der quadrierten senkrechten (orthogonalen) Abstände der Punkte von der Geraden. Sie wird angewendet, wenn sowohl die Antwortvariable $Y$ als auch die Prädiktorvariable $X$ Messfehler enthalten. @orthogonale_regression
+/ Orthogonale Regression (Deming-Regression): Minimiert die Summe der
+  quadrierten senkrechten Abstände der Datenpunkte zur Regressionsgeraden. Sie
+  wird angewendet, wenn sowohl $Y$ als auch $X$ Messfehler aufweisen.
+  @orthogonale_regression
 
+Da die Frequenzmessungen beider Achsen messtechnisch bedingte Fehler enthalten,
+wird die *orthogonale Regression* verwendet.
 
-Da auch die $X$ Werte Fehler in der Messung enthalten, wird die *Orthogonale Regression* verwendet.
+== Stimmvorgang
 
-== Stimmen der Gitarre
+Zunächst wird die gewünschte Zielstimmung festgelegt. Gitarren werden je nach
+musikalischem Kontext in verschiedenen Stimmungen gespielt, da bestimmte
+Akkordgriffe in alternativen Stimmungen vereinfacht oder erst ermöglicht werden.
 
-Man defininiert, welche Zielfrequenz die Gitarre haben soll. Es gibt unterschiedliche _Stimmungen_ bei Gitarren, da sie manche _Akkorde_ verinfachen oder erst möglich machen.
-
-Dann misst man einmalig den Zustand der Gitarre. Um den Frequenzvektor zu erhalten. Mit einer Implementierung von @eqFloydRoseTuner wird dann Bestimmt um wieviel Herz welche Saite verstimmt werden muss.
+Anschließend wird der aktuelle Zustand der Gitarre durch eine einmalige
+Frequenzmessung aller Saiten erfasst, um den Frequenzvektor $arrow(f_0)$ zu
+bestimmen. Mithilfe von @eqFloydRoseTuner wird dann für jede Saite die absolute
+Zielfrequenz berechnet, auf die sie gestimmt werden muss.
 
 == Überprüfung
-Zum Schluss wird überprüft, ob die Gitarre gestimmt wurde, mit einem Herkömmlichen Stimmgerät.
+Abschließend wird mithilfe eines herkömmlichen Stimmgeräts verifiziert, ob alle
+Saiten die berechneten Zielfrequenzen erreicht haben und die Gitarre korrekt
+gestimmt ist.
 
 = Grundlegende Verfahren
-Es gibt verfahren die für die Umsetzung notwendig sind.
+Im Folgenden werden die Verfahren beschrieben, die für die Umsetzung des
+Stimmvorgangs erforderlich sind.
 == Bestimmung der Fundamentalfrequenz
 
-Für die Implementierung eines Tuners auf mobilen Geräten ist die präzise und effiziente Bestimmung der Grundfrequenz (Fundamental Frequency, F0) entscheidend. Im Folgenden werden gängige Verfahren vorgestellt und hinsichtlich Genauigkeit, Rechenaufwand und Anwendungsbereich bewertet.
+Für die Implementierung eines Stimmgeräts auf mobilen Geräten ist die präzise
+und effiziente Bestimmung der Grundfrequenz (Fundamental Frequency, F0)
+entscheidend. Im Folgenden werden gängige Verfahren vorgestellt und hinsichtlich
+Genauigkeit, Rechenaufwand und Anwendungsbereich bewertet.
 
 
 === Autokorrelation
-Die Idee der Autokorrelation besteht darin, dass ein Signal mit einer Periode von $tau$, wenn es mit sich selbst gefaltet wird, bei vielfachen von $tau$ Maxima aufweisen wird. Wenn man nun den ersten von null verschiedenen x Wert wählt, der bei einem Hochpunkt ist, hat man mit hoher Wahrscheinlichkeit, das Richtige $Tau$ und mit seinem Inversen die Frequenz des Signals.
+Die Grundidee der Autokorrelation beruht darauf, dass ein periodisches Signal
+mit der Periode $tau$, wenn es mit einer zeitverschobenen Version seiner selbst
+multipliziert wird, bei ganzzahligen Vielfachen von $tau$ Maxima aufweist. Das
+erste von null verschiedene lokale Maximum bestimmt die gesuchte Periode $tau$;
+ihr Kehrwert liefert die Grundfrequenz des Signals.
 
 $
-  r_t(tau) = sum_(j=t+1)^(t+W) x_j x_(j+tau)
+  r_t (tau) = sum_(j=t+1)^(t+W) x_j dot x_(j+tau)
 $
 
-wobei $r_t(tau)$ die Autokorrelationsfunktion von der Verzögerung $tau$ berechnet zum Zeitindex $t$ und $W$ ist die Integrationsfenstergröße.@YIN
+Dabei bezeichnet $r_t (tau)$ den Autokorrelationswert für die Verzögerung $tau$
+zum Zeitindex $t$ und $W$ die Fenstergröße der Integration. @YIN
 
 === YIN-Algorithmus
 
-Der YIN-Algorithmus ist eine Weiterentwicklung der Autokorrelation. Sie fügt extra Fehlerreduktionsschritte hinzu. So wird zum Beispiel durch die "Difference function" eine Immunität gegenüber schwankenden Amplituden erzeugt und uninteressante $tau$ werden herausgefiltert.@YIN Der Algorithmus wird in vielen Stimmgeräten verwendet.
-
+Der YIN-Algorithmus stellt eine Weiterentwicklung der klassischen
+Autokorrelation dar. Durch zusätzliche Fehlerreduktionsschritte wird die
+Robustheit gegenüber Amplitudenschwankungen verbessert; die sogenannte
+_Difference Function_ filtert dabei unplausible Perioden $tau$ heraus. @YIN
+Aufgrund dieser Eigenschaften findet der Algorithmus breite Anwendung in
+kommerziellen Stimmgeräten.
 === Fourier- und Cepstrum-Analyse
 
-Bei der Fourier-Analyse wird das Signal ins Frequenzspektrum transformiert, um das Spektrum nach der Grundfrequenz zu durchsuchen. Die Cepstrum-Analyse erweitert diesen Ansatz, indem das logarithmierte Spektrum erneut transformiert wird, um periodische Muster zu detektieren. Eine Analyse hat gezeigt, dass jedoch Fourier-Analysen fehleranfällig sind und eine hohe Sampling-Rate benötigen. @FFT_NEEDS_HIGH_SAMPLING
-Ein Vorteil von Cepstrum ist die Robustheit gegenüber harmonischen Obertönen und eine gute Integration in digitale Signalverarbeitungssysteme.
-Ein Nachteil ist die eingeschränkte Genauigkeit bei niedrigen Frequenzen oder verrauschten Signalen, da die Cepstrum-Analyse auf der Annahme basiert, dass das Signal periodisch ist und dass die Obertöne harmonisch sind. In realen Situationen können diese Annahmen jedoch nicht immer erfüllt sein, was zu Fehlern bei der Schätzung der Grundfrequenz führen kann. @Noll1967Cepstrum
+Bei der Fourier-Analyse wird das Zeitsignal in den Frequenzbereich transformiert
+und das resultierende Spektrum nach der Grundfrequenz durchsucht. Studien zeigen
+jedoch, dass Fourier-basierte Verfahren fehleranfällig sind und hohe
+Abtastraten erfordern. @FFT_NEEDS_HIGH_SAMPLING
+
+Die Cepstrum-Analyse erweitert diesen Ansatz, indem das logarithmierte Spektrum
+erneut transformiert wird, um periodische Muster zu detektieren. Ein Vorteil
+ist die Robustheit gegenüber harmonischen Obertönen sowie die gute Integration
+in digitale Signalverarbeitungssysteme. Nachteilig wirkt sich die eingeschränkte
+Genauigkeit bei niedrigen Frequenzen und verrauschten Signalen aus, da das
+Verfahren Periodizität und harmonische Obertöne voraussetzt -- Annahmen, die in
+realen Umgebungen nicht immer erfüllt sind. @Noll1967Cepstrum
 
 === Moderne Deep-Learning-Ansätze
 
-Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional- oder Recurrent Neural Networks, um direkt aus Roh-Audio oder Spektrogrammen die Fundamental-Frequenz vorherzusagen.
-
-Vorteile sind die hohe Robustheit bei Polyphonie, Hintergrundgeräuschen und unterschiedlichen Instrumenten.
-
-Nachteile sind der hohe Rechenaufwand, die Notwendigkeit großer Trainingsdatensätze und die Ressourcenintensität auf Mobilgeräten. @Kim2019CREPE
+Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional Neural Networks
+oder Recurrent Neural Networks, um die Grundfrequenz direkt aus Roh-Audio oder
+Spektrogrammen zu schätzen. Vorteile sind die hohe Robustheit gegenüber
+Polyphonie, Hintergrundgeräuschen und verschiedenen Instrumenten. Nachteilig
+sind der erhebliche Rechenaufwand, der Bedarf an großen Trainingsdatensätzen
+sowie die eingeschränkte Eignung für ressourcenbeschränkte Mobilgeräte.
+@Kim2019CREPE
 
 === Auswahl des Verfahrens
-Für die Implementierung wird der YIN-Algorithmus gewählt, da er eine gute Balance zwischen Genauigkeit und Rechenaufwand bietet. Er ist speziell für die Schätzung der Grundfrequenz entwickelt worden und bietet eine robuste Leistung bei verschiedenen Signalbedingungen. Hinzu kommt, dass er bereits in vielen Stimmgeräten erfolgreich eingesetzt wird und bereits Implementierungen in verschiedenen Programmiersprachen verfügbar sind.
+Für die Implementierung wird der YIN-Algorithmus gewählt, da er eine
+ausgewogene Balance zwischen Genauigkeit und Rechenaufwand bietet. Er ist
+speziell für die Schätzung monophoner Grundfrequenzen entwickelt worden, zeigt
+robuste Leistung unter variierenden Signalbedingungen und ist in zahlreichen
+Programmiersprachen bereits als Bibliothek verfügbar.
 
-== Filter
-Damit die Fundamental Frequenz besser erfasst werden kann, ist es Sinnvoll, das Signal vorher zu bereinigen und störgeräusche zu Filtern.
-=== Bandpass
-Da der YIN-Algorithmus verwindet wird, kann man durch die Anpassung seiner Parameter, den effekt eines Bandpasses erzielen. Verringert man die Samplingrate, so werden höhere Frequenzen nicht mehr erkannt. Das liegt an dem _Nyquist–Shannon sampling theorem_@nyquist_shannon_wikipedia.
-um die Tief Frequenz zu filtern, kann man nun die Samplelänge beeinflussen. Mit $f = 1/T$ darf die Samplelänge nicht länger sein als $T_"max"=1/f_"lowest"$.
-Die frequzenz bereich einer Gitarre liegt ungefähr zwischen $50 "Hz" - 350 "Hz"$
-=== Moving Average für gestreamte Messdaten
-Mit einem Mikrofon werden auch Geräusche der Umwelt aufgenommen. Das Führt zu Schwankungen in der Frequenz Messung. Damit die Visualisierung dieser Messdaten nicht zu sehr ruckeln und _smoother_ werden kann man den Average, der letzten N Messdaten nehmen und diesen Anzeigen.
+== Signal-Filter
+Um die Zuverlässigkeit der Grundfrequenzschätzung zu erhöhen, wird Ein- und Ausgangssignal gefiltert und konditioniert.
+=== Bandpassfilterung durch Parameteranpassung
+Da der YIN-Algorithmus verwendet wird, lässt sich eine implizite
+Bandpassfilterung durch gezielte Anpassung seiner Parameter erreichen. Durch
+Reduktion der Abtastrate werden Frequenzen oberhalb der halben Nyquist-Frequenz
+nicht mehr erfasst, was dem Nyquist-Shannon-Abtasttheorem entspricht.
+@nyquist_shannon_wikipedia
 
-=== Volume Threshhold
+Die untere Grenzfrequenz wird durch die maximale Fensterlänge $W$ begrenzt.
+Gemäß $f = 1 slash T$ darf die Fensterlänge den Wert $T_"max" = 1 slash f_"min"$ #footnote[Mit "min" ist das Minimum gemeint.]
+nicht überschreiten. Da der Frequenzbereich von Gitarrensaiten näherungsweise
+$50 "Hz"$ bis $350 "Hz"$ umfasst, lassen sich die Parameter entsprechend
+dimensionieren.
+=== Gleitender Mittelwert für Streaming-Messdaten
+Mikrofonaufnahmen enthalten unvermeidlich Umgebungsgeräusche, die zu
+Schwankungen in der Frequenzschätzung führen. Um eine stabile Visualisierung zu
+gewährleisten, wird ein gleitender Mittelwert über die letzten $N$ Messwerte
+gebildet und angezeigt. Dieses Verfahren reduziert kurzzeitige Ausreißer, ohne
+dabei wesentliche Latenzen einzuführen.
+=== Amplitudenschwelle
 
-Damit die Fundamentalfrequenz nicht ständig ermittelt wird, ist es Sinnvoll diese nur zuaktivieren, wenn das Signal eine Gewisse mindest Lautstärke erreicht.
+Um eine kontinuierliche Grundfrequenzschätzung bei Stille oder Umgebungslärm zu
+vermeiden, wird die Schätzung nur aktiviert, wenn das Signal einen
+Mindestpegel überschreitet. Der Schalldruckpegel wird dabei gemäß
+
 $
-  "dB" = 20 dot log("rms" / 32768) / ln(10),
+  L = 20 dot log_10 lr((frac("RMS", 32768)))
 $
+
+in _decibels relative to full scale_ (dBFS) @dBFS berechnet, wobei $32768$ dem maximalen Amplitudenwert eines
+16-Bit-PCM-Signals entspricht.
 
 = Software Entwicklung/Implementierung
 
 Die Software soll nach dem Buch "Mobile App Engineering" @mobileAppEngineering entwickelt werden.
 
-Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in diesem Rahmen entwickelte App ist zwar keine _Enterprise App_, aber die Prinzipien der Softwareentwicklung, die in diesem Buch beschrieben werden, sind dennoch anwendbar. Es werden insbesondere die Prinzipien der Anforderungsanalyse und der nutzerzentrierten Gestaltung.
+Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in diesem Rahmen entwickelte App ist zwar keine _Enterprise App_, aber die Prinzipien der Softwareentwicklung, die in diesem Buch beschrieben werden, sind dennoch anwendbar. Es werden insbesondere die Prinzipien der Anforderungsanalyse und der nutzerzentrierten Gestaltung übernommen.
 
-Damit die App frühzeitig auf sovielen Geräten wie möglich verwendet werden kann, wird die App mit einem Cross-Plattform-Framework entwickelt. Es gibt verschiedene Frameworks, die für die Entwicklung von Cross-Plattform-Apps verwendet werden können, wie zum Beispiel React Native @reactnative_dev, .NET MAUI (ehemals Xamarin)@dotnet_maui und Flutter @flutter_dev.
+Wie im Buch beschrieben, werden Mobile Applikationen in Iterativen Prozessen entwickelt. Daher werden manche Design entscheidungen mit Usertests begründet die mit einer Älteren Version der App durch geführt wurden.
 
-Aufgrund von eigener Erfahrungen mit React Native, Dot Net Maui (ehermals Xamarin) und Flutter wurde Flutter ausgewählt.
-Flutter bot eine bessere Performance als React Native, und das Designen von Benutzeroberflächen war mit Flutter einfacher als mit Dot Net Maui. Die Developer Experience ist bei Flutter besonders gut.
-
-Somit wird das _Cross-Compiling_ Paradigma angewandt. Die App benötigt Zugriff auf das Mikrofon des Endgeräts und wird in Echtzeit Frequenzanalysen und weitere mathematische Operationen durchführen. Mit Flutter sieht die App auf jedem Gerät gleich aus. In dem Buch "Mobile App Engineering" (Jahr 2017) @mobileAppEngineering wurden Nachteile von _Cross-Compiling_ aufgezählt die heute von Flutter gelöst werden.
-
-== Anforderungen
+== Requirements Enginnering
 Im Rahmen der Anforderungsanalyse und der nutzerzentrierten Gestaltung der mobilen Tuning-App wurden drei repräsentative User Journeys erarbeitet. Diese beschreiben typische Nutzungsszenarien unterschiedlicher Nutzergruppen und dienen der Validierung der funktionalen sowie der interaktionsbezogenen Anforderungen. Die Journeys wurden auf Basis der erstellten Personas und der identifizierten Pain Points entwickelt und berücksichtigen sowohl Erstnutzung als auch wiederkehrende Nutzungsszenarien.
 == User Journeys
 
@@ -594,7 +699,28 @@ Auswahl von Frameworks und Libraries:
 - Flutter
 - Riverpod
 - etc..
-Verlinkung des Gitrepositories
+Verlinkung des Git-Repositories
+= Floyd-Rose-Tuner App
+Im folgendem wird die App, wie sie zum Zeitpunkt der Abgabe der Bachelorarbeit war, vorgestellt.
+
+== First Load
+
+#figure(image("assets/image-2.png", height: 40%), caption: [Landing Page])<appLanding>
+Wenn man die App startet, sieht man als erstes die Möglichkeit das _Tuning_ einzustellen, die bereits auf die standartmäßige Stimmung _E-A-D-G-H-e_ eingestellt ist (Siehe @appLanding).
+#figure(image("assets/image-3.png", height: 40%), caption: [Selecting Tuning Page])<appSelectTuning>
+Versucht man ein anderes _Tuning_ auszuwählen, sieht man wie in @appSelectTuning eine größere Auswahl von herkömmlichen Stimmungen.
+
+Da die App noch keine Gitarre erlernt hat, wird in der Auswahl die Aufforderung angezeigt, eine Gitarre auszuwählen (@appLanding). Zu beginn der das Dropdown Menu enthält zunächst keine Gitarre. Allerdings kann, der Nutzer auf den Button "Add A New Guitar" klicken und kommt nun zur _Detuning Matrix Measure Page_.
+
+== Detuning Matrix Measure Page
+Auf dieser Saite, nimmt man die Messdaten auf um die Verstimmungsmatrix zu bestimmen.
+
+
+#figure(image("assets/image-4.png", height: 40%), caption: [Measure Detuning Matrix Page])<appDetuningMatrixPage>
+
+Diese Seite ist die Komplizierteste. Ganz oben ist ein Zufällig generierter Name für die Gitarre. Beim öffnen der Saite kann man direkt den Namen der Gitarre einstellen. Der Textinput ist direkt fokussiert. Das passiert nicht wenn man die Gitarre Editiert was in @editingGuitar näher erleutert wird.
+
+== Editing GuitarConfig <editingGuitar>
 = Evaluation
 
 == Funktionsfähigkeit des Algorithmuses
@@ -603,16 +729,32 @@ Mit der App konnte die Gitarre erfolgreich  gestimmt werden.
 == Nutzertests
 === Nutzer 0
 Die App wurde in einem ruhigen Zimmer, mit verstärkter Gitarre ohne Verzerrungseffekt getestet. Hierbei wurden die Frequenzen der Saiten korrekt erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es gab kleine Schwierigkeiten bei dem Erkennen der Fundamental frequenz. Da diese etwas schwankten.
-
+Dabei dauerte der Prozess um die Matrix zu bestimmen und die Messdaten nocheinmal zu überprüfen 3:47 Minuten.
 Innerhalb von ungefähr 7 Minuten war die Gitarre gestimmt.
 
 === Nutzer 1
-Hierbei wurde die App auf einer Jam Session vorgestellt. Beim Versuch, die Frequenz der E Gitarre zu messen, wurde nicht die korrekte Fundamentalfrequenz erkannt, sondern der Oberton mit Faktor 2. Gerade weil es in der Umgebung laut war und die Gitarre einen Verzerrungseffekt hatte, bei dem Obertöne verstärkt werden.
+Hierbei wurde die App auf einer Jam Session vorgestellt. Beim Versuch, die Frequenz der E-Gitarre zu messen, wurde nicht die korrekte Fundamentalfrequenz erkannt, sondern der Oberton mit Faktor 2. Gerade weil es in der Umgebung laut war und die Gitarre einen Verzerrungseffekt hatte, bei dem Obertöne verstärkt wurden.
 Der Stimmvorgang wurde abgebrochen.
 
 Für so ein Szenario muss die Erkennung der Fundamentalfrequenz stabiler sein.
 
+=== Nutzer 2
+Die App wurde Zuhause unter guten Bedingungen verwendet.
+Es viel auf, dass das Erlernen der Verstimmungmatrix zwar technisch funktionierte, aber im protzess einige repetitive Aktionen getätigt werden mussten. Denn wenn man den Zustand der gitarre gemessan hatte nach dem eine Saite verstimmt wurde, könnte man diesen Zustand auch schon als ausgangslage der nächsten Saite speichern. Aktuell wird das noch manuell gemacht.
 
+
+Es hat sich gezeigt, dass die Gitarre doch nicht prezise gestimmt wird. Denn beim verstimmen der Gitarre, wurden zwar zunächst die korrekten $Delta f$ angezeigt. Doch wenn man eine Saite mit hilfe der App verstimmt, verändert sich der gemessene Zustand der aktuell ausgewählten Saite und auch aller anderen. Diese änderung wurden nicht mit eineberechnet in der Folgenden berechnung der $Delta f$.
+
+Deswegen muss schritt weise die änderung vorhergesehen werden im Stimmprozess.
+
+=== Nutzer 3
+
+Nutzer 3 war verwirrt, was die Zahlen bedeutet (Frequenzen). Das verstärkte den Bedarf einer Erklärung.
+
+=== Nutzer 4
+13:50 - Nutzer fängt an, und will direkt die gitarre Stimmen. Die App konnte nicht klar kommunizieren, dass zu erst die Saiten der Gitarre gemessen werden mussten, mehr mals um die Verstimmungsmatrix zu bestimmen. Als dass im Tutorial Video erklärt wurde. War nicht klar, als die Saite zum testen verstimmt werden sollte, wohin die Gitarre verstimmt werden sollte. Auch wenn es egal ist wohin, hat das unsicherheiten ausgelöst. Als das erklärt wurde, hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu messen. Da die Stahlsaiten starke obertöne aufwies. Durch umpositionierung des Handys näher am Lautsprecher, und durch betätigung des _Tone Nobs_ der die Funktion eines Analogen Lowpass Filter erfüllt. Ging es dann. Zum Schluss wurde die Gitarre gestimmt. wobei Allerding die E Saite zu Hoch war, was darauf hindeutet, dass die Der Einfluss auf die E-Saite die meisten Messfehler aufwies.
+
+Das Stimmen dauerte effektiv 8 Minuten.
 = Ausblick
 == Usability Verbessern
 Die App nutzt noch zu komplizierte Begriffe für die Nutzer.
@@ -625,11 +767,24 @@ VST und CLAP Plugin implementieren, in C++
 == Synthetischen Ton zur Kontrolle abspielen um zu hören ob die korrekte Frequenz erfasst wurde.
 == Erkennen welche Saite gespielt wird, annahme 6 Saiten
 Wenn der Nutzer die Gitarre stimmt, dann wollen wir erkennen welche Saite er verändert und automatisch switchen. Annahme ist, dass er bereits ungefähr an der richtigen Frequenz ist.
+== Mehr Konfigurationsfreiraum
+=== Mehr Samples zur bestimmung der Steigungen verwendeten
+Dieses Feature ist tatsächlich schon implementiert. Allerdings wurde es deaktiviert, um die Benutzeroberfläche einfacher zu gestalten. Weniger Ablenkung, da weniger Knöpfe.
+
+=== Referenzstimmung 440 Hz ändern
+Zukünftig könnte es sinnvoll sein, die Referenzstimmung von 440 Hz ändern zu können. Manchmal gibt es Instrumente die um zum Referenzton A mit 438 Hz gestimmt sind. So könnte man die Gitarre auch auf diese Instrumente stimmen.
+
+=== Erstellen eigener Stimmungen
+Außerdem kann man bisher keine eigenen Tunings definieren. Es wäre flexibeler wenn der Nutzer selbst bestimmen könnte, auf welche Frequenzen er Seine Gitarre Stimmen möchte.
+
+=== Support von Gitarren mit beliebig vielen Saiten
+Desweiteren gibt es in sehr Seltenen Fällen Gitarren die nicht 6 Saiten haben, sondern mehr oder weniger. Für diesen Fall wäre gut wenn, man auch solche Gitarren stimmen kann. Momentan wird angenommen, dass es nur 6 Saiten gibt.
+
 
 #pagebreak()
-#heading(depth: 1, "Abkürzungsverzeichnis", numbering: none, outlined: false)
+#heading(depth: 1, "Glossar", numbering: none, outlined: false)
 
-/ Sattel: Ein fester Punkt am Gitarrenhals (vlg. @figBegriffe).
+/ Sattel: Ein fester Punkt am Gitarrenhals (vgl. @figBegriffe).
 / Brücke: Ein fester Punkt am Gitarrenkörper, an dem die Saiten befestigt sind (vlg. @figBegriffe).
 / Saite: Ein Dünner Draht, der zwischen Sattel und Brücke einer Gitarre gespannt ist und beim Anschlagen schwingt, um Töne zu erzeugen.
 / Tremolo: Eine spezielle Art von Gitarrenbrücke, die es ermöglicht, die Tonhöhe der Saiten durch Bewegung eines Hebels zu verändern.
@@ -641,6 +796,9 @@ Wenn der Nutzer die Gitarre stimmt, dann wollen wir erkennen welche Saite er ver
 / Bund: Ein Metallstift, der quer über den Gitarrenhals verläuft und die Saiten in Abschnitte unterteilt, um verschiedene Töne zu erzeugen, wenn die Saite auf den Bund gedrückt wird.
 
 / MAUI: Multi-platform App UI
+/ Stimmung: Die Stimmung im Kontext von Gitarren bezeichnet die spezifische Tonhöhe, auf die die sechs Saiten des Instruments eingestellt sind. Sie legt fest, welche Töne erklingen, wenn die Saiten leer (ohne Greifen im Bund) angeschlagen werden.
+/ Tuning: der englische Begriff für Stimmung
+
 #figure(
   image("assets/gitarren_begriffe.png", height: 34%),
   caption: [Begriffe einer Gitarre],

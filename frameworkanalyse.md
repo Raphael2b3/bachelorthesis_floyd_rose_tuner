@@ -29,3 +29,20 @@ Einordnung und Bewertung
 Zusammenfassend lässt sich feststellen, dass Flutter in der Entwicklergemeinschaft insbesondere aufgrund seiner konsistenten Rendering-Architektur, stabilen Performance und integrierten Entwicklungsumgebung positiv bewertet wird. React Native punktet hingegen durch sein großes Ökosystem und die weite Verbreitung, was insbesondere in organisatorischen Kontexten (z. B. Personalverfügbarkeit) relevant ist. .NET MAUI stellt vor allem für bestehende .NET-Umgebungen eine interessante Option dar, weist jedoch im Vergleich häufiger Schwächen in der praktischen Umsetzung auf.
 
 Die Wahl des geeigneten Frameworks hängt letztlich stark vom jeweiligen Anwendungsfall ab. Während Flutter häufig für UI-intensive Anwendungen bevorzugt wird, kann React Native durch seine Flexibilität und Verbreitung überzeugen. .NET MAUI bietet Vorteile in spezifischen Enterprise-Szenarien, insbesondere bei bestehender Integration in Microsoft-Technologien.
+
+---
+
+Damit die App frühzeitig auf so vielen Geräten wie möglich verwendet werden kann, wird die App mit einem Cross-Plattform-Framework entwickelt. Es gibt verschiedene Frameworks, die für die Entwicklung von Cross-Plattform-Apps verwendet werden können, wie zum Beispiel React Native @reactnative_dev, .NET MAUI (ehemals Xamarin)@dotnet_maui und Flutter @flutter_dev.
+
+Aufgrund eigener Erfahrungen mit React Native, Dot Net Maui und Flutter wurde Flutter ausgewählt.
+Flutter bot eine bessere Performance als React Native, und das Designen von Benutzeroberflächen war mit Flutter einfacher als mit Dot Net Maui. Die Developer Experience ist bei Flutter besonders gut.
+
+Somit wird das _Cross-Compiling_ Paradigma angewandt. Die App benötigt Zugriff auf das Mikrofon des Endgeräts und wird in Echtzeit Frequenzanalysen und weitere mathematische Operationen durchführen. Mit Flutter sieht die App auf jedem Gerät gleich aus. In dem Buch "Mobile App Engineering" (Jahr 2017) @mobileAppEngineering wurden Nachteile von _Cross-Compiling_ aufgezählt die heute von Flutter gelöst werden.
+
+Kriterien Für SDK
+
+Wie schnell kann man komplexe Probleme umsetzen.
+
+Einstiegshürde,
+
+Wie Stabil ist der Code
