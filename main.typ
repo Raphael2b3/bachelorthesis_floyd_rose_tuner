@@ -652,9 +652,38 @@ Wie im Buch beschrieben, werden Mobile Applikationen in Iterativen Prozessen ent
 
 == Requirements Enginnering
 Im Rahmen der Anforderungsanalyse und der nutzerzentrierten Gestaltung der mobilen Tuning-App wurden drei repräsentative User Journeys erarbeitet. Diese beschreiben typische Nutzungsszenarien unterschiedlicher Nutzergruppen und dienen der Validierung der funktionalen sowie der interaktionsbezogenen Anforderungen. Die Journeys wurden auf Basis der erstellten Personas und der identifizierten Pain Points entwickelt und berücksichtigen sowohl Erstnutzung als auch wiederkehrende Nutzungsszenarien.
-== User Journeys
+=== Projektvision
 
-=== Gerhard Gitarrist (Erstnutzer mit Floyd-Rose-Tremolo-Gitarre)
+Ziel des Projekts ist die Entwicklung einer mobilen Applikation, die Gitarristen
+beim effizienten Stimmen von Gitarren mit Floyd-Rose-Brücke unterstützt und den
+damit verbundenen zeitlichen sowie technischen Aufwand minimiert.
+
+=== Ziel- und Benutzergruppe
+
+Die Zielgruppe umfasst alle Personen, die regelmäßig oder gelegentlich eine
+Gitarre mit Floyd-Rose-Brücke stimmen müssen. Sie lässt sich in drei Segmente
+unterteilen:
+
+*Gitarren-Einsteiger* erwarben eine Floyd-Rose-Gitarre häufig ohne vollständiges
+Bewusstsein über den erhöhten Stimmaufwand dieses Brückensystems. Vorkenntnisse
+über Gitarrentechnik sind in dieser Gruppe gering; Alter und technisches
+Vorwissen variieren stark.
+
+*Professionelle Gitarristen* verfügen über mehrere Instrumente in
+unterschiedlichen Stimmungen, um ein breites klangliches Spektrum abdecken zu
+können. Sie besitzen fundierte Gitarrenkenntnisse und kommunizieren in der Regel
+auf Englisch.
+
+*Gitarrentechniker in Musikgeschäften* stellen die zeitkritischste Benutzergruppe
+dar. Sie stimmen und warten potenziell täglich mehrere Floyd-Rose-Gitarren für
+Kunden, verfügen über tiefgehendes technisches Fachwissen und sind mit
+englischsprachiger Fachterminologie vertraut. Für diese Gruppe bietet die
+Applikation den größten Effizienzgewinn.
+
+
+=== User Journeys
+
+==== Gerhard Gitarrist (Erstnutzer mit Floyd-Rose-Tremolo-Gitarre)
 Gerhard Gitarrist besitzt eine Floyd-Rose-Tremolo-Gitarre und möchte diese präzise stimmen.
 Er hat von der App erfahren und lädt sie aus dem App Store herunter.
 Beim erstmaligen Start der App gelangt er auf eine Onboarding-Seite, die ihm bewusst macht, dass er mit der Funktionsweise der App noch nicht vertraut ist.
