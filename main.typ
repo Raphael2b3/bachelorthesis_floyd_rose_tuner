@@ -731,6 +731,87 @@ einer Verwendbarkeit als Plugin für Digital Audio Workstations (DAW). Dieser
 Anwendungsfall liegt jedoch außerhalb des definierten Projektumfangs und wird
 nicht berücksichtigt.
 
+=== Personas
+
+Um die Anforderungen der Zielgruppe greifbar zu machen, wurden auf Basis der
+Zielgruppensegmente vier repräsentative Personas entwickelt.
+
+==== Emil -- Gitarren-Einsteiger
+
+Emil ist 26 Jahre alt, arbeitet als Kellner und macht Musik als Hobby. Er hat
+Translationswissenschaften studiert und keinen technischen Hintergrund. Durch
+ein Familiengeschenk kam er in den Besitz einer Floyd-Rose-Gitarre, ohne sich
+zuvor mit den Besonderheiten dieses Brückensystems auseinandergesetzt zu haben.
+
+Emil nutzt alltäglich Spotify, WhatsApp, Instagram und YouTube. Er liest Texte
+selten vollständig und bevorzugt visuelle oder interaktive Inhalte. Er ist
+ungeduldig und erwartet, dass Anwendungen ihn intuitiv durch Prozesse führen.
+
+Der erhöhte Zeitaufwand beim Stimmen frustriert ihn zunehmend und lässt ihn
+über den Kauf einer einfacher zu stimmenden Gitarre nachdenken.
+
+*Relevanz:* Emil repräsentiert Nutzer mit geringem Vorwissen, die eine niedrige
+Einstiegshürde und eine geführte Benutzeroberfläche benötigen.
+
+==== Matilda -- Professionelle Gitarristin
+
+Matilda ist 38 Jahre alt und verdient ihren Lebensunterhalt als Gitarristin
+ihrer Metalband „Fire Hawks". Sie spielt seit 20 Jahren E-Gitarre und besitzt
+eine Sammlung mehrerer Instrumente, darunter ihre bevorzugte Music Man
+Silhouette mit Floyd-Rose-Tremolo.
+
+Da sie ihre Saiten aufgrund intensiver Bespielung regelmäßig wechselt, ist
+das Neustimmen für sie Routine. Matilda wechselt häufig zwischen Standard- und
+Drop-D-Stimmung und schätzt dabei Effizienz. Sie kommuniziert per E-Mail,
+Telefon und WhatsApp; als Musikerin nutzt sie bewusst Streaming-Plattformen,
+die Künstler stärker vergüten als marktführende Dienste.
+
+*Relevanz:* Matilda repräsentiert erfahrene Nutzerinnen, die schnelle Workflows
+und die Unterstützung mehrerer Stimmungen priorisieren.
+
+==== Jonas -- Gitarrentechniker
+
+Jonas ist 45 Jahre alt und arbeitet seit 18 Jahren als Gitarrentechniker in
+einem Musikfachgeschäft. Er wartet, repariert und stimmt täglich Instrumente
+verschiedener Kunden -- darunter regelmäßig Gitarren mit Floyd-Rose-Brücke.
+
+Er verfügt über tiefgehendes technisches Fachwissen zu Gitarren aller Bauarten
+und ist mit englischsprachiger Fachterminologie vertraut. Zeiteffizienz hat für
+ihn höchste Priorität, da er unter Umständen mehrere Floyd-Rose-Gitarren pro
+Tag stimmen muss. Er ist gegenüber neuen Werkzeugen aufgeschlossen, sofern sie
+seinen Workflow beschleunigen und zuverlässig funktionieren.
+
+*Relevanz:* Jonas repräsentiert professionelle Anwender im gewerblichen Umfeld,
+für die die Applikation den größten messbaren Effizienzgewinn liefert.
+
+
+
+==== Hanna -- Home-Producerin
+
+Hanna ist 30 Jahre alt und betreibt ein eigenes Heimstudio, in dem sie
+regelmäßig Bands aufnimmt und mischt -- darunter die Band „Fire Hawks". Sie
+arbeitet mit der DAW Bitwig und ist mit CLAP- und VST-Plugin-Formaten sowie
+den Grundlagen der digitalen Signalverarbeitung vertraut. Darüber hinaus
+programmiert sie eigenständig und verfügt über hochpräzise
+Frequenzmessmöglichkeiten in ihrer Studioumgebung.
+
+Im Aufnahmekontext begegnen ihr regelmäßig Gitarristinnen und Gitarristen mit
+Floyd-Rose-Instrumenten. Da für eine qualitativ hochwertige Aufnahme eine
+präzise Stimmung unerlässlich ist, hat der Stimmvorgang in der Vergangenheit
+wiederholt Aufnahmesessions verzögert. Hanna ist mit einschlägiger
+Fachterminologie aus Tontechnik und Gitarrenbau vertraut und erwartet von
+Werkzeugen eine hohe Messgenauigkeit.
+
+*Relevanz:* Hanna repräsentiert technisch versierte Nutzerinnen im
+professionellen Aufnahmekontext, für die Präzision und Geschwindigkeit des
+Stimmvorgangs direkte Auswirkungen auf den Produktionsablauf haben. Zudem
+verfügen Nutzerinnen dieses Segments außerhalb der Applikation über
+hochpräzise Messinstrumente, was eine entsprechend hohe Messgenauigkeit
+voraussetzt.
+
+
+=== Szenarien
+
 === User Journeys
 
 ==== Gerhard Gitarrist (Erstnutzer mit Floyd-Rose-Tremolo-Gitarre)
