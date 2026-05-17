@@ -680,6 +680,56 @@ Kunden, verfügen über tiefgehendes technisches Fachwissen und sind mit
 englischsprachiger Fachterminologie vertraut. Für diese Gruppe bietet die
 Applikation den größten Effizienzgewinn.
 
+=== Systemkontext
+
+Der Systemkontext beschreibt alle materiellen und immateriellen Einflussfaktoren,
+die im Zusammenhang mit dem Projekt stehen. @mobileAppEngineering Im vorliegenden
+Fall umfasst er folgende Aspekte:
+
+*Benutzer:* Personen, die eine Floyd-Rose-Gitarre stimmen möchten, unabhängig
+von ihrem technischen Kenntnisstand.
+
+*Akustische Umgebung:* Die Umgebungsgeräusche am Ort des Stimmvorgangs
+beeinflussen die Qualität der Frequenzmessung und stellen eine zentrale
+Einflussgröße für die Zuverlässigkeit der Applikation dar.
+
+*Hardware des Mobilgeräts:* Die Mikrofonqualität des verwendeten Endgeräts
+wirkt sich direkt auf die Genauigkeit der Grundfrequenzschätzung aus.
+
+*Spielweise der Gitarre:* Es ist zu unterscheiden, ob die Gitarre über einen
+Verstärker mit ausreichendem Schallpegel betrieben oder unverstärkt und damit
+leiser angespielt wird. Zudem kann ein ausgeprägter Obertonanteil die
+Frequenzanalyse erschweren.
+
+Da die Applikation vollständig lokal auf dem Endgerät ausgeführt wird, ist
+kein IT-Backend und keine Internetverbindung erforderlich.
+
+=== Anwendungskontext
+
+Der Anwendungskontext wurde maßgeblich durch die in @nutzerTests dokumentierten
+Nutzertests ermittelt. Dabei wurden folgende praxisrelevante Erkenntnisse
+gewonnen:
+
+*Akustische Störeinflüsse:* Ein Teil der Testpersonen stimmte die Gitarre in
+lauten Umgebungen oder spielte Instrumente mit ausgeprägtem Obertonanteil.
+Beides führte zu einer fehlerhaften Erkennung der Grundfrequenz und stellt
+damit eine zentrale Herausforderung für die Signalverarbeitung dar.
+
+*Benutzerführung:* Die Tests zeigten, dass rein textbasierte Erklärungen für
+einen Teil der Nutzer nicht ausreichen. Visuelle Unterstützung durch
+Illustrationen oder animierte Hinweise ist notwendig, um Bedienabläufe
+verständlich zu vermitteln.
+
+*Darstellung von Messwerten:* Numerische Frequenzangaben erzeugten bei
+Testpersonen häufig Verwirrung. Eine abstrahierte, intuitiv verständliche
+Visualisierung der Stimmgenauigkeit ist daher einer rein zahlenwertbasierten
+Darstellung vorzuziehen.
+
+*Abgrenzung des Anwendungsbereichs:* Einzelne Testpersonen äußerten den Wunsch
+nach einer Integration in professionelle Musikstudio-Umgebungen sowie nach
+einer Verwendbarkeit als Plugin für Digital Audio Workstations (DAW). Dieser
+Anwendungsfall liegt jedoch außerhalb des definierten Projektumfangs und wird
+nicht berücksichtigt.
 
 === User Journeys
 
@@ -729,6 +779,11 @@ Auswahl von Frameworks und Libraries:
 - Riverpod
 - etc..
 Verlinkung des Git-Repositories
+
+== Tests während der Entwicklung
+Alles wurde Manuell getestet außer:
+
+Algorithmen für bla bla...
 = Floyd-Rose-Tuner App
 Im folgendem wird die App, wie sie zum Zeitpunkt der Abgabe der Bachelorarbeit war, vorgestellt.
 
@@ -755,7 +810,7 @@ Diese Seite ist die Komplizierteste. Ganz oben ist ein Zufällig generierter Nam
 == Funktionsfähigkeit des Algorithmuses
 Mit der App konnte die Gitarre erfolgreich  gestimmt werden.
 == Erfüllung der Requirements aus SWE
-== Nutzertests
+== Nutzertests<nutzerTests>
 === Nutzer 0
 Die App wurde in einem ruhigen Zimmer, mit verstärkter Gitarre ohne Verzerrungseffekt getestet. Hierbei wurden die Frequenzen der Saiten korrekt erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es gab kleine Schwierigkeiten bei dem Erkennen der Fundamental frequenz. Da diese etwas schwankten.
 Dabei dauerte der Prozess um die Matrix zu bestimmen und die Messdaten nocheinmal zu überprüfen 3:47 Minuten.
@@ -781,19 +836,17 @@ Deswegen muss schritt weise die änderung vorhergesehen werden im Stimmprozess.
 Nutzer 3 war verwirrt, was die Zahlen bedeutet (Frequenzen). Das verstärkte den Bedarf einer Erklärung.
 
 === Nutzer 4
-13:50 - Nutzer fängt an, und will direkt die gitarre Stimmen. Die App konnte nicht klar kommunizieren, dass zu erst die Saiten der Gitarre gemessen werden mussten, mehr mals um die Verstimmungsmatrix zu bestimmen. Als dass im Tutorial Video erklärt wurde. War nicht klar, als die Saite zum testen verstimmt werden sollte, wohin die Gitarre verstimmt werden sollte. Auch wenn es egal ist wohin, hat das unsicherheiten ausgelöst. Als das erklärt wurde, hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu messen. Da die Stahlsaiten starke obertöne aufwies. Durch umpositionierung des Handys näher am Lautsprecher, und durch betätigung des _Tone Nobs_ der die Funktion eines Analogen Lowpass Filter erfüllt. Ging es dann. Zum Schluss wurde die Gitarre gestimmt. wobei Allerding die E Saite zu Hoch war, was darauf hindeutet, dass die Der Einfluss auf die E-Saite die meisten Messfehler aufwies.
+13:50 - Nutzer fängt an, und will direkt die gitarre Stimmen. Die App konnte nicht klar kommunizieren, dass zu erst die Saiten der Gitarre gemessen werden mussten, mehr mals um die Verstimmungsmatrix zu bestimmen. Als dass im Tutorial Video erklärt wurde. War nicht klar, als die Saite zum testen verstimmt werden sollte, wohin die Gitarre verstimmt werden sollte. Auch wenn es egal ist wohin, hat das unsicherheiten ausgelöst. Als das erklärt wurde, hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu messen. Da die Stahlsaiten starke obertöne aufwies. Durch umpositionierung des Handys näher am Lautsprecher, und durch betätigung des _Tone Nobs_ der die Funktion eines Analogen Lowpass Filter erfüllt. Ging es dann. Zum Schluss wurde die Gitarre gestimmt. wobei Allerding die E Saite zu Hoch war, was darauf hindeutet, dass die Der Einfluss auf die E2-Saite die meisten Messfehler aufwies.
 
 Das Stimmen dauerte effektiv 8 Minuten.
 = Ausblick
 == Usability Verbessern
-Die App nutzt noch zu komplizierte Begriffe für die Nutzer.
-== Indikator was noch nicht überprüft wurde
-Ein Indikator könnte sein, dass die App anzeigt, welche Saiten bereits überprüft wurden.
+Die App nutzt noch zu komplizierte Begriffe für die Nutzer. Aus @nutzerTests wurde außerdem klar, dass die App am besten so gestalten werden sollte, dass dem Nutzer nur eine Aufgabe gestellt wird und nicht mehrere gleichzeitig sodass verwirrung und "suchen nach was man als nächsten machen soll" nicht mehr passiert.
+
 == Mehrere Saiten gleichzeitig Messen
 Fourier Transformation, 6 Peaks erkennen und die obertöne rausrechnen.
 == Implementierung für VST und Digital Audio Workstations (Plugin)
 VST und CLAP Plugin implementieren, in C++
-== Synthetischen Ton zur Kontrolle abspielen um zu hören ob die korrekte Frequenz erfasst wurde.
 == Erkennen welche Saite gespielt wird, annahme 6 Saiten
 Wenn der Nutzer die Gitarre stimmt, dann wollen wir erkennen welche Saite er verändert und automatisch switchen. Annahme ist, dass er bereits ungefähr an der richtigen Frequenz ist.
 == Mehr Konfigurationsfreiraum
