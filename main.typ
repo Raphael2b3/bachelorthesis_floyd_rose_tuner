@@ -790,7 +790,7 @@ für die die Applikation den größten messbaren Effizienzgewinn liefert.
 
 Hanna ist 30 Jahre alt und betreibt ein eigenes Heimstudio, in dem sie
 regelmäßig Bands aufnimmt und mischt -- darunter die Band „Fire Hawks". Sie
-arbeitet mit der DAW Bitwig und ist mit CLAP- und VST-Plugin-Formaten sowie
+arbeitet mit der _DAW Bitwig_ und ist mit _CLAP-_ und _VST-Plugin-Formaten_ sowie
 den Grundlagen der digitalen Signalverarbeitung vertraut. Darüber hinaus
 programmiert sie eigenständig und verfügt über hochpräzise
 Frequenzmessmöglichkeiten in ihrer Studioumgebung.
@@ -809,45 +809,81 @@ verfügen Nutzerinnen dieses Segments außerhalb der Applikation über
 hochpräzise Messinstrumente, was eine entsprechend hohe Messgenauigkeit
 voraussetzt.
 
-
 === Szenarien
 
 ==== Szenario 1 -- Emils erster Versuch
 
-Emil kommt nach einem harten Arbeitstag zu sich nachhause und möchte zum runterkommen etwas Gitarre spielen und singen. Als er über eine Youtube empfehlung von der App hörter ist er ganz aufgeregt weil er nun vielleicht doch nicht eine neue Gitarre kaufen muss. Er lädt die App herunter und setzt sich mit der gitarre auf den Fußboden seines Wohnzimmers und legt das handy vor sich. Die App startet und er kann nun seine Wunschzielstimmung und eine Gitarre auswählen. Er weiß nicht was Stimmung bedeutet und will es nicht anfassen. Die Stimmung ist allerdings schon auf _Standard E_ eingestellt. Als er eine Gitarre auswählen möchte, sieht er das noch keine existiert. Darunter ist aber präsent ein Button der ihm eine Neue Gitarre anlegen lässt. Er klickt darauf und wird nach einem Namen für die Gitarre gefragt. Er nennt sie "Onkel Ullies Gitarre". Nun kommt er auf eine 
-=== User Journeys
+*Normaler Ablauf:*
+Emil kommt nach einem langen Arbeitstag nach Hause und möchte zur Entspannung
+Gitarre spielen. Über eine YouTube-Empfehlung wird er auf die Applikation
+aufmerksam und hofft, damit den Kauf einer neuen Gitarre vermeiden zu können.
+Er lädt die App herunter, setzt sich mit der Gitarre auf den Boden seines
+Wohnzimmers und legt das Smartphone vor sich.
 
-==== Gerhard Gitarrist (Erstnutzer mit Floyd-Rose-Tremolo-Gitarre)
-Gerhard Gitarrist besitzt eine Floyd-Rose-Tremolo-Gitarre und möchte diese präzise stimmen.
-Er hat von der App erfahren und lädt sie aus dem App Store herunter.
-Beim erstmaligen Start der App gelangt er auf eine Onboarding-Seite, die ihm bewusst macht, dass er mit der Funktionsweise der App noch nicht vertraut ist.
+Nach dem Start der Applikation kann er eine Zielstimmung sowie ein
+Gitarrenprofil auswählen. Da noch kein Profil existiert, legt er über einen
+prominenten Button eine neue Gitarre an und benennt sie „Onkel Ullies Gitarre".
+Anschließend gelangt er in den Kalibrierungsmodus, in dem er aufgefordert wird,
+jede Saite einzeln anzuspielen. Daraufhin wird er gebeten, die E2-Saite gezielt
+zu verstimmen und alle Saiten erneut zu messen. Eine Fortschrittsanzeige
+informiert ihn über die verbleibenden Messschritte. Nach Abschluss der
+Kalibrierung ist das Gitarrenprofil angelegt.
 
-Auf dieser Startseite werden ihm zwei Hilfsangebote prominent angezeigt: ein Link zu einem kurzen Erklärvideo (ca. 90 Sekunden) sowie ein prägnanter, textbasierter Erklärtext.
-Gerhard entscheidet sich jedoch gegen beide Hilfsmittel, da er sofort mit dem Stimmvorgang beginnen möchte.
-Er klickt daher auf den prominent platzierten Button „Direkt zum Stimmgerät“, der ihn ohne weitere Verzögerung auf die Tuning-Seite führt.Die App informiert ihn nun klar und strukturiert darüber, dass zunächst eine einmalige Konfiguration des Stimmgeräts für seine Floyd-Rose-Gitarre notwendig ist.
-Der Konfigurationsprozess beginnt automatisch:
-Die App fordert Gerhard auf, nacheinander alle sechs Saiten einmal anzuspielen, um die aktuelle Grundstimmung und die Saitenreihenfolge zu erfassen.
-Anschließend wird er aufgefordert, die tiefe E-Saite bewusst um einen definierten Betrag zu verstimmen (z. B. um eine Terz).
-Sobald die gewünschte Verstimmung erreicht ist, erhält er ein positives visuelles und akustisches Feedback.
-Danach muss er jede weitere Saite einmal einzeln anspielen. Spielt er versehentlich eine falsche Saite an, kann er über einen deutlich sichtbaren Button „Vorherige Saite“ zum vorherigen Schritt zurückkehren.
+Im anschließenden Stimmvorgang misst Emil zunächst den aktuellen Zustand der
+Gitarre. Die App zeigt ihm daraufhin für jede Saite eine visuelle Zielanzeige,
+anhand derer er die Saite in den grünen Bereich stimmt. Nach Abschluss aller
+Saiten wird ihm im integrierten Stimmgerät bestätigt, dass die Gitarre korrekt
+gestimmt ist.
 
-Der Vorgang wiederholt sich analog für alle Saiten.
-Nach Abschluss der Kalibrierung erscheint ein Dialog, der Gerhard fragt, ob er diese Konfiguration speichern möchte, um den Prozess künftig zu überspringen. Neben einem Textfeld zur freien Benennung der Konfiguration (z. B. „Meine Floyd Rose – Standard“) stehen die beiden Buttons „Speichern“ und „Abbrechen“ zur Verfügung.Nach Bestätigung öffnet sich das eigentliche Stimmgerät.
-Oben in der Kopfzeile wird die gerade ausgewählte Konfiguration angezeigt.
-Gerhard wird nun aufgefordert, jede Saite einzeln auf die exakte Zieltonhöhe (in Hz) zu stimmen.
-Sobald alle Saiten korrekt gestimmt sind, erhält er eine abschließende Bestätigung „Gitarre erfolgreich gestimmt“ und kann die App beenden.
-=== Arnold Abbrecher (Wiederholungsnutzer mit Abbruchwunsch)
-Arnold Abbrecher ist bereits Nutzer der App und besitzt ebenfalls eine Floyd-Rose-Tremolo-Gitarre. Beim Start der App gelangt er direkt in das Stimmgerät, das automatisch die zuletzt verwendete Konfiguration lädt.
-Bevor er mit dem eigentlichen Stimmen beginnt, bemerkt er einen Hinweis-Text, der ihn darauf aufmerksam macht, dass bei neuen Saiten oder bei einer anderen Gitarre eine erneute Konfiguration des Stimmgeräts erforderlich ist.
-Arnold entscheidet sich dafür, eine neue Konfiguration anzulegen, und klickt auf den Button „Neue Konfiguration erstellen“.Der Konfigurationsprozess startet wie bei Gerhard Gitarrist. Nach einigen Schritten wird Arnold jedoch durch äußere Einflüsse (z. B. ein Telefonat oder Zeitmangel) unterbrochen.
-Er möchte den Vorgang an dieser Stelle abbrechen und klickt auf den jederzeit sichtbaren und gut erreichbaren Button „Konfiguration abbrechen“.
-Die App fragt sicherheitshalber noch einmal nach einer Bestätigung („Möchten Sie den Konfigurationsprozess wirklich abbrechen? Die bisherigen Daten gehen verloren.“).
-Nach Bestätigung wird Arnold zurück zur Startseite des Stimmgeräts geleitet; die bisherigen Konfigurationsdaten werden verworfen und die zuletzt gespeicherte Konfiguration bleibt erhalten.
-=== Norman Normaler (Nutzer einer Standard-Gitarre ohne Tremolo)
-Norman Normaler ist Gitarrist mit einer herkömmlichen E-Gitarre ohne Floyd-Rose-Tremolo-System.
-Er besitzt die App bereits und startet sie.
-Wie bei Arnold öffnet sich direkt das Stimmgerät mit der zuletzt verwendeten Konfiguration.Da Norman keine Floyd-Rose-Gitarre stimmen möchte, sondern lediglich eine schnelle Standardstimmung benötigt, navigiert er über die untere Navigationsleiste zum Menüpunkt „Standard Tuner“. Die App wechselt nahtlos in den vereinfachten Stimmmodus, der auf die klassische chromatische Stimmfunktion ohne spezielle Floyd-Rose-Kalibrierung zurückgreift.Norman spielt nun nacheinander die Saiten an und stimmt sie manuell auf die Standardtonhöhen (E-A-D-G-H-e).
-Die App zeigt dabei in Echtzeit die aktuelle Frequenz sowie eine visuelle Hilfestellung (Zeiger bzw. Farbverlauf). Sobald alle Saiten korrekt gestimmt sind, erhält er eine Erfolgsmeldung. Norman kann die App anschließend direkt schließen, ohne weitere Konfigurationsschritte durchlaufen zu müssen.
+*Mögliche Fehler und Lösungsansätze:*
+
++ *Falsche Stimmung gewählt:* Emil wählt versehentlich eine unbekannte Stimmung
+  aus und ist anschließend verwirrt, da die Gitarre nicht dem erwarteten Klang
+  entspricht. Da Emil textbasierte Erklärungen meidet, sollte ein kurzes
+  Erklärvideo zur Verfügung stehen; ergänzend kann ein knapper Infotext
+  eingeblendet werden.
+
++ *Unbekannte Saitenbezeichnungen:* Emil ist mit den Bezeichnungen E2, A2, D3,
+  G3, B3 und E4 nicht vertraut. Auch hier bietet ein kurzes Demonstrationsvideo
+  den geeigneten Einstieg.
+
++ *Schwierigkeiten bei der Frequenzeingabe:* Emil weiß nicht, wie er die
+  Frequenz einer Saite in die App einträgt. Ein Anleitungsvideo, das den
+  Messvorgang vorführt, ermöglicht ihm ein einfaches Nachahmen.
+
++ *Falsche Saite verstimmt:* Emil verstimmt versehentlich die falsche Saite,
+  ohne es zu bemerken. Die Applikation sollte anhand der gemessenen Frequenzen
+  automatisch erkennen, ob die korrekte Saite verstimmt wurde, und den Nutzer
+  gegebenenfalls zur Wiederholung auffordern.
+
++ *Frequenz nicht erkennbar:* Die Gitarre wird zu leise angespielt, sodass das
+  Mikrofon -- insbesondere bei tiefen Saiten -- kein zuverlässiges Signal
+  erfasst. In diesem Fall werden häufig harmonische Obertöne gemessen; die App
+  sollte durch Rückrechnung die Grundfrequenz ableiten und eine
+  Plausibilitätsprüfung anhand des erwarteten Frequenzbereichs durchführen.
+
++ *Defektes Mikrofon:* Das Mikrofon des Endgeräts ist nicht funktionsfähig.
+  Als Fallback sollte die manuelle Eingabe von Frequenzwerten über ein
+  Textfeld ermöglicht werden.
+
+==== Szenario 2 -- Matilda auf einer Jam-Session
+
+*Normaler Ablauf:*
+Matilda spielt auf einer Jam-Session und möchte für den nächsten Auftritt die
+Stimmung ihrer Gitarre wechseln. Sie öffnet die App, wählt die gewünschte
+Zielstimmung sowie ihr gespeichertes Gitarrenprofil aus und startet den
+Stimmvorgang. Da die Umgebung laut ist, benötigt sie mehrere Versuche, um
+stabile Frequenzmessungen zu erhalten. Nach erfolgreichem Abschluss aller
+Saiten ist die Gitarre korrekt gestimmt.
+
+*Mögliche Fehler und Lösungsansätze* (ergänzend zu Szenario 1):
+
++ *Störgeräusche unterbrechen die Messung:* Hintergrundgeräusche führen dazu,
+  dass kontinuierlich neue Frequenzwerte erkannt werden, ohne dass eine Saite
+  angespielt wurde. Über einen einstellbaren Lautstärkeschwellenwert -- etwa
+  einen Schieberegler in den Einstellungen -- kann die Empfindlichkeit des
+  Mikrofons so angepasst werden, dass Messungen nur ausgelöst werden, wenn die
+  Lautstärke der gespielten Saite den Umgebungspegel deutlich übersteigt.
 
 == Anforderungen
 Aus User Journeys ableiten
@@ -964,7 +1000,9 @@ Desweiteren gibt es in sehr Seltenen Fällen Gitarren die nicht 6 Saiten haben, 
 / MAUI: Multi-platform App UI
 / Stimmung: Die Stimmung im Kontext von Gitarren bezeichnet die spezifische Tonhöhe, auf die die sechs Saiten des Instruments eingestellt sind. Sie legt fest, welche Töne erklingen, wenn die Saiten leer (ohne Greifen im Bund) angeschlagen werden.
 / Tuning: der englische Begriff für Stimmung
-
+/ DAW: Digital Audio Workstation
+/ VST: Virtual Studio Technology ist eine Programmierschnittstelle für Audio-Plug-ins. Damit können virtuelle Effekte programmiert werden.
+/ CLAP: CLever Audio Plug-in
 #figure(
   image("assets/gitarren_begriffe.png", height: 34%),
   caption: [Begriffe einer Gitarre],
