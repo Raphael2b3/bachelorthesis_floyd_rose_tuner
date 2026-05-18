@@ -644,14 +644,14 @@ in _decibels relative to full scale_ (dBFS) @dBFS berechnet, wobei $32768$ dem m
 
 = Software Entwicklung/Implementierung
 
-Die Software soll nach dem Buch "Mobile App Engineering" @mobileAppEngineering entwickelt werden.
+Die Methodik der Softwareentwicklung wurde primär durch das Buch "Mobile App Engineering" @mobileAppEngineering inspiriert.
 
 Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in diesem Rahmen entwickelte App ist zwar keine _Enterprise App_, aber die Prinzipien der Softwareentwicklung, die in diesem Buch beschrieben werden, sind dennoch anwendbar. Es werden insbesondere die Prinzipien der Anforderungsanalyse und der nutzerzentrierten Gestaltung übernommen.
 
-Wie im Buch beschrieben, werden Mobile Applikationen in Iterativen Prozessen entwickelt. Daher werden manche Design entscheidungen mit Usertests begründet die mit einer Älteren Version der App durch geführt wurden.
+Wie im Buch beschrieben, werden Mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Usertests begründet, die mit einer älteren Version der App durchgeführt wurden.
 
 == Requirements Enginnering
-Im Rahmen der Anforderungsanalyse und der nutzerzentrierten Gestaltung der mobilen Tuning-App wurden drei repräsentative User Journeys erarbeitet. Diese beschreiben typische Nutzungsszenarien unterschiedlicher Nutzergruppen und dienen der Validierung der funktionalen sowie der interaktionsbezogenen Anforderungen. Die Journeys wurden auf Basis der erstellten Personas und der identifizierten Pain Points entwickelt und berücksichtigen sowohl Erstnutzung als auch wiederkehrende Nutzungsszenarien.
+
 === Projektvision
 
 Ziel des Projekts ist die Entwicklung einer mobilen Applikation, die Gitarristen
@@ -812,6 +812,9 @@ voraussetzt.
 
 === Szenarien
 
+==== Szenario 1 -- Emils erster Versuch
+
+Emil kommt nach einem harten Arbeitstag zu sich nachhause und möchte zum runterkommen etwas Gitarre spielen und singen. Als er über eine Youtube empfehlung von der App hörter ist er ganz aufgeregt weil er nun vielleicht doch nicht eine neue Gitarre kaufen muss. Er lädt die App herunter und setzt sich mit der gitarre auf den Fußboden seines Wohnzimmers und legt das handy vor sich. Die App startet und er kann nun seine Wunschzielstimmung und eine Gitarre auswählen. Er weiß nicht was Stimmung bedeutet und will es nicht anfassen. Die Stimmung ist allerdings schon auf _Standard E_ eingestellt. Als er eine Gitarre auswählen möchte, sieht er das noch keine existiert. Darunter ist aber präsent ein Button der ihm eine Neue Gitarre anlegen lässt. Er klickt darauf und wird nach einem Namen für die Gitarre gefragt. Er nennt sie "Onkel Ullies Gitarre". Nun kommt er auf eine 
 === User Journeys
 
 ==== Gerhard Gitarrist (Erstnutzer mit Floyd-Rose-Tremolo-Gitarre)
