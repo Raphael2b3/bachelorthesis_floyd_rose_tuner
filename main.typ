@@ -651,6 +651,7 @@ Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in die
 Wie im Buch beschrieben, werden Mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Usertests begründet, die mit einer älteren Version der App durchgeführt wurden.
 
 == Requirements Enginnering
+Dieses Kapitel wurde mit Hilfe des Buchs "Mobile App Engineering" @mobileAppEngineering entwickelt. Die Ergebnisse folgen aus der befolgung des Kapitel 4 "Requirements Engineering".
 
 === Projektvision
 
@@ -733,7 +734,8 @@ nicht berücksichtigt.
 
 === Personas
 
-Um die Anforderungen der Zielgruppe greifbar zu machen, wurden auf Basis der
+Um die Anforderungen der Zielgruppe greifbar zu machen, wurden auf
+Basis der
 Zielgruppensegmente vier repräsentative Personas entwickelt.
 
 ==== Emil -- Gitarren-Einsteiger
@@ -783,8 +785,6 @@ seinen Workflow beschleunigen und zuverlässig funktionieren.
 
 *Relevanz:* Jonas repräsentiert professionelle Anwender im gewerblichen Umfeld,
 für die die Applikation den größten messbaren Effizienzgewinn liefert.
-
-
 
 ==== Hanna -- Home-Producerin
 
@@ -885,28 +885,154 @@ Saiten ist die Gitarre korrekt gestimmt.
   Mikrofons so angepasst werden, dass Messungen nur ausgelöst werden, wenn die
   Lautstärke der gespielten Saite den Umgebungspegel deutlich übersteigt.
 
-== Anforderungen
-Aus User Journeys ableiten
+=== Anforderungen
+
+Auf Basis der Projektvision, des System- und Anwendungskontexts sowie der erstellten Personas sowie Anwendungsszenarien wurden funktionale und nicht-funktionale Anforderungen
+an die Applikation abgeleitet. Wie es in @mobileAppEngineering empfohlen wurde, sind diese nach _MUSS_-,_SOLL_ und nach Wertigkeit nach dem Kano-Model. Hinzu werden Anforderungen mit einem Hohenwert und einem hohen Risiko beim (Fehlen) höher priosiert. Eine etwas niedrigere Priorität haben, Anforderungen mit einerm niedrigen Risiko und einem hohen Nutzen und schließlich kommen die Anforderungen mit einem Geringen Nutzen und Geringem Risiko. Das folgt aus @mobileAppEngineering und der Sogennanten "Wert-Risiko-Matrix nach Cohn[2005]".
+
+==== Funktionale Benutzeranforderungen
+- Ein Nutzer Muss Eine Floyd-Rose Gitarre effizient stimmen können
+- Ein Nutzer Muss die App auf seine Gitarre kalibrieren können
+- Ein Nutzer Muss die Kalibrierung mehrer Gitarren langfristig speichern können.
+- Ein Nutzer Muss den Zustand seiner Gitarre messen können.
+- Ein Nutzer muss die Empfindlichkeit zur Messung der Gitarre einstellen können, in geräusch lasting umgebungen.
+- Ein Nutzer Muss Hilfe zur Bedienung der App erhalten können.
+- Ein Nutzer muss die korrektheit der Messungen überprüfen können, wenn das nicht von der App bereits geschafft wird.
+- Ein Nutzer muss Fehlerhafte Messungen korrigieren können.
+- Ein Nutzer Sollte unterschiedliche Stimmungen für den Stimmprozess auswählen können.
+- Ein Nutzer Sollte die Stimmung seiner Gitarre auf Richtigkeit prüfen können, mit einem Normalen stimmgerät.
+- Ein Nutzer sollte die App auf seine Gitarre rekalibrieren können.
+- Ein Nutzer sollte für die Kalibrierungen Namen vergeben können.
+- Ein Nutzer sollte Eigene Stimmungen erstellen bearbeiten und löschen können.
+- Ein Nutzer sollte die Messungen der App auch Händisch vornehmen können mit externen hilfsmittel (Anderes frequenzmessgerät).
+- Ein Nutzer sollte nicht allgemein bekannte begriffe nachvollziehen können (Stimmungen, Saitennamen).
+==== Funktionale Systemanforderungen
+
+- Das System muss die Grundfrequenz einer angespielten Saite mittels
+  YIN-Algorithmus in Echtzeit schätzen.
+- Das System muss Frequenzmessungen nur durchführen, wenn der Schalldruckpegel
+  des Eingangssignals einen konfigurierbaren dBFS-Schwellenwert überschreitet.
+- Das System muss nach einer vollständigen Zustandsmessung aller Saiten
+  ($arrow(f_0)$) für jede Saite $N$ die absolute Zielfrequenz gemäß
+
+  $
+    f_N = f_"0,N" + sum_(i=1)^(N) Delta_i dot C_(N\,i)
+  $
+
+  berechnen.
+- Das System muss sicherstellen, dass Saiten stets in der Reihenfolge
+  E2 $arrow$ A2 $arrow$ D3 $arrow$ G3 $arrow$ B3 $arrow$ E4 gestimmt werden,
+  sodass die Verstimmungseinflüsse bereits gestimmter Saiten in die
+  Zielfrequenz nachfolgender Saiten einfließen.
+- Das System muss einen gleitenden Mittelwert über die letzten $N$ Messwerte
+  berechnen und zur Anzeige verwenden, um Ausreißer zu dämpfen.
+- Das System muss den Frequenzbereich der Schätzung auf ca.
+  50 Hz bis 350 Hz begrenzen.
+- Das System muss bei der Kalibrierung für jede Saite $j$ mindestens zwei
+  Messpunkte erfassen und daraus den Eintrag $C_(i,j)$ der Verstimmungsmatrix
+  mittels orthogonaler Regression (Deming-Regression) schätzen.
+- Das System muss die Diagonalelemente $C_(i i) = 1$ der Verstimmungsmatrix
+  ohne Messung als bekannt voraussetzen.
+- Das System muss bei der Kalibrierung automatisch prüfen, ob die vom Nutzer
+  verstimmte Saite der geforderten Saite entspricht, und bei Abweichung die
+  Messung verwerfen und den Schritt wiederholen.
+- Das System muss die gitarrenspezifische Verstimmungsmatrix $C$ persistent
+  auf dem Gerät speichern und beim nächsten Start wiederherstellen.
+- Das System Funktionalitäten eines Standard-Stimmgerätes anbieten, um die Korrektheit der Stimmung zu verifizieren.
+- Das System sollte bei einer gemessenen Frequenz, die einem harmonischen
+  Oberton entspricht, durch Halbierung auf die Grundfrequenz rückschließen
+  und den Wert anhand des erwarteten Frequenzbereichs der jeweiligen Saite
+  plausibilisieren.
+- Das System sollte für jedes Gitarrenprofil einen benutzerdefinierten Namen
+  persistent speichern und beim Laden anzeigen.
+- Das System sollte vordefinierte Stimmungen (mindestens Standard-E und
+  Drop-D) als unveränderliche Referenzwerte bereitstellen.
+- Das System sollte benutzerdefinierte Stimmungen persistent speichern,
+  bearbeiten und löschen können.
+
+==== Nichtfunktionale Anforderungen
+===== Messgenauigkeit
+
+- Das System muss die Grundfrequenz einer Gitarrensaite mit einer Abweichung
+  von maximal $±1 "Cent"$ vom wahren Wert schätzen, gemessen unter
+  kontrollierten akustischen Bedingungen.
+- Das System muss harmonische Obertöne von der Grundfrequenz unterscheiden
+  und darf diese nicht als Grundfrequenz ausgeben, sofern der Signalpegel
+  des Grundtons den Schwellenwert überschreitet.
+- Das System sollte auch bei unverstärktem Spiel (leises Signal) eine
+  Messgenauigkeit von $±3 "Cent"$ einhalten.
+
+===== Latenz
+
+- Das System muss die visuelle Zielanzeige innerhalb von 100 ms nach
+  Eingang eines stabilen Messwerts aktualisieren, sodass der Nutzer
+  beim Stimmen unmittelbares Feedback erhält.
+- Das System muss die Berechnung der Zielfrequenzen aller sechs Saiten
+  nach Abschluss der Zustandsmessung in unter 500 ms abschließen.
+
+===== Robustheit
+
+- Das System muss bei Umgebungsgeräuschen bis zu einem Pegel von
+  $70 "dB(A)"$ stabile Frequenzmessungen liefern, sofern der Schallpegel
+  der gespielten Saite den Umgebungspegel um mindestens $10 "dB"$ übersteigt.
+- Das System darf bei Stille oder reinem Umgebungslärm keine
+  Frequenzschätzung ausgeben und muss in diesem Zustand keine
+  Zielanzeige aktualisieren.
+- Das System muss bei einem nicht funktionsfähigen Mikrofon in einen
+  Fallback-Modus wechseln und den Nutzer darüber informieren.
+
+===== Bedienbarkeit
+
+- Das System muss so gestaltet sein, dass ein Nutzer ohne Vorkenntnisse
+  im Umgang mit Floyd-Rose-Gitarren den vollständigen Erststart
+  (Kalibrierung und erster Stimmvorgang) ohne externe Hilfe abschließen
+  kann.
+- Das System muss alle zentralen Aktionen (Profil auswählen, Stimmvorgang
+  starten, Messung auslösen) mit maximal drei Interaktionen erreichbar
+  machen.
+- Das System sollte Bedienabläufe durch visuelle Mittel (Illustrationen,
+  Animationen) vermitteln und auf rein textbasierte Anleitungen verzichten,
+  wo visuelle Alternativen verfügbar sind.
+- Das System sollte kurze Erklärvideos zu Saitenbezeichnungen,
+  Stimmungswahl und Messvorgang bereitstellen.
+
+===== Kompatibilität
+
+- Das System muss auf iOS (ab Version 16) und Android (ab Version 10)
+  lauffähig sein.
+- Das System muss auf Geräten mit einem Arbeitsspeicher von mindestens
+  2 GB ohne merkbare Leistungseinbußen betrieben werden können.
+- Das System sollte auf gängigen Gerätegrößen (4,7 Zoll bis 6,7 Zoll
+  Bildschirmdiagonale) ohne Layoutbrüche dargestellt werden.
+
+===== Datenschutz und Betrieb
+
+- Das System darf keine Nutzerdaten, Audiodaten oder Gitarrenprofile an
+  externe Server übermitteln; alle Daten verbleiben ausschließlich lokal
+  auf dem Endgerät.
+- Das System muss ohne aktive Internetverbindung vollständig funktionsfähig
+  sein.
+- Das System sollte gespeicherte Gitarrenprofile und Stimmungen bei einer
+  Neuinstallation der App durch ein Backup-/Exportformat wiederherstellbar
+  machen.
+
+==== Ausgeschlossene Anforderungen
+
+Die folgenden Anwendungsfälle liegen explizit außerhalb des definierten
+Projektumfangs und werden nicht berücksichtigt:
+
+- Integration in professionelle Musikstudio-Umgebungen
+- Verwendbarkeit als Plugin für Digital Audio Workstations (DAW)
+- Netzwerkbasierte Funktionen wie Cloud-Synchronisation oder
+  Mehrgeräte-Unterstützung
+
+
+==== Hinweis
+
+Da ein Vollständiges Anforderungsdokument den Rahmen der Bachelor arbeit sprengt wurden auf Formalien wie Projekteam/Rollenbeschreibung, (in dem Fall nur der Autor), _Story Boards_, _UML-Anwendungsfalldiagrammen, Anwendungsfallschablonen, Ausformulierten Userstories, und die Einhaltung von Barrierfreiheitsstandarts so wie weiteren Standards_ verzichtet.
+
+
 == Konzeption und Design
-Screenshots von der App einfügen
-//#image("assets/image.png")
-das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
-== Architektur
-Backend der App konzipieren. Pipeline Modelletc
-== Implementierung
-Auswahl von Frameworks und Libraries:
-- Flutter
-- Riverpod
-- etc..
-Verlinkung des Git-Repositories
-
-== Tests während der Entwicklung
-Alles wurde Manuell getestet außer:
-
-Algorithmen für bla bla...
-= Floyd-Rose-Tuner App
-Im folgendem wird die App, wie sie zum Zeitpunkt der Abgabe der Bachelorarbeit war, vorgestellt.
-
 == First Load
 
 #figure(image("assets/image-2.png", height: 40%), caption: [Landing Page])<appLanding>
@@ -925,6 +1051,24 @@ Auf dieser Saite, nimmt man die Messdaten auf um die Verstimmungsmatrix zu besti
 Diese Seite ist die Komplizierteste. Ganz oben ist ein Zufällig generierter Name für die Gitarre. Beim öffnen der Saite kann man direkt den Namen der Gitarre einstellen. Der Textinput ist direkt fokussiert. Das passiert nicht wenn man die Gitarre Editiert was in @editingGuitar näher erleutert wird.
 
 == Editing GuitarConfig <editingGuitar>
+
+Screenshots von der App einfügen
+//#image("assets/image.png")
+das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
+== Architektur
+Backend der App konzipieren. Pipeline Modelletc
+== Implementierung
+Auswahl von Frameworks und Libraries:
+- Flutter
+- Riverpod
+- etc..
+Verlinkung des Git-Repositories
+
+== Tests während der Entwicklung
+Alles wurde Manuell getestet außer:
+
+Algorithmen für bla bla...
+
 = Evaluation
 
 == Funktionsfähigkeit des Algorithmuses
