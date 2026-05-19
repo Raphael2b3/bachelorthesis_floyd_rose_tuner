@@ -53,7 +53,50 @@
 // Main body.
 #set par(justify: true)
 #show heading: set block(below: 1.3em)
+// ── Nummerierung pro Kategorie ──────────────────────────────────
+#show figure.where(kind: "FBA"): set figure(supplement: [FBA ], numbering: "1")
+#show figure.where(kind: "FSA"): set figure(supplement: [FSA ], numbering: "1")
+#show figure.where(kind: "NFA-MG"): set figure(supplement: [NFA-MG ], numbering: "1")
+#show figure.where(kind: "NFA-LA"): set figure(supplement: [NFA-LA ], numbering: "1")
+#show figure.where(kind: "NFA-RO"): set figure(supplement: [NFA-RO ], numbering: "1")
+#show figure.where(kind: "NFA-BE"): set figure(supplement: [NFA-BE ], numbering: "1")
+#show figure.where(kind: "NFA-KO"): set figure(supplement: [NFA-KO ], numbering: "1")
+#show figure.where(kind: "NFA-DP"): set figure(supplement: [NFA-DP ], numbering: "1")
 
+// ── Eine einzige Show-Regel für alle Anforderungs-Kinds ─────────
+#let req-kinds = ("FBA", "FSA", "NFA-MG", "NFA-LA", "NFA-RO", "NFA-BE", "NFA-KO", "NFA-DP")
+
+#show figure: it => {
+  if type(it.kind) == str and req-kinds.contains(it.kind) {
+    it.body
+  } else {
+    it
+  }
+}
+
+// ── Hilfsfunktion ───────────────────────────────────────────────
+// ID-Präfix bestimmt automatisch den kind-Wert.
+// "NFA-MG-01" → kind "NFA-MG", "FBA-03" → kind "FBA"
+#let req-kind(id) = {
+  if id.starts-with("NFA-") { id.slice(0, 6) } // "NFA-MG", "NFA-LA" …
+  else { id.slice(0, 3) } // "FBA", "FSA"
+}
+
+#let req(id, prioritaet, inhalt) = figure(
+  kind: req-kind(id),
+  caption: none,
+  block(
+    width: 100%,
+    inset: (x: 8pt, y: 6pt),
+    stroke: (left: 2pt + luma(180)),
+    grid(
+      columns: (5.5em, 1fr, 5em),
+      column-gutter: 1em,
+      align: (left + top, left + top, right + top),
+      strong(id), inhalt, emph(prioritaet),
+    ),
+  ),
+)
 #project()
 
 
@@ -885,136 +928,308 @@ Saiten ist die Gitarre korrekt gestimmt.
   Mikrofons so angepasst werden, dass Messungen nur ausgelöst werden, wenn die
   Lautstärke der gespielten Saite den Umgebungspegel deutlich übersteigt.
 
+// ============================================================
+// Hilfsfunktion: eine einzelne Anforderung als referenzierbaren
+// Block rendern. Aufruf:
+//   #req("FBA-01", "MUSS", [Inhalt]) <req-fba-01>
+// Referenz im Text:
+//   @req-fba-01
+// ============================================================
+
 === Anforderungen
 
-Auf Basis der Projektvision, des System- und Anwendungskontexts sowie der erstellten Personas sowie Anwendungsszenarien wurden funktionale und nicht-funktionale Anforderungen
-an die Applikation abgeleitet. Wie es in @mobileAppEngineering empfohlen wurde, sind diese nach _MUSS_-,_SOLL_ und nach Wertigkeit nach dem Kano-Model. Hinzu werden Anforderungen mit einem Hohenwert und einem hohen Risiko beim (Fehlen) höher priosiert. Eine etwas niedrigere Priorität haben, Anforderungen mit einerm niedrigen Risiko und einem hohen Nutzen und schließlich kommen die Anforderungen mit einem Geringen Nutzen und Geringem Risiko. Das folgt aus @mobileAppEngineering und der Sogennanten "Wert-Risiko-Matrix nach Cohn[2005]".
+Auf Basis der Projektvision, des System- und Anwendungskontexts sowie der
+erstellten Personas und Anwendungsszenarien wurden funktionale und
+nicht-funktionale Anforderungen an die Applikation abgeleitet. Wie in
+@mobileAppEngineering empfohlen, werden diese nach _MUSS_- und _SOLL_-Kriterien
+sowie nach der Wertigkeit gemäß Kano-Modell priorisiert. Anforderungen mit
+hohem Wert und hohem Ausfallrisiko erhalten dabei die höchste Priorität,
+gefolgt von Anforderungen mit hohem Nutzen bei geringem Risiko. Anforderungen
+mit geringem Nutzen und geringem Risiko werden zuletzt eingestuft. Dies folgt
+aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix nach
+Cohn (2005)_.
 
 ==== Funktionale Benutzeranforderungen
-- Ein Nutzer Muss Eine Floyd-Rose Gitarre effizient stimmen können
-- Ein Nutzer Muss die App auf seine Gitarre kalibrieren können
-- Ein Nutzer Muss die Kalibrierung mehrer Gitarren langfristig speichern können.
-- Ein Nutzer Muss den Zustand seiner Gitarre messen können.
-- Ein Nutzer muss die Empfindlichkeit zur Messung der Gitarre einstellen können, in geräusch lasting umgebungen.
-- Ein Nutzer Muss Hilfe zur Bedienung der App erhalten können.
-- Ein Nutzer muss die korrektheit der Messungen überprüfen können, wenn das nicht von der App bereits geschafft wird.
-- Ein Nutzer muss Fehlerhafte Messungen korrigieren können.
-- Ein Nutzer Sollte unterschiedliche Stimmungen für den Stimmprozess auswählen können.
-- Ein Nutzer Sollte die Stimmung seiner Gitarre auf Richtigkeit prüfen können, mit einem Normalen stimmgerät.
-- Ein Nutzer sollte die App auf seine Gitarre rekalibrieren können.
-- Ein Nutzer sollte für die Kalibrierungen Namen vergeben können.
-- Ein Nutzer sollte Eigene Stimmungen erstellen bearbeiten und löschen können.
-- Ein Nutzer sollte die Messungen der App auch Händisch vornehmen können mit externen hilfsmittel (Anderes frequenzmessgerät).
-- Ein Nutzer sollte nicht allgemein bekannte begriffe nachvollziehen können (Stimmungen, Saitennamen).
+
+#req("FBA-01", "MUSS", [Ein Nutzer muss eine Floyd-Rose-Gitarre effizient stimmen können.]) <req-fba-01>
+
+#req("FBA-02", "MUSS", [Ein Nutzer muss die App auf seine Gitarre kalibrieren können.]) <req-fba-02>
+
+#req("FBA-03", "MUSS", [Ein Nutzer muss die Kalibrierung mehrerer Gitarren langfristig speichern können.]) <req-fba-03>
+
+#req("FBA-04", "MUSS", [Ein Nutzer muss den aktuellen Stimmzustand seiner Gitarre messen können.]) <req-fba-04>
+
+#req(
+  "FBA-05",
+  "MUSS",
+  [Ein Nutzer muss die Empfindlichkeit der Frequenzmessung einstellen können, um die App in geräuschbelasteten Umgebungen zuverlässig nutzen zu können.],
+) <req-fba-05>
+
+#req("FBA-06", "MUSS", [Ein Nutzer muss Hilfe zur Bedienung der App erhalten können.]) <req-fba-06>
+
+#req(
+  "FBA-07",
+  "MUSS",
+  [Ein Nutzer muss die Korrektheit einer Messung überprüfen können, sofern dies nicht bereits automatisch durch die App erfolgt.],
+) <req-fba-07>
+
+#req("FBA-08", "MUSS", [Ein Nutzer muss fehlerhafte Messungen korrigieren können.]) <req-fba-08>
+
+#req(
+  "FBA-09",
+  "SOLL",
+  [Ein Nutzer sollte unterschiedliche Stimmungen für den Stimmprozess auswählen können.],
+) <req-fba-09>
+
+#req(
+  "FBA-10",
+  "SOLL",
+  [Ein Nutzer sollte die Stimmung seiner Gitarre mithilfe eines herkömmlichen Stimmgeräts auf Richtigkeit prüfen können.],
+) <req-fba-10>
+
+#req("FBA-11", "SOLL", [Ein Nutzer sollte die App auf seine Gitarre rekalibrieren können.]) <req-fba-11>
+
+#req("FBA-12", "SOLL", [Ein Nutzer sollte Kalibrierungen einen benutzerdefinierten Namen vergeben können.]) <req-fba-12>
+
+#req("FBA-13", "SOLL", [Ein Nutzer sollte eigene Stimmungen erstellen, bearbeiten und löschen können.]) <req-fba-13>
+
+#req(
+  "FBA-14",
+  "SOLL",
+  [Ein Nutzer sollte Messungen auch manuell mit externen Hilfsmitteln (z.~B. einem separaten Frequenzmessgerät) vornehmen und die Werte eintragen können.],
+) <req-fba-14>
+
+#req(
+  "FBA-15",
+  "SOLL",
+  [Ein Nutzer sollte nicht allgemein bekannte Begriffe -- insbesondere Stimmungsbezeichnungen und Saitennamen -- nachvollziehen können.],
+) <req-fba-15>
+
 ==== Funktionale Systemanforderungen
 
-- Das System muss die Grundfrequenz einer angespielten Saite mittels
-  YIN-Algorithmus in Echtzeit schätzen.
-- Das System muss Frequenzmessungen nur durchführen, wenn der Schalldruckpegel
-  des Eingangssignals einen konfigurierbaren dBFS-Schwellenwert überschreitet.
-- Das System muss nach einer vollständigen Zustandsmessung aller Saiten
-  ($arrow(f_0)$) für jede Saite $N$ die absolute Zielfrequenz gemäß
+#req(
+  "FSA-01",
+  "MUSS",
+  [Das System muss die Grundfrequenz einer angespielten Saite mittels YIN-Algorithmus in Echtzeit schätzen.],
+) <req-fsa-01>
 
-  $
-    f_N = f_"0,N" + sum_(i=1)^(N) Delta_i dot C_(N\,i)
-  $
+#req(
+  "FSA-02",
+  "MUSS",
+  [Das System muss Frequenzmessungen nur durchführen, wenn der Schalldruckpegel des Eingangssignals einen konfigurierbaren dBFS-Schwellenwert überschreitet.],
+) <req-fsa-02>
 
-  berechnen.
-- Das System muss sicherstellen, dass Saiten stets in der Reihenfolge
-  E2 $arrow$ A2 $arrow$ D3 $arrow$ G3 $arrow$ B3 $arrow$ E4 gestimmt werden,
-  sodass die Verstimmungseinflüsse bereits gestimmter Saiten in die
-  Zielfrequenz nachfolgender Saiten einfließen.
-- Das System muss einen gleitenden Mittelwert über die letzten $N$ Messwerte
-  berechnen und zur Anzeige verwenden, um Ausreißer zu dämpfen.
-- Das System muss den Frequenzbereich der Schätzung auf ca.
-  50 Hz bis 350 Hz begrenzen.
-- Das System muss bei der Kalibrierung für jede Saite $j$ mindestens zwei
-  Messpunkte erfassen und daraus den Eintrag $C_(i,j)$ der Verstimmungsmatrix
-  mittels orthogonaler Regression (Deming-Regression) schätzen.
-- Das System muss die Diagonalelemente $C_(i i) = 1$ der Verstimmungsmatrix
-  ohne Messung als bekannt voraussetzen.
-- Das System muss bei der Kalibrierung automatisch prüfen, ob die vom Nutzer
-  verstimmte Saite der geforderten Saite entspricht, und bei Abweichung die
-  Messung verwerfen und den Schritt wiederholen.
-- Das System muss die gitarrenspezifische Verstimmungsmatrix $C$ persistent
-  auf dem Gerät speichern und beim nächsten Start wiederherstellen.
-- Das System Funktionalitäten eines Standard-Stimmgerätes anbieten, um die Korrektheit der Stimmung zu verifizieren.
-- Das System sollte bei einer gemessenen Frequenz, die einem harmonischen
-  Oberton entspricht, durch Halbierung auf die Grundfrequenz rückschließen
-  und den Wert anhand des erwarteten Frequenzbereichs der jeweiligen Saite
-  plausibilisieren.
-- Das System sollte für jedes Gitarrenprofil einen benutzerdefinierten Namen
-  persistent speichern und beim Laden anzeigen.
-- Das System sollte vordefinierte Stimmungen (mindestens Standard-E und
-  Drop-D) als unveränderliche Referenzwerte bereitstellen.
-- Das System sollte benutzerdefinierte Stimmungen persistent speichern,
-  bearbeiten und löschen können.
+#req(
+  "FSA-03",
+  "MUSS",
+  [Das System muss nach einer vollständigen Zustandsmessung aller Saiten ($arrow(f_0)$) für jede Saite $N$ die absolute Zielfrequenz gemäß
+    $
+      f_N = f_"0,N" + sum_(i=1)^(N) Delta_i dot C_(N\,i)
+    $
+    berechnen.],
+) <req-fsa-03>
+
+#req(
+  "FSA-04",
+  "MUSS",
+  [Das System muss sicherstellen, dass Saiten stets in der Reihenfolge E2 $arrow$ A2 $arrow$ D3 $arrow$ G3 $arrow$ B3 $arrow$ E4 gestimmt werden, sodass die Verstimmungseinflüsse bereits gestimmter Saiten in die Zielfrequenz nachfolgender Saiten einfließen.],
+) <req-fsa-04>
+
+#req(
+  "FSA-05",
+  "MUSS",
+  [Das System muss einen gleitenden Mittelwert über die letzten $N$ Messwerte berechnen und zur Anzeige verwenden, um kurzfristige Ausreißer zu dämpfen.],
+) <req-fsa-05>
+
+#req(
+  "FSA-06",
+  "MUSS",
+  [Das System muss den Frequenzbereich der Schätzung auf näherungsweise 50 Hz bis 350 Hz begrenzen.],
+) <req-fsa-06>
+
+#req(
+  "FSA-07",
+  "MUSS",
+  [Das System muss bei der Kalibrierung für jede Saite $j$ mindestens zwei Messpunkte erfassen und daraus den Eintrag $C_(i,j)$ der Verstimmungsmatrix mittels orthogonaler Regression (Deming-Regression) schätzen.],
+) <req-fsa-07>
+
+#req(
+  "FSA-08",
+  "MUSS",
+  [Das System muss die Diagonalelemente $C_(i i) = 1$ der Verstimmungsmatrix ohne Messung als bekannt voraussetzen.],
+) <req-fsa-08>
+
+#req(
+  "FSA-09",
+  "MUSS",
+  [Das System muss bei der Kalibrierung automatisch prüfen, ob die vom Nutzer verstimmte Saite der geforderten Saite entspricht, und bei Abweichung die Messung verwerfen und den Schritt wiederholen.],
+) <req-fsa-09>
+
+#req(
+  "FSA-10",
+  "MUSS",
+  [Das System muss die gitarrenspezifische Verstimmungsmatrix $C$ persistent auf dem Gerät speichern und beim nächsten Start wiederherstellen.],
+) <req-fsa-10>
+
+#req(
+  "FSA-11",
+  "MUSS",
+  [Das System muss die Funktionalität eines Standard-Stimmgeräts anbieten, um die Korrektheit der Stimmung zu verifizieren.],
+) <req-fsa-11>
+
+#req(
+  "FSA-12",
+  "SOLL",
+  [Das System sollte bei einer gemessenen Frequenz, die einem harmonischen Oberton entspricht, durch Halbierung auf die Grundfrequenz rückschließen und den Wert anhand des erwarteten Frequenzbereichs der jeweiligen Saite plausibilisieren.],
+) <req-fsa-12>
+
+#req(
+  "FSA-13",
+  "SOLL",
+  [Das System sollte für jedes Gitarrenprofil einen benutzerdefinierten Namen persistent speichern und beim Laden anzeigen.],
+) <req-fsa-13>
+
+#req(
+  "FSA-14",
+  "SOLL",
+  [Das System sollte vordefinierte Stimmungen (mindestens Standard-E und Drop-D) als unveränderliche Referenzwerte bereitstellen.],
+) <req-fsa-14>
+
+#req(
+  "FSA-15",
+  "SOLL",
+  [Das System sollte benutzerdefinierte Stimmungen persistent speichern, bearbeiten und löschen können.],
+) <req-fsa-15>
+
+#req(
+  "FSA-16",
+  "SOLL",
+  [Das System sollte das Erfassen von mehr als zwei Messpunkten pro Saite
+    ermöglichen, um die Schätzgenauigkeit der Verstimmungsmatrix durch
+    zusätzliche Stützstellen für die Deming-Regression zu erhöhen.],
+) <req-fsa-16>
 
 ==== Nichtfunktionale Anforderungen
+
 ===== Messgenauigkeit
 
-- Das System muss die Grundfrequenz einer Gitarrensaite mit einer Abweichung
-  von maximal $±1 "Cent"$ vom wahren Wert schätzen, gemessen unter
-  kontrollierten akustischen Bedingungen.
-- Das System muss harmonische Obertöne von der Grundfrequenz unterscheiden
-  und darf diese nicht als Grundfrequenz ausgeben, sofern der Signalpegel
-  des Grundtons den Schwellenwert überschreitet.
-- Das System sollte auch bei unverstärktem Spiel (leises Signal) eine
-  Messgenauigkeit von $±3 "Cent"$ einhalten.
+#req(
+  "NFA-MG-01",
+  "MUSS",
+  [Das System muss die Grundfrequenz einer Gitarrensaite mit einer Abweichung von maximal $±0.2 "Hz"$ vom wahren Wert schätzen, gemessen unter kontrollierten akustischen Bedingungen.],
+) <req-nfa-mg-01>
+
+#req(
+  "NFA-MG-02",
+  "MUSS",
+  [Das System muss harmonische Obertöne von der Grundfrequenz unterscheiden und darf diese nicht als Grundfrequenz ausgeben, sofern der Signalpegel des Grundtons den Schwellenwert überschreitet.],
+) <req-nfa-mg-02>
+
+#req(
+  "NFA-MG-03",
+  "SOLL",
+  [Das System sollte auch bei unverstärktem Spiel eine Messgenauigkeit von $±0.1 "Hz"$ einhalten.#footnote([Da Töne logarithmisch wahrgenommen werden, steigt die geforderte absolute Genauigkeit mit sinkender Frequenz.])],
+) <req-nfa-mg-03>
 
 ===== Latenz
 
-- Das System muss die visuelle Zielanzeige innerhalb von 100 ms nach
-  Eingang eines stabilen Messwerts aktualisieren, sodass der Nutzer
-  beim Stimmen unmittelbares Feedback erhält.
-- Das System muss die Berechnung der Zielfrequenzen aller sechs Saiten
-  nach Abschluss der Zustandsmessung in unter 500 ms abschließen.
+#req(
+  "NFA-LA-01",
+  "MUSS",
+  [Das System muss die visuelle Zielanzeige innerhalb von 100 ms nach Eingang eines stabilen Messwerts aktualisieren, sodass der Nutzer beim Stimmen unmittelbares Feedback erhält.],
+) <req-nfa-la-01>
+
+#req(
+  "NFA-LA-02",
+  "MUSS",
+  [Das System muss die Berechnung der Zielfrequenzen aller sechs Saiten nach Abschluss der Zustandsmessung in unter 500 ms abschließen.],
+) <req-nfa-la-02>
 
 ===== Robustheit
 
-- Das System muss bei Umgebungsgeräuschen bis zu einem Pegel von
-  $70 "dB(A)"$ stabile Frequenzmessungen liefern, sofern der Schallpegel
-  der gespielten Saite den Umgebungspegel um mindestens $10 "dB"$ übersteigt.
-- Das System darf bei Stille oder reinem Umgebungslärm keine
-  Frequenzschätzung ausgeben und muss in diesem Zustand keine
-  Zielanzeige aktualisieren.
-- Das System muss bei einem nicht funktionsfähigen Mikrofon in einen
-  Fallback-Modus wechseln und den Nutzer darüber informieren.
+#req(
+  "NFA-RO-01",
+  "MUSS",
+  [Das System muss bei Umgebungsgeräuschen bis zu einem Pegel von $70 "dB(A)"$ stabile Frequenzmessungen liefern, sofern der Schallpegel der gespielten Saite den Umgebungspegel um mindestens $10 "dB"$ übersteigt.],
+) <req-nfa-ro-01>
+
+#req(
+  "NFA-RO-02",
+  "MUSS",
+  [Das System darf bei Stille oder reinem Umgebungslärm keine Frequenzschätzung ausgeben und muss in diesem Zustand die Zielanzeige nicht aktualisieren.],
+) <req-nfa-ro-02>
+
+#req(
+  "NFA-RO-03",
+  "MUSS",
+  [Das System muss bei einem nicht funktionsfähigen Mikrofon in einen Fallback-Modus wechseln und den Nutzer darüber informieren.],
+) <req-nfa-ro-03>
 
 ===== Bedienbarkeit
 
-- Das System muss so gestaltet sein, dass ein Nutzer ohne Vorkenntnisse
-  im Umgang mit Floyd-Rose-Gitarren den vollständigen Erststart
-  (Kalibrierung und erster Stimmvorgang) ohne externe Hilfe abschließen
-  kann.
-- Das System muss alle zentralen Aktionen (Profil auswählen, Stimmvorgang
-  starten, Messung auslösen) mit maximal drei Interaktionen erreichbar
-  machen.
-- Das System sollte Bedienabläufe durch visuelle Mittel (Illustrationen,
-  Animationen) vermitteln und auf rein textbasierte Anleitungen verzichten,
-  wo visuelle Alternativen verfügbar sind.
-- Das System sollte kurze Erklärvideos zu Saitenbezeichnungen,
-  Stimmungswahl und Messvorgang bereitstellen.
+#req(
+  "NFA-BE-01",
+  "MUSS",
+  [Das System muss so gestaltet sein, dass ein Nutzer ohne Vorkenntnisse im Umgang mit Floyd-Rose-Gitarren den vollständigen Erststart -- Kalibrierung und erster Stimmvorgang -- ohne externe Hilfe abschließen kann.],
+) <req-nfa-be-01>
+
+#req(
+  "NFA-BE-02",
+  "MUSS",
+  [Das System muss alle zentralen Aktionen (Profil auswählen, Stimmvorgang starten, Messung auslösen) mit maximal drei Interaktionen erreichbar machen.],
+) <req-nfa-be-02>
+
+#req(
+  "NFA-BE-03",
+  "SOLL",
+  [Das System sollte Bedienabläufe durch visuelle Mittel (Illustrationen, Animationen) vermitteln und auf rein textbasierte Anleitungen verzichten, wo visuelle Alternativen verfügbar sind.],
+) <req-nfa-be-03>
+
+#req(
+  "NFA-BE-04",
+  "SOLL",
+  [Das System sollte kurze Erklärvideos zu Saitenbezeichnungen, Stimmungswahl und Messvorgang bereitstellen.],
+) <req-nfa-be-04>
 
 ===== Kompatibilität
 
-- Das System muss auf iOS (ab Version 16) und Android (ab Version 10)
-  lauffähig sein.
-- Das System muss auf Geräten mit einem Arbeitsspeicher von mindestens
-  2 GB ohne merkbare Leistungseinbußen betrieben werden können.
-- Das System sollte auf gängigen Gerätegrößen (4,7 Zoll bis 6,7 Zoll
-  Bildschirmdiagonale) ohne Layoutbrüche dargestellt werden.
+#req(
+  "NFA-KO-01",
+  "MUSS",
+  [Das System muss auf iOS (ab Version 16) und Android (ab Version 10) lauffähig sein.],
+) <req-nfa-ko-01>
+
+#req(
+  "NFA-KO-02",
+  "MUSS",
+  [Das System muss auf Geräten mit einem Arbeitsspeicher von mindestens 2 GB ohne merkbare Leistungseinbußen betrieben werden können.],
+) <req-nfa-ko-02>
+
+#req(
+  "NFA-KO-03",
+  "SOLL",
+  [Das System sollte auf gängigen Gerätegrößen (4,7 Zoll bis 6,7 Zoll Bildschirmdiagonale) ohne Layoutbrüche dargestellt werden.],
+) <req-nfa-ko-03>
 
 ===== Datenschutz und Betrieb
 
-- Das System darf keine Nutzerdaten, Audiodaten oder Gitarrenprofile an
-  externe Server übermitteln; alle Daten verbleiben ausschließlich lokal
-  auf dem Endgerät.
-- Das System muss ohne aktive Internetverbindung vollständig funktionsfähig
-  sein.
-- Das System sollte gespeicherte Gitarrenprofile und Stimmungen bei einer
-  Neuinstallation der App durch ein Backup-/Exportformat wiederherstellbar
-  machen.
+#req(
+  "NFA-DP-01",
+  "MUSS",
+  [Das System darf keine Nutzerdaten, Audiodaten oder Gitarrenprofile an externe Server übermitteln; alle Daten verbleiben ausschließlich lokal auf dem Endgerät.],
+) <req-nfa-dp-01>
+
+#req(
+  "NFA-DP-02",
+  "MUSS",
+  [Das System muss ohne aktive Internetverbindung vollständig funktionsfähig sein.],
+) <req-nfa-dp-02>
+
+#req(
+  "NFA-DP-03",
+  "SOLL",
+  [Das System sollte gespeicherte Gitarrenprofile und Stimmungen bei einer Neuinstallation durch ein Export-/Importformat wiederherstellbar machen.],
+) <req-nfa-dp-03>
 
 ==== Ausgeschlossene Anforderungen
 
@@ -1026,14 +1241,40 @@ Projektumfangs und werden nicht berücksichtigt:
 - Netzwerkbasierte Funktionen wie Cloud-Synchronisation oder
   Mehrgeräte-Unterstützung
 
-
 ==== Hinweis
 
-Da ein Vollständiges Anforderungsdokument den Rahmen der Bachelor arbeit sprengt wurden auf Formalien wie Projekteam/Rollenbeschreibung, (in dem Fall nur der Autor), _Story Boards_, _UML-Anwendungsfalldiagrammen, Anwendungsfallschablonen, Ausformulierten Userstories, und die Einhaltung von Barrierfreiheitsstandarts so wie weiteren Standards_ verzichtet.
+Da ein vollständiges Anforderungsdokument den Rahmen dieser Bachelorarbeit
+sprengen würde, wurde auf Formalien wie Projekteam- und Rollenbeschreibung,
+_Storyboards_, _UML-Anwendungsfalldiagramme_, _Anwendungsfallschablonen_,
+ausformulierte _User Stories_ sowie die Einhaltung von
+Barrierefreiheitsstandards und weiteren Normen verzichtet.
 
+
+
+=== Entwicklungsparadigma
+Die Applikation richtet sich gemäß @req-nfa-ko-01 an Nutzer beider
+marktführenden mobilen Betriebssysteme -- iOS und Android. Eine native
+Entwicklung für jede Plattform separat würde bedeuten, dieselbe
+Fachlogik -- insbesondere den YIN-Algorithmus (@req-fsa-01), die
+Berechnung der Verstimmungsmatrix (@req-fsa-07) sowie die
+Zielfrequenzformel (@req-fsa-03) -- doppelt zu implementieren und zu
+warten. Cross-Platform-Entwicklung mit _Flutter_ vermeidet diese
+Redundanz durch eine gemeinsame Codebasis, aus der plattformspezifische
+Artefakte für iOS und Android erzeugt werden.
+
+Da die Applikation gemäß @req-nfa-dp-01 und @req-nfa-dp-02 vollständig
+lokal und ohne Netzwerkzugriff betrieben wird, entfallen die
+Hauptargumente gegen Cross-Platform-Ansätze: Es gibt keine
+plattformspezifischen Push-Benachrichtigungen, keine
+hardwarenahen Hintergrunddienste und keine nativen
+Zahlungsschnittstellen. Der einzige plattformnahe Zugriff -- das
+Gerätmikrofon -- wird von _Flutter_ über eine stabile,
+plattformübergreifende API abgedeckt. Der Effizienzgewinn einer
+gemeinsamen Codebasis überwiegt daher den Mehraufwand einer rein
+nativen Implementierung deutlich.
 
 == Konzeption und Design
-== First Load
+=== First Load
 
 #figure(image("assets/image-2.png", height: 40%), caption: [Landing Page])<appLanding>
 Wenn man die App startet, sieht man als erstes die Möglichkeit das _Tuning_ einzustellen, die bereits auf die standartmäßige Stimmung _E-A-D-G-H-e_ eingestellt ist (Siehe @appLanding).
@@ -1042,7 +1283,7 @@ Versucht man ein anderes _Tuning_ auszuwählen, sieht man wie in @appSelectTunin
 
 Da die App noch keine Gitarre erlernt hat, wird in der Auswahl die Aufforderung angezeigt, eine Gitarre auszuwählen (@appLanding). Zu beginn der das Dropdown Menu enthält zunächst keine Gitarre. Allerdings kann, der Nutzer auf den Button "Add A New Guitar" klicken und kommt nun zur _Detuning Matrix Measure Page_.
 
-== Detuning Matrix Measure Page
+=== Detuning Matrix Measure Page
 Auf dieser Saite, nimmt man die Messdaten auf um die Verstimmungsmatrix zu bestimmen.
 
 
@@ -1050,7 +1291,7 @@ Auf dieser Saite, nimmt man die Messdaten auf um die Verstimmungsmatrix zu besti
 
 Diese Seite ist die Komplizierteste. Ganz oben ist ein Zufällig generierter Name für die Gitarre. Beim öffnen der Saite kann man direkt den Namen der Gitarre einstellen. Der Textinput ist direkt fokussiert. Das passiert nicht wenn man die Gitarre Editiert was in @editingGuitar näher erleutert wird.
 
-== Editing GuitarConfig <editingGuitar>
+=== Editing GuitarConfig <editingGuitar>
 
 Screenshots von der App einfügen
 //#image("assets/image.png")
@@ -1074,6 +1315,107 @@ Algorithmen für bla bla...
 == Funktionsfähigkeit des Algorithmuses
 Mit der App konnte die Gitarre erfolgreich  gestimmt werden.
 == Erfüllung der Requirements aus SWE
+// Erfüllungsmatrix – einfach "Ja" / "Nein" / "Teilweise" eintragen
+// oder die Symbole ✓  ✗  ◐ verwenden
+
+#table(
+  columns: (auto, 1fr, auto),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (center, left, center),
+
+  table.header(strong[ID], strong[Anforderung], strong[Erfüllt]),
+
+  // ── Funktionale Benutzeranforderungen ──────────────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Funktionale Benutzeranforderungen*
+  ],
+  [@req-fba-01], [Eine Floyd-Rose-Gitarre effizient stimmen], [],
+  [@req-fba-02], [App auf Gitarre kalibrieren], [],
+  [@req-fba-03], [Kalibrierung mehrerer Gitarren speichern], [],
+  [@req-fba-04], [Stimmzustand der Gitarre messen], [],
+  [@req-fba-05], [Messempfindlichkeit einstellen], [],
+  [@req-fba-06], [Bedienhilfe erhalten], [],
+  [@req-fba-07], [Korrektheit der Messung manuell prüfen], [],
+  [@req-fba-08], [Fehlerhafte Messungen korrigieren], [],
+  [@req-fba-09], [Unterschiedliche Stimmungen auswählen], [],
+  [@req-fba-10], [Stimmung mit herkömmlichem Stimmgerät prüfen], [],
+  [@req-fba-11], [App rekalibrieren], [],
+  [@req-fba-12], [Kalibrierungen benennen], [],
+  [@req-fba-13], [Eigene Stimmungen erstellen, bearbeiten, löschen], [],
+  [@req-fba-14], [Messungen manuell mit externem Gerät eintragen], [],
+  [@req-fba-15], [Unbekannte Begriffe nachvollziehen], [],
+
+  // ── Funktionale Systemanforderungen ───────────────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Funktionale Systemanforderungen*
+  ],
+  [@req-fsa-01], [Grundfrequenzschätzung per YIN-Algorithmus], [],
+  [@req-fsa-02], [Messung nur bei Überschreitung des dBFS-Schwellenwerts], [],
+  [@req-fsa-03], [Berechnung der Zielfrequenz gemäß Verstimmungsformel], [],
+  [@req-fsa-04], [Stimmen in Reihenfolge E2 → A2 → D3 → G3 → B3 → E4], [],
+  [@req-fsa-05], [Gleitender Mittelwert zur Ausreißerdämpfung], [],
+  [@req-fsa-06], [Frequenzbereich auf 50 Hz – 350 Hz begrenzen], [],
+  [@req-fsa-07], [Kalibrierungsmatrix per Deming-Regression schätzen], [],
+  [@req-fsa-08], [Diagonalelemente $C_(i i)=1$ ohne Messung setzen], [],
+  [@req-fsa-09], [Falsch verstimmte Saite bei Kalibrierung erkennen], [],
+  [@req-fsa-10], [Verstimmungsmatrix $C$ persistent speichern], [],
+  [@req-fsa-11], [Standard-Stimmgerät-Funktionalität anbieten], [],
+  [@req-fsa-12], [Grundfrequenz aus Obertönen ableiten], [],
+  [@req-fsa-13], [Gitarrenprofilnamen persistent speichern], [],
+  [@req-fsa-14], [Vordefinierte Stimmungen bereitstellen], [],
+  [@req-fsa-15], [Benutzerdefinierte Stimmungen speichern/bearbeiten/löschen], [],
+  [@req-fsa-16], [Mehr als zwei Samples für Regression], [],
+
+  // ── Nichtfunktionale: Messgenauigkeit ─────────────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Nichtfunktionale Anforderungen – Messgenauigkeit*
+  ],
+  [@req-nfa-mg-01], [Grundfrequenz mit max. $±0.2 "Hz"$ Abweichung], [],
+  [@req-nfa-mg-02], [Obertöne nicht als Grundfrequenz ausgeben], [],
+  [@req-nfa-mg-03], [Bei unverstärktem Spiel max. $±0.1 "Hz"$ Abweichung], [],
+
+  // ── Nichtfunktionale: Latenz ───────────────────────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Nichtfunktionale Anforderungen – Latenz*
+  ],
+  [@req-nfa-la-01], [Zielanzeige innerhalb von 100 ms aktualisieren], [],
+  [@req-nfa-la-02], [Zielfrequenzberechnung in unter 500 ms], [],
+
+  // ── Nichtfunktionale: Robustheit ──────────────────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Nichtfunktionale Anforderungen – Robustheit*
+  ],
+  [@req-nfa-ro-01], [Stabile Messung bei bis zu 70 dB(A) Umgebungslärm], [],
+  [@req-nfa-ro-02], [Keine Schätzung bei Stille oder reinem Lärm], [],
+  [@req-nfa-ro-03], [Fallback-Modus bei defektem Mikrofon], [],
+
+  // ── Nichtfunktionale: Bedienbarkeit ───────────────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Nichtfunktionale Anforderungen – Bedienbarkeit*
+  ],
+  [@req-nfa-be-01], [Erststart ohne externe Hilfe abschließbar], [],
+  [@req-nfa-be-02], [Zentrale Aktionen mit max. 3 Interaktionen erreichbar], [],
+  [@req-nfa-be-03], [Visuelle statt textbasierte Bedienführung], [],
+  [@req-nfa-be-04], [Erklärvideos bereitstellen], [],
+
+  // ── Nichtfunktionale: Kompatibilität ──────────────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Nichtfunktionale Anforderungen – Kompatibilität*
+  ],
+  [@req-nfa-ko-01], [Lauffähig auf iOS ≥ 16 und Android ≥ 10], [],
+  [@req-nfa-ko-02], [Betrieb auf Geräten mit ≥ 2 GB RAM], [],
+  [@req-nfa-ko-03], [Kein Layoutbruch auf 4,7 – 6,7 Zoll Displays], [],
+
+  // ── Nichtfunktionale: Datenschutz und Betrieb ─────────────────
+  table.cell(colspan: 3, fill: luma(230))[
+    *Nichtfunktionale Anforderungen – Datenschutz und Betrieb*
+  ],
+  [@req-nfa-dp-01], [Keine Datenübermittlung an externe Server], [],
+  [@req-nfa-dp-02], [Vollständig offline nutzbar], [],
+  [@req-nfa-dp-03], [Profile und Stimmungen exportierbar/importierbar], [],
+)
+
 == Nutzertests<nutzerTests>
 === Nutzer 0
 Die App wurde in einem ruhigen Zimmer, mit verstärkter Gitarre ohne Verzerrungseffekt getestet. Hierbei wurden die Frequenzen der Saiten korrekt erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es gab kleine Schwierigkeiten bei dem Erkennen der Fundamental frequenz. Da diese etwas schwankten.
