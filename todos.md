@@ -17,3 +17,6 @@ Aufbau Implementierungsteil
 --- Verteidigung
 
 Alles was ich gemacht habe,
+
+
+bib text finden für Garett [2012] und Cohn 2005

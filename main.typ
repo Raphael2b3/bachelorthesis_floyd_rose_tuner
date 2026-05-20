@@ -693,7 +693,7 @@ Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in die
 
 Wie im Buch beschrieben, werden Mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Usertests begründet, die mit einer älteren Version der App durchgeführt wurden.
 
-== Requirements Enginnering
+== Requirements Engineering
 Dieses Kapitel wurde mit Hilfe des Buchs "Mobile App Engineering" @mobileAppEngineering entwickelt. Die Ergebnisse folgen aus der befolgung des Kapitel 4 "Requirements Engineering".
 
 === Projektvision
@@ -914,7 +914,7 @@ gestimmt ist.
 *Normaler Ablauf:*
 Matilda spielt auf einer Jam-Session und möchte für den nächsten Auftritt die
 Stimmung ihrer Gitarre wechseln. Sie öffnet die App, wählt die gewünschte
-Zielstimmung sowie ihr gespeichertes Gitarrenprofil aus und startet den
+Zielstimmung Drop-D sowie ihr gespeichertes Gitarrenprofil aus und startet den
 Stimmvorgang. Da die Umgebung laut ist, benötigt sie mehrere Versuche, um
 stabile Frequenzmessungen zu erhalten. Nach erfolgreichem Abschluss aller
 Saiten ist die Gitarre korrekt gestimmt.
@@ -1278,7 +1278,24 @@ gemeinsamen Codebasis überwiegt daher den Mehraufwand einer rein
 nativen Implementierung deutlich.
 
 == Konzeption und Design
-=== First Load
+=== Informationsarchitektur
+Inhalte Kategorisieren
+Baumstruktur anfertigen
+=== Interaktionsdesign
+Visuelles Vokabular nutzen um pages zu modellieren, nach Garett [2012]
+=== Visuelles Konzept
+Da die App zunächst nur auf Android getestet werden kann, werden die Gestaltungsrichtlinien und Componenten von Google, das Material 3 Designsystem verwendet. Dies Beinhaltet bereits standarts für Schriftgrößen, Farben, Icons, Buttonzuständen und Navigationsleisten.
+
+Da später flutter verwendet wird, ist von haus aus Material 3 komponenten importierbar. Außerdem werden für Konzept und Design entwicklung Figma benutzt, wo ebenfalls Material 3 Komponenten einfach importierbar und verwendbar sind.
+=== Prototypen
+Die App wirde zunächst als sogenannten vertikalen Protyp entwickelt. Dabei wurde zuerst überprüft ob die Anforderung @req-fba-01 überhaupt umsetzbar ist. Anschließend wurde die UI überarbeitet, dass auch weniger technische Leute die App benutzen konnten. 
+
+Screenshots von älteren versionen.
+
+=== Finale Wireframes
+=== Seitenspezifikation
+
+==== First Load
 
 #figure(image("assets/image-2.png", height: 40%), caption: [Landing Page])<appLanding>
 Wenn man die App startet, sieht man als erstes die Möglichkeit das _Tuning_ einzustellen, die bereits auf die standartmäßige Stimmung _E-A-D-G-H-e_ eingestellt ist (Siehe @appLanding).
