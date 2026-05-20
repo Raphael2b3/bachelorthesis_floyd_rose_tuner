@@ -1004,7 +1004,11 @@ Cohn (2005)_.
   "SOLL",
   [Ein Nutzer sollte nicht allgemein bekannte Begriffe -- insbesondere Stimmungsbezeichnungen und Saitennamen -- nachvollziehen können.],
 ) <req-fba-15>
-
+#req(
+  "FBA-16",
+  "SOLL",
+  [Ein Nutzer sollte die Prezision des Stimmungsprozesses erhöhen können],
+) <req-fba-16>
 ==== Funktionale Systemanforderungen
 
 #req(
@@ -1304,19 +1308,69 @@ Auswahl von Frameworks und Libraries:
 - Riverpod
 - etc..
 Verlinkung des Git-Repositories
-
 == Tests während der Entwicklung
-Alles wurde Manuell getestet außer:
 
-Algorithmen für bla bla...
+=== Manuelle Tests
+
+Aus Zeitgründen wurden die meisten Anforderungen manuell getestet.
+Dabei wurde jede Anforderung durch gezielte Bedienung der App unter
+den jeweils beschriebenen Bedingungen überprüft und das Ergebnis
+protokolliert.
+
+Manuell getestet wurden:
+
+- @req-fba-01 bis @req-fba-16
+- @req-fsa-01, @req-fsa-02
+- @req-fsa-04 bis @req-fsa-06
+- @req-fsa-09 bis @req-fsa-16
+- @req-nfa-mg-01 bis @req-nfa-mg-03
+- @req-nfa-ro-02, @req-nfa-ro-03
+- @req-nfa-be-01 bis @req-nfa-be-04
+- @req-nfa-dp-01 bis @req-nfa-dp-03
+
+=== Unit-Tests
+
+Für die mathematisch verifizierbaren Kernanforderungen wurden
+automatisierte Unit-Tests implementiert:
+
+- @req-fsa-03: Korrektheit der Zielfrequenzberechnung anhand bekannter
+  Eingabe- und Ausgabewerte
+- @req-fsa-07, @req-fsa-08: Schätzung der Verstimmungsmatrix mittels
+  Deming-Regression, überprüft gegen synthetische Messdaten mit
+  bekannter Steigung
+
+=== Nicht getestet
+
+Die folgenden Anforderungen wurden im Rahmen dieser Arbeit nicht
+getestet und stellen offene Punkte für eine Weiterentwicklung dar:
+
+- @req-nfa-la-01, @req-nfa-la-02: Latenzmessung erfordert eine
+  instrumentierte Testumgebung zur präzisen Zeiterfassung
+- @req-nfa-ro-01: Systematischer Test bei definiertem Umgebungspegel
+  von $70 "dB(A)"$ war messtechnisch nicht umsetzbar
+- @req-nfa-ko-01 bis @req-nfa-ko-03: Kompatibilitätstests auf
+  verschiedenen Geräten und Betriebssystemversionen stehen aus
 
 = Evaluation
 
-== Funktionsfähigkeit des Algorithmuses
-Mit der App konnte die Gitarre erfolgreich  gestimmt werden.
+== Funktionsfähigkeit des Algorithmus
+
+Das zentrale Ziel der Arbeit -- eine Floyd-Rose-Gitarre mithilfe der
+Applikation korrekt zu stimmen -- wurde erreicht. In den Nutzertests
+(@nutzerTests) konnte die Gitarre unter geeigneten akustischen
+Bedingungen erfolgreich gestimmt werden. Die Verstimmungsmatrix wurde
+korrekt kalibriert und die berechneten Zielfrequenzen führten zu einem
+gestimmten Instrument.
+
+Gleichzeitig zeigten die Tests Grenzen des aktuellen Stands: Unter
+lauten Bedingungen oder bei verzerrtem Signal war die
+Fundamentalfrequenzerkennung nicht zuverlässig genug, um den
+Stimmvorgang abzuschließen (@nutzerTests, Nutzer 1). Zudem wurde ein
+konzeptioneller Fehler im Stimmvorgang identifiziert -- die fehlende
+Kompensation von Folgeverstimmungen beim schrittweisen Stimmen --
+der zwischenzeitlich behoben wurde (@nutzerTests, Nutzer 2).
+
 == Erfüllung der Requirements aus SWE
-// Erfüllungsmatrix – einfach "Ja" / "Nein" / "Teilweise" eintragen
-// oder die Symbole ✓  ✗  ◐ verwenden
 
 #table(
   columns: (auto, 1fr, auto),
@@ -1330,143 +1384,262 @@ Mit der App konnte die Gitarre erfolgreich  gestimmt werden.
   table.cell(colspan: 3, fill: luma(230))[
     *Funktionale Benutzeranforderungen*
   ],
-  [@req-fba-01], [Eine Floyd-Rose-Gitarre effizient stimmen], [],
-  [@req-fba-02], [App auf Gitarre kalibrieren], [],
-  [@req-fba-03], [Kalibrierung mehrerer Gitarren speichern], [],
-  [@req-fba-04], [Stimmzustand der Gitarre messen], [],
-  [@req-fba-05], [Messempfindlichkeit einstellen], [],
-  [@req-fba-06], [Bedienhilfe erhalten], [],
-  [@req-fba-07], [Korrektheit der Messung manuell prüfen], [],
-  [@req-fba-08], [Fehlerhafte Messungen korrigieren], [],
-  [@req-fba-09], [Unterschiedliche Stimmungen auswählen], [],
-  [@req-fba-10], [Stimmung mit herkömmlichem Stimmgerät prüfen], [],
-  [@req-fba-11], [App rekalibrieren], [],
-  [@req-fba-12], [Kalibrierungen benennen], [],
-  [@req-fba-13], [Eigene Stimmungen erstellen, bearbeiten, löschen], [],
-  [@req-fba-14], [Messungen manuell mit externem Gerät eintragen], [],
-  [@req-fba-15], [Unbekannte Begriffe nachvollziehen], [],
-
+  [@req-fba-01], [Eine Floyd-Rose-Gitarre effizient stimmen], [Ja],
+  [@req-fba-02], [App auf Gitarre kalibrieren], [Ja],
+  [@req-fba-03], [Kalibrierung mehrerer Gitarren speichern], [Ja],
+  [@req-fba-04], [Stimmzustand der Gitarre messen], [Ja],
+  [@req-fba-05], [Messempfindlichkeit einstellen], [Ja],
+  [@req-fba-06], [Bedienhilfe erhalten], [Teilweise],
+  [@req-fba-07], [Korrektheit der Messung manuell prüfen], [Ja],
+  [@req-fba-08], [Fehlerhafte Messungen korrigieren], [Ja],
+  [@req-fba-09], [Unterschiedliche Stimmungen auswählen], [Ja],
+  [@req-fba-10], [Stimmung mit herkömmlichem Stimmgerät prüfen], [Ja],
+  [@req-fba-11], [App rekalibrieren], [Ja],
+  [@req-fba-12], [Kalibrierungen benennen], [Ja],
+  [@req-fba-13], [Eigene Stimmungen erstellen, bearbeiten, löschen], [Nein],
+  [@req-fba-14], [Messungen manuell mit externem Gerät eintragen], [Ja],
+  [@req-fba-15], [Unbekannte Begriffe nachvollziehen], [Nein],
+  [@req-fba-16], [Prezision der Kalibrierung erhöhen], [Teilweise],
   // ── Funktionale Systemanforderungen ───────────────────────────
   table.cell(colspan: 3, fill: luma(230))[
     *Funktionale Systemanforderungen*
   ],
-  [@req-fsa-01], [Grundfrequenzschätzung per YIN-Algorithmus], [],
-  [@req-fsa-02], [Messung nur bei Überschreitung des dBFS-Schwellenwerts], [],
-  [@req-fsa-03], [Berechnung der Zielfrequenz gemäß Verstimmungsformel], [],
-  [@req-fsa-04], [Stimmen in Reihenfolge E2 → A2 → D3 → G3 → B3 → E4], [],
-  [@req-fsa-05], [Gleitender Mittelwert zur Ausreißerdämpfung], [],
-  [@req-fsa-06], [Frequenzbereich auf 50 Hz – 350 Hz begrenzen], [],
-  [@req-fsa-07], [Kalibrierungsmatrix per Deming-Regression schätzen], [],
-  [@req-fsa-08], [Diagonalelemente $C_(i i)=1$ ohne Messung setzen], [],
-  [@req-fsa-09], [Falsch verstimmte Saite bei Kalibrierung erkennen], [],
-  [@req-fsa-10], [Verstimmungsmatrix $C$ persistent speichern], [],
-  [@req-fsa-11], [Standard-Stimmgerät-Funktionalität anbieten], [],
-  [@req-fsa-12], [Grundfrequenz aus Obertönen ableiten], [],
-  [@req-fsa-13], [Gitarrenprofilnamen persistent speichern], [],
-  [@req-fsa-14], [Vordefinierte Stimmungen bereitstellen], [],
-  [@req-fsa-15], [Benutzerdefinierte Stimmungen speichern/bearbeiten/löschen], [],
-  [@req-fsa-16], [Mehr als zwei Samples für Regression], [],
+  [@req-fsa-01], [Grundfrequenzschätzung per YIN-Algorithmus], [Ja],
+  [@req-fsa-02], [Messung nur bei Überschreitung des dBFS-Schwellenwerts], [Ja],
+  [@req-fsa-03], [Berechnung der Zielfrequenz gemäß Verstimmungsformel], [Ja],
+  [@req-fsa-04], [Stimmen in Reihenfolge E2 → A2 → D3 → G3 → B3 → E4], [Ja],
+  [@req-fsa-05], [Gleitender Mittelwert zur Ausreißerdämpfung], [Ja],
+  [@req-fsa-06], [Frequenzbereich auf 50 Hz – 350 Hz begrenzen], [Ja],
+  [@req-fsa-07], [Verstimmungsmatrix per Deming-Regression schätzen], [Ja],
+  [@req-fsa-08], [Diagonalelemente $C_(i i)=1$ ohne Messung setzen], [Ja],
+  [@req-fsa-09], [Falsch verstimmte Saite bei Kalibrierung erkennen], [Nein],
+  [@req-fsa-10], [Verstimmungsmatrix $C$ persistent speichern], [Ja],
+  [@req-fsa-11], [Standard-Stimmgerät-Funktionalität anbieten], [Ja],
+  [@req-fsa-12], [Grundfrequenz aus Obertönen ableiten], [Nein],
+  [@req-fsa-13], [Gitarrenprofilnamen persistent speichern], [Ja],
+  [@req-fsa-14], [Vordefinierte Stimmungen bereitstellen], [Ja],
+  [@req-fsa-15], [Benutzerdefinierte Stimmungen speichern/bearbeiten/löschen], [Nein],
+  [@req-fsa-16], [Mehr als zwei Samples für Regression], [Teilweise],
 
   // ── Nichtfunktionale: Messgenauigkeit ─────────────────────────
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Messgenauigkeit*
   ],
-  [@req-nfa-mg-01], [Grundfrequenz mit max. $±0.2 "Hz"$ Abweichung], [],
-  [@req-nfa-mg-02], [Obertöne nicht als Grundfrequenz ausgeben], [],
-  [@req-nfa-mg-03], [Bei unverstärktem Spiel max. $±0.1 "Hz"$ Abweichung], [],
+  [@req-nfa-mg-01], [Grundfrequenz mit max. $±0.2 "Hz"$ Abweichung], [Nein],
+  [@req-nfa-mg-02], [Obertöne nicht als Grundfrequenz ausgeben], [Teilweise],
+  [@req-nfa-mg-03], [Bei unverstärktem Spiel max. $±0.1 "Hz"$ Abweichung], [Nein],
 
   // ── Nichtfunktionale: Latenz ───────────────────────────────────
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Latenz*
   ],
-  [@req-nfa-la-01], [Zielanzeige innerhalb von 100 ms aktualisieren], [],
-  [@req-nfa-la-02], [Zielfrequenzberechnung in unter 500 ms], [],
+  [@req-nfa-la-01], [Zielanzeige innerhalb von 100 ms aktualisieren], [Nicht Überprüft],
+  [@req-nfa-la-02], [Zielfrequenzberechnung in unter 500 ms], [Nicht Überprüft],
 
   // ── Nichtfunktionale: Robustheit ──────────────────────────────
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Robustheit*
   ],
-  [@req-nfa-ro-01], [Stabile Messung bei bis zu 70 dB(A) Umgebungslärm], [],
-  [@req-nfa-ro-02], [Keine Schätzung bei Stille oder reinem Lärm], [],
-  [@req-nfa-ro-03], [Fallback-Modus bei defektem Mikrofon], [],
+  [@req-nfa-ro-01], [Stabile Messung bei bis zu 70 dB(A) Umgebungslärm], [Nicht Überprüft],
+  [@req-nfa-ro-02], [Keine Schätzung bei Stille oder reinem Lärm], [Ja],
+  [@req-nfa-ro-03], [Fallback-Modus bei defektem Mikrofon], [Ja],
 
   // ── Nichtfunktionale: Bedienbarkeit ───────────────────────────
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Bedienbarkeit*
   ],
-  [@req-nfa-be-01], [Erststart ohne externe Hilfe abschließbar], [],
-  [@req-nfa-be-02], [Zentrale Aktionen mit max. 3 Interaktionen erreichbar], [],
-  [@req-nfa-be-03], [Visuelle statt textbasierte Bedienführung], [],
-  [@req-nfa-be-04], [Erklärvideos bereitstellen], [],
+  [@req-nfa-be-01], [Erststart ohne externe Hilfe abschließbar], [Ja],
+  [@req-nfa-be-02], [Zentrale Aktionen mit max. 3 Interaktionen erreichbar], [Ja],
+  [@req-nfa-be-03], [Visuelle statt textbasierte Bedienführung], [Teilweise],
+  [@req-nfa-be-04], [Erklärvideos bereitstellen], [Nein],
 
   // ── Nichtfunktionale: Kompatibilität ──────────────────────────
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Kompatibilität*
   ],
-  [@req-nfa-ko-01], [Lauffähig auf iOS ≥ 16 und Android ≥ 10], [],
-  [@req-nfa-ko-02], [Betrieb auf Geräten mit ≥ 2 GB RAM], [],
-  [@req-nfa-ko-03], [Kein Layoutbruch auf 4,7 – 6,7 Zoll Displays], [],
+  [@req-nfa-ko-01], [Lauffähig auf iOS ≥ 16 und Android ≥ 10], [Nicht Überprüft],
+  [@req-nfa-ko-02], [Betrieb auf Geräten mit ≥ 2 GB RAM], [Nicht Überprüft],
+  [@req-nfa-ko-03], [Kein Layoutbruch auf 4,7 – 6,7 Zoll Displays], [Nicht Überprüft],
 
   // ── Nichtfunktionale: Datenschutz und Betrieb ─────────────────
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Datenschutz und Betrieb*
   ],
-  [@req-nfa-dp-01], [Keine Datenübermittlung an externe Server], [],
-  [@req-nfa-dp-02], [Vollständig offline nutzbar], [],
-  [@req-nfa-dp-03], [Profile und Stimmungen exportierbar/importierbar], [],
+  [@req-nfa-dp-01], [Keine Datenübermittlung an externe Server], [Ja],
+  [@req-nfa-dp-02], [Vollständig offline nutzbar], [Ja],
+  [@req-nfa-dp-03], [Profile und Stimmungen exportierbar/importierbar], [Nein],
 )
+== Nutzertests <nutzerTests>
 
-== Nutzertests<nutzerTests>
 === Nutzer 0
-Die App wurde in einem ruhigen Zimmer, mit verstärkter Gitarre ohne Verzerrungseffekt getestet. Hierbei wurden die Frequenzen der Saiten korrekt erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es gab kleine Schwierigkeiten bei dem Erkennen der Fundamental frequenz. Da diese etwas schwankten.
-Dabei dauerte der Prozess um die Matrix zu bestimmen und die Messdaten nocheinmal zu überprüfen 3:47 Minuten.
-Innerhalb von ungefähr 7 Minuten war die Gitarre gestimmt.
+
+Die App wurde in einem ruhigen Zimmer mit verstärkter Gitarre ohne
+Verzerrungseffekt getestet. Die Frequenzen aller Saiten wurden korrekt
+erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es traten
+vereinzelte Schwankungen bei der Erkennung der Fundamentalfrequenz auf,
+die den Prozess geringfügig verlangsamten.
+
+Die Bestimmung der Verstimmungsmatrix inklusive anschließender
+Überprüfung der Messdaten dauerte 3:47 Minuten; der gesamte
+Stimmvorgang war nach ca. 7 Minuten abgeschlossen.
 
 === Nutzer 1
-Hierbei wurde die App auf einer Jam Session vorgestellt. Beim Versuch, die Frequenz der E-Gitarre zu messen, wurde nicht die korrekte Fundamentalfrequenz erkannt, sondern der Oberton mit Faktor 2. Gerade weil es in der Umgebung laut war und die Gitarre einen Verzerrungseffekt hatte, bei dem Obertöne verstärkt wurden.
-Der Stimmvorgang wurde abgebrochen.
 
-Für so ein Szenario muss die Erkennung der Fundamentalfrequenz stabiler sein.
+Die App wurde auf einer Jam-Session vorgestellt. Beim Versuch, die
+Frequenzen der E-Gitarre zu messen, wurde nicht die Fundamentalfrequenz,
+sondern der erste Oberton (Faktor 2) erkannt. Als Ursache kommen zwei
+Faktoren zusammen: die laute Umgebung sowie ein aktiver
+Verzerrungseffekt, der den Obertonanteil des Signals verstärkte. Der
+Stimmvorgang musste abgebrochen werden.
+
+Dieser Test macht deutlich, dass die Fundamentalfrequenzerkennung unter
+ungünstigen akustischen Bedingungen robuster gestaltet werden muss.
 
 === Nutzer 2
-Die App wurde Zuhause unter guten Bedingungen verwendet.
-Es viel auf, dass das Erlernen der Verstimmungmatrix zwar technisch funktionierte, aber im protzess einige repetitive Aktionen getätigt werden mussten. Denn wenn man den Zustand der gitarre gemessan hatte nach dem eine Saite verstimmt wurde, könnte man diesen Zustand auch schon als ausgangslage der nächsten Saite speichern. Aktuell wird das noch manuell gemacht.
 
+Die App wurde zu Hause unter guten akustischen Bedingungen verwendet.
+Es fiel auf, dass der Kalibrierungsprozess zwar technisch korrekt
+funktionierte, jedoch unnötige Wiederholungen enthielt: Nachdem der
+Zustand der Gitarre nach dem Verstimmen einer Saite gemessen wurde,
+könnte dieser Zustand direkt als Ausgangslage für die Messung der
+nächsten Saite weiterverwendet werden. Aktuell wird dieser Schritt
+manuell ausgelöst.
 
-Es hat sich gezeigt, dass die Gitarre doch nicht prezise gestimmt wird. Denn beim verstimmen der Gitarre, wurden zwar zunächst die korrekten $Delta f$ angezeigt. Doch wenn man eine Saite mit hilfe der App verstimmt, verändert sich der gemessene Zustand der aktuell ausgewählten Saite und auch aller anderen. Diese änderung wurden nicht mit eineberechnet in der Folgenden berechnung der $Delta f$.
-
-Deswegen muss schritt weise die änderung vorhergesehen werden im Stimmprozess.
+Darüber hinaus zeigte sich ein grundlegenderes Problem: Beim Stimmen
+einer Saite mit Hilfe der App wurden zunächst die korrekten
+Zielabweichungen $Delta f$ angezeigt. Sobald jedoch eine Saite aktiv
+verstimmt wurde, veränderte sich -- erwartungsgemäß aufgrund der
+Brückenkopplung -- der Zustand aller übrigen Saiten. Diese
+Zustandsänderung wurde nicht in die nachfolgende Berechnung der
+$Delta f$ einbezogen, sodass die Gitarre am Ende nicht präzise gestimmt
+war. Als Konsequenz muss der Stimmvorgang die durch jede
+Saitenänderung verursachten Folgeverstimmungen schrittweise
+vorausberechnen und kompensieren.
 
 === Nutzer 3
 
-Nutzer 3 war verwirrt, was die Zahlen bedeutet (Frequenzen). Das verstärkte den Bedarf einer Erklärung.
+Nutzer 3 war mit der Darstellung roher Frequenzwerte (in Hz) überfordert
+und konnte deren Bedeutung nicht einordnen. Dies bestätigte den Bedarf
+einer abstrahierten, intuitiv verständlichen Visualisierung der
+Stimmgenauigkeit anstelle numerischer Frequenzangaben.
 
 === Nutzer 4
-13:50 - Nutzer fängt an, und will direkt die gitarre Stimmen. Die App konnte nicht klar kommunizieren, dass zu erst die Saiten der Gitarre gemessen werden mussten, mehr mals um die Verstimmungsmatrix zu bestimmen. Als dass im Tutorial Video erklärt wurde. War nicht klar, als die Saite zum testen verstimmt werden sollte, wohin die Gitarre verstimmt werden sollte. Auch wenn es egal ist wohin, hat das unsicherheiten ausgelöst. Als das erklärt wurde, hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu messen. Da die Stahlsaiten starke obertöne aufwies. Durch umpositionierung des Handys näher am Lautsprecher, und durch betätigung des _Tone Nobs_ der die Funktion eines Analogen Lowpass Filter erfüllt. Ging es dann. Zum Schluss wurde die Gitarre gestimmt. wobei Allerding die E Saite zu Hoch war, was darauf hindeutet, dass die Der Einfluss auf die E2-Saite die meisten Messfehler aufwies.
 
-Das Stimmen dauerte effektiv 8 Minuten.
+Nutzer 4 versuchte, die Gitarre unmittelbar nach dem
+Öffnen der App zu stimmen, ohne den Kalibrierungsschritt zu
+durchlaufen. Die App konnte nicht ausreichend klar vermitteln, dass
+zunächst mehrere Messreihen zur Bestimmung der Verstimmungsmatrix
+erforderlich sind. Auch das Tutorial-Video war zu dem Zeitpunkt nicht verfügbar.
+
+Als der Nutzer aufgefordert wurde, eine Saite gezielt zu verstimmen,
+entstand Unsicherheit darüber, in welche Richtung und um wie viel die
+Saite verstimmt werden solle -- obwohl der genaue Betrag für das
+Verfahren irrelevant ist.
+
+Zusätzlich hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu
+messen, da die Stahlsaiten einen ausgeprägten Obertonanteil aufwiesen.
+Durch Umpositionierung des Smartphones näher am Lautsprecher sowie
+durch Betätigung des _Tone-Knobs_ -- der die Funktion eines analogen
+Tiefpassfilters erfüllt -- konnte das Problem behoben werden.
+
+Der abschließende Stimmvorgang verlief weitgehend erfolgreich; die
+E2-Saite wurde jedoch zu hoch gestimmt. Dies deutet darauf hin, dass
+die Einträge der Verstimmungsmatrix, die den Einfluss auf E2 beschreiben,
+den größten Messfehler aufwiesen.
+
+Der effektive Zeitaufwand für den Stimmvorgang betrug 8 Minuten.
+
+
 = Ausblick
-== Usability Verbessern
-Die App nutzt noch zu komplizierte Begriffe für die Nutzer. Aus @nutzerTests wurde außerdem klar, dass die App am besten so gestalten werden sollte, dass dem Nutzer nur eine Aufgabe gestellt wird und nicht mehrere gleichzeitig sodass verwirrung und "suchen nach was man als nächsten machen soll" nicht mehr passiert.
 
-== Mehrere Saiten gleichzeitig Messen
-Fourier Transformation, 6 Peaks erkennen und die obertöne rausrechnen.
-== Implementierung für VST und Digital Audio Workstations (Plugin)
-VST und CLAP Plugin implementieren, in C++
-== Erkennen welche Saite gespielt wird, annahme 6 Saiten
-Wenn der Nutzer die Gitarre stimmt, dann wollen wir erkennen welche Saite er verändert und automatisch switchen. Annahme ist, dass er bereits ungefähr an der richtigen Frequenz ist.
+== Optimierung der Fundamentalfrequenzschätzung
+
+Die Nutzertests (@nutzerTests) zeigten, dass der YIN-Algorithmus unter
+zwei Bedingungen zur Erkennung von Obertönen statt der Fundamentalfrequenz
+neigt: bei hohem Umgebungspegel (Nutzer 1) sowie bei Saiten mit ausgeprägtem
+Obertonanteil wie tiefen Stahlsaiten (Nutzer 4). In beiden Fällen wurde
+der erste Oberton -- also die doppelte Grundfrequenz -- als Schätzwert
+ausgegeben.
+
+Als Gegenmaßnahme wurde gemäß @req-fsa-12 eine Plausibilitätsprüfung
+implementiert: Liegt der geschätzte Wert außerhalb des erwarteten
+Frequenzbereichs der jeweiligen Saite, wird durch Halbierung auf die
+Grundfrequenz rückgeschlossen. Diese Heuristik behebt den Oktavfehler in
+den beobachteten Fällen, setzt jedoch voraus, dass der Fehler genau eine
+Oktave beträgt. Für stärker verrauschte Signale oder höhere Obertöne
+(Faktor 3, 4, ...) greift sie nicht zuverlässig.
+
+Eine robustere Alternative wäre das _Harmonic Product Spectrum_ (HPS):
+Dabei wird das Frequenzspektrum des Signals mit sich selbst bei
+schrittweise halbierten Frequenzachsen multipliziert, wodurch die
+Grundfrequenz als gemeinsamer Teiler aller Partialtöne verstärkt
+hervortritt. @req-fsa-01 schreibt den YIN-Algorithmus nicht zwingend
+vor -- eine Ersetzung oder Ergänzung durch HPS wäre im Rahmen einer
+Weiterentwicklung prüfenswert.
+
+== Umsetzung und Testen der verbleibenden Anforderungen
+
+Das Requirements Engineering hat eine Vielzahl klar abgegrenzter
+Arbeitspakete hervorgebracht. Die verbleibenden Anforderungen zu
+implementieren, zu verfeinern und durch automatisierte Tests abzusichern
+würde die Qualität und Zuverlässigkeit der Applikation deutlich
+verbessern.
+
+== Gleichzeitiges Messen aller Saiten
+
+Derzeit muss der Nutzer jede Saite einzeln anspielen. Durch den Einsatz
+einer Fourier-Transformation ließe sich das vollständige Frequenzspektrum
+eines Akkords analysieren, die sechs saitenspezifischen Grundfrequenzen
+als lokale Maxima identifizieren und harmonische Obertöne herausrechnen.
+Der Nutzer könnte so alle Saiten gleichzeitig anschlagen, was den
+Messvorgang erheblich beschleunigen würde.
+
+== Automatische Saiten­erkennung beim Stimmen
+
+Wenn der Nutzer während des Stimmvorgangs eine Saite anspielt, könnte
+die App anhand der gemessenen Frequenz automatisch erkennen, welche Saite
+verändert wird, und die Anzeige entsprechend umschalten. Voraussetzung
+ist, dass die Saite bereits näherungsweise auf der Zielfrequenz liegt,
+sodass eine eindeutige Zuordnung möglich ist.
+
 == Mehr Konfigurationsfreiraum
-=== Mehr Samples zur bestimmung der Steigungen verwendeten
-Dieses Feature ist tatsächlich schon implementiert. Allerdings wurde es deaktiviert, um die Benutzeroberfläche einfacher zu gestalten. Weniger Ablenkung, da weniger Knöpfe.
 
-=== Referenzstimmung 440 Hz ändern
-Zukünftig könnte es sinnvoll sein, die Referenzstimmung von 440 Hz ändern zu können. Manchmal gibt es Instrumente die um zum Referenzton A mit 438 Hz gestimmt sind. So könnte man die Gitarre auch auf diese Instrumente stimmen.
+=== Änderbare Referenzstimmung
 
-=== Erstellen eigener Stimmungen
-Außerdem kann man bisher keine eigenen Tunings definieren. Es wäre flexibeler wenn der Nutzer selbst bestimmen könnte, auf welche Frequenzen er Seine Gitarre Stimmen möchte.
+Aktuell ist die Referenzfrequenz fest auf $440 "Hz"$ eingestellt.
+Manche Ensembles -- insbesondere im Orchesterkontext -- stimmen auf
+abweichende Referenzwerte wie $438 "Hz"$ oder $442 "Hz"$. Eine
+konfigurierbare Referenzfrequenz würde es ermöglichen, die Gitarre
+präzise auf solche Ensembles abzustimmen.
 
-=== Support von Gitarren mit beliebig vielen Saiten
-Desweiteren gibt es in sehr Seltenen Fällen Gitarren die nicht 6 Saiten haben, sondern mehr oder weniger. Für diesen Fall wäre gut wenn, man auch solche Gitarren stimmen kann. Momentan wird angenommen, dass es nur 6 Saiten gibt.
+=== Unterstützung beliebig vieler Saiten
+
+Die aktuelle Implementierung setzt sechs Saiten voraus. Es gibt jedoch
+Gitarren mit sieben, acht oder mehr Saiten sowie Bass­gitarren mit vier
+oder fünf Saiten. Eine Verallgemeinerung der Verstimmungsmatrix $C$ auf
+$n times n$ wäre konzeptuell straightforward und würde die Applikation
+für eine deutlich breitere Instrumentenvielfalt nutzbar machen.
+
+== Implementierung als DAW-Plugin
+
+Eine Portierung der Kernlogik als VST3- oder CLAP-Plugin in C++ würde
+den Einsatz in professionellen Studio-Umgebungen ermöglichen und damit
+das in @req-fba-10 beschriebene Szenario von Persona Hanna adressieren.
+Im Plugin-Kontext stünden zudem deutlich präzisere Audio-APIs und
+geringere Latenzen zur Verfügung, was die Messgenauigkeit weiter
+steigern könnte. Dieser Anwendungsfall wurde bewusst aus dem Umfang
+dieser Arbeit ausgeschlossen (siehe Ausgeschlossene Anforderungen),
+bleibt jedoch ein sinnvoller nächster Schritt.
+
+== Veröffentlichung und Erweiterung auf weitere Brückensysteme
+
+Nach einer abschließenden Qualitätssicherung könnte die Applikation
+in den App Store und Google Play veröffentlicht werden. Darüber hinaus
+existieren weitere Gitarrenbrücken -- etwa das Kahler-System oder
+Semi-Floating-Bridges -- die ein ähnliches Kopplungsverhalten zwischen
+den Saiten aufweisen. Eine Verallgemeinerung des Kalibrierungsverfahrens
+auf solche Systeme würde die potenzielle Nutzerbasis erheblich
+vergrößern.
 
 
 #pagebreak()
