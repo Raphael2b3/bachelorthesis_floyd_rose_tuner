@@ -39,7 +39,7 @@ Flutter bot eine bessere Performance als React Native, und das Designen von Benu
 
 Somit wird das _Cross-Compiling_ Paradigma angewandt. Die App benötigt Zugriff auf das Mikrofon des Endgeräts und wird in Echtzeit Frequenzanalysen und weitere mathematische Operationen durchführen. Mit Flutter sieht die App auf jedem Gerät gleich aus. In dem Buch "Mobile App Engineering" (Jahr 2017) @mobileAppEngineering wurden Nachteile von _Cross-Compiling_ aufgezählt die heute von Flutter gelöst werden.
 
-Kriterien Für SDK
+ergänze:
 
 Wie schnell kann man komplexe Probleme umsetzen.
 

@@ -540,7 +540,7 @@ nachfolgenden Zielfrequenzen einfließen können.
 Im Folgenden wird der Ablauf zum Stimmen einer Floyd-Rose-Gitarre beschrieben
 sowie die dafür erforderlichen Verfahren erläutert.
 
-== Initierung -- Bestimmung der Verstimmungsmatrix
+== Initiierung -- Bestimmung der Verstimmungsmatrix
 Vor dem eigentlichen Stimmvorgang muss die gitarrenspezifische
 Verstimmungsmatrix $C$ einmalig ermittelt werden. Da sie eine physikalische
 Eigenschaft des jeweiligen Instruments beschreibt, ist diese Kalibrierung nur
@@ -814,7 +814,7 @@ die Künstler stärker vergüten als marktführende Dienste.
 *Relevanz:* Matilda repräsentiert erfahrene Nutzerinnen, die schnelle Workflows
 und die Unterstützung mehrerer Stimmungen priorisieren.
 
-==== Jonas -- Gitarrentechniker
+==== Jonas -- Gitarrentechniker <jonasGit>
 
 Jonas ist 45 Jahre alt und arbeitet seit 18 Jahren als Gitarrentechniker in
 einem Musikfachgeschäft. Er wartet, repariert und stimmt täglich Instrumente
@@ -1279,19 +1279,40 @@ nativen Implementierung deutlich.
 
 == Konzeption und Design
 === Informationsarchitektur
-Inhalte Kategorisieren
-Baumstruktur anfertigen
+#figure(image("assets/infoarch.png"), caption: [Informationsarchitektur der Floyd-Rose-Tuner-App]) <infArch>
+
+In @infArch ist die Informationsarchitektur zu sehen. Auf höchster Ebene soll der Kern zufinden Sein. Die Initiierung des Stimmvorgangs. In dieser sollen die Wichtigsten Informationen erreichbar sein.
+1. Hilfe
+2. Gitarre Auswählen für den Stimmprozess
+3. Standard Tuner da evtl nur geprüft werden soll ob eine gitarre in Stimmung ist.
+4. Stimmung Auswählen
+5. Gitarre Anlegen (Da die Persona Jonas -- Gitarrentechniker aus @jonasGit) täglich neue Gitarren stimmen muss.
+6. Floyd-Rose-Stimmen -- Das Herz der App
+
+Wird eine Gitarre Ausgewählt sollte man sie Editieren(umbennenen und rekalibrieren) und Löschen können.
+
+Wird eine Gitarre Angelegt soll sie auch Benannt und Kalibriert werden.
+
 === Interaktionsdesign
-Visuelles Vokabular nutzen um pages zu modellieren, nach Garett [2012]
+#figure(image("assets/interaktionsdesign.png"), caption: [Interaktionsdesign mit _visuelles Vokabular_])<visVoc>
+
+In @visVoc wurde die Grafische Sprache _visuelles Vokabular_ erstellt nach Garett [2012] zur erstellung des Interaktionsdesigns verwendet.
+
+Man startet auf der Floyd-Rose-Initierungsseite von der man auf die Hilfspage, die Standard Stimmgerät Page, die Gitarren bennen Page, die Kalibrierungsapage auf der man die Verstimmungsmatrix bestimmt, auf die gitarren Messpage mit der man jede Gitarren Saite anspielt und misst.
+Nach dem man die gitarre Gemessen hat, kann man diese Information nutzen direkt zum Floyd-Rose-Stimmgerät navigieren. Vom Floyd-Rose-Stimmgerät kommt man wiederum zum Standard-Stimmgerät um das Ergebnis des Floyd-Rose-Stimmgeräts zu überprüfen.
+
+
 === Visuelles Konzept
 Da die App zunächst nur auf Android getestet werden kann, werden die Gestaltungsrichtlinien und Componenten von Google, das Material 3 Designsystem verwendet. Dies Beinhaltet bereits standarts für Schriftgrößen, Farben, Icons, Buttonzuständen und Navigationsleisten.
 
 Da später flutter verwendet wird, ist von haus aus Material 3 komponenten importierbar. Außerdem werden für Konzept und Design entwicklung Figma benutzt, wo ebenfalls Material 3 Komponenten einfach importierbar und verwendbar sind.
 === Prototypen
-Die App wirde zunächst als sogenannten vertikalen Protyp entwickelt. Dabei wurde zuerst überprüft ob die Anforderung @req-fba-01 überhaupt umsetzbar ist. Anschließend wurde die UI überarbeitet, dass auch weniger technische Leute die App benutzen konnten. 
+Die App wirde zunächst als sogenannten vertikalen Protyp entwickelt. Dabei wurde zuerst überprüft ob die Anforderung @req-fba-01 überhaupt umsetzbar ist. Anschließend wurde die UI überarbeitet, dass auch weniger technische Leute die App benutzen konnten.
 
 Screenshots von älteren versionen.
+#image("assets/prototyp_create_guitar.png")
 
+#image("assets/prototyp_calibration.png")
 === Finale Wireframes
 === Seitenspezifikation
 
@@ -1320,11 +1341,150 @@ das hatte zuviele buttons, buttons werden reduziert und usability verbessert, al
 == Architektur
 Backend der App konzipieren. Pipeline Modelletc
 == Implementierung
-Auswahl von Frameworks und Libraries:
-- Flutter
-- Riverpod
-- etc..
-Verlinkung des Git-Repositories
+
+=== Auswahl des Cross-Platform-Frameworks
+
+Da die App gemäß @req-nfa-ko-01 auf iOS und Android lauffähig sein muss,
+wird ein Cross-Platform-Framework eingesetzt, um eine gemeinsame Codebasis
+für beide Plattformen zu erhalten. Zur Auswahl standen React Native
+@reactnative_dev, .NET MAUI @dotnet_maui und Flutter @flutter_dev.
+
+==== Umsetzungsgeschwindigkeit komplexer Anforderungen
+
+Flutter bietet mit seinem Widget-System und dem integrierten
+Rendering-Stack eine durchgängige Abstraktionsebene, auf der sich
+komplexe UI-Zustände -- wie die Echtzeit-Visualisierung der
+Stimmgenauigkeit -- direkt und ohne Umwege über plattformspezifische
+APIs umsetzen lassen. React Native erfordert bei komplexeren
+Anforderungen häufiger den Rückgriff auf native Module oder externe
+Bibliotheken, was den Entwicklungsaufwand erhöht. .NET MAUI zeigte in
+eigenen Experimenten bei plattformübergreifenden UI-Komponenten
+Inkonsistenzen, die zusätzlichen Abstimmungsaufwand erzeugten.
+
+==== Einstiegshürde
+
+Flutter verwendet die Programmiersprache Dart, die im Vergleich zu
+JavaScript (React Native) oder C\# (.NET MAUI) zunächst eine
+unbekanntere Wahl darstellt. In der Praxis erwies sich Dart jedoch als
+schnell erlernbar: Die Sprache ist stark typisiert, die Dokumentation
+vollständig und das Tooling -- insbesondere Hot Reload und die
+IDE-Integration -- reduziert die Zeit bis zu ersten funktionierenden
+Ergebnissen erheblich. Aus eigener Erfahrung war die Einstiegshürde bei
+Flutter trotz der neuen Sprache geringer als bei .NET MAUI, dessen
+Abstraktion über native Controls zu unerwartetem Verhalten und schwer
+nachvollziehbaren Fehlern führte.
+
+==== Codestabilität
+
+Flutter kompiliert Ahead-of-Time (AOT) in nativen Code und umgeht damit
+die Bridge-Architektur von React Native, die bei häufigem Datenaustausch
+zwischen JavaScript- und nativer Ebene Laufzeitfehler und
+Performance-Einbrüche verursachen kann. Da die App gemäß @req-fsa-01
+kontinuierliche Frequenzmessungen in Echtzeit durchführt, ist ein
+stabiler, vorhersehbarer Ausführungspfad ohne Kommunikations-Overhead
+essenziell. Darüber hinaus reduziert Flutters geschlossenes Ökosystem --
+im Gegensatz zu Reacts starker Abhängigkeit von externen Bibliotheken --
+das Risiko inkompatibler Abhängigkeiten und erleichtert langfristige
+Wartung.
+
+==== UI-Komponenten mit Material 3
+
+Flutter integriert Material 3 @material3 direkt als Teil des Frameworks,
+ohne externe Abhängigkeit. Standardkomponenten wie Buttons, Navigation,
+Eingabefelder und Farbschemata stehen sofort zur Verfügung und folgen
+konsistenten Designrichtlinien. Für diese App bedeutet das, dass die
+Benutzeroberfläche -- insbesondere die geführte Kalibrierung und die
+Stimmansicht gemäß @req-nfa-be-01 und @req-nfa-be-02 -- ohne eigenes
+Design-System von Grund auf aufgebaut werden musste. Theming,
+Typografie und Abstände sind systemseitig definiert und plattformweit
+konsistent, was den Designaufwand erheblich reduziert und gleichzeitig
+eine professionelle Darstellung sicherstellt.
+
+==== Entscheidung
+
+Aufgrund eigener praktischer Erfahrungen mit allen drei Frameworks sowie
+der beschriebenen Eigenschaften wurde Flutter gewählt. Es bietet bessere
+Performance als React Native, ein kohärenteres Entwicklungserlebnis als
+.NET MAUI und ermöglicht eine plattformübergreifende Darstellung, die
+auf jedem Gerät identisch aussieht. Nachteile von
+Cross-Compiling-Ansätzen, die in @mobileAppEngineering (2017) beschrieben
+werden, sind durch Flutters AOT-Kompilierung, eigenständiges Rendering
+und die direkte Integration von Material 3 heute weitgehend überholt.
+=== Abhängigkeiten
+
+Die App verwendet folgende Laufzeit-Abhängigkeiten:
+
+/ `flutter_riverpod` \^3.0.0: State-Management-Framework. Ermöglicht
+  das Bereitstellen von gemeinsamem Zustand über mehrere Widgets hinweg
+  und bildet die Grundlage für Model und Controller im gewählten
+  Architekturmuster.
+
+/ `riverpod_annotation` \^4.0.0: Annotationspaket für Riverpod;
+  wird zur Code-Generierung benötigt.
+
+/ `shared_preferences` \^2.3.3: Plattformübergreifende Persistenz
+  einfacher Schlüssel-Wert-Paare. Wird verwendet, um Gitarrenprofile
+  und Stimmungen dauerhaft auf dem Gerät zu speichern (@req-fsa-10,
+  @req-fsa-13).
+
+/ `json_annotation` \^4.9.0: Annotationspaket für JSON-Serialisierung;
+  ermöglicht das Speichern komplexer Datenobjekte als JSON-String in
+  `shared_preferences`.
+
+/ `record` \^6.1.1: Plattformunabhängiger Zugriff auf das Gerätmikrofon
+  für iOS und Android (@req-fsa-01).
+
+/ `pitch_detector_dart` \^0.0.7: Implementierung des YIN-Algorithmus
+  zur Grundfrequenzschätzung (@req-fsa-01).
+
+/ `buffered_list_stream` \^1.3.0: Puffert den kontinuierlichen
+  Audiodatenstrom des Mikrofons zu Blöcken, die der YIN-Algorithmus
+  verarbeiten kann.
+
+/ `ml_linalg` \^13.12.6: Optimierte Matrizenoperationen (Multiplikation,
+  Inversion) für die Berechnung der Verstimmungsmatrix und der
+  Zielfrequenzen (@req-fsa-07, @req-fsa-03).
+
+/ `statistics` \^1.2.1: Hilfsfunktionen für Listenoperationen, die in
+  der Signalverarbeitung und Plausibilitätsprüfung eingesetzt werden.
+
+/ `async` \^2.13.0: Erweiterungen für asynchrone Programmierung und
+  Parallelverarbeitung des Audiostreams.
+
+/ `flutter_sound` \^9.30.0: Wiedergabe eines Referenztons zur
+  auditiven Überprüfung der Stimmung.
+
+/ `auto_route` \^11.1.0: Typsicheres Routing mit reduziertem
+  Boilerplate-Code.
+
+/ `url_launcher` \^6.3.2: Öffnet externe URLs; wird verwendet, um
+  Hilfevideos auf YouTube zu verlinken (@req-fba-06, @req-nfa-be-04).
+
+Folgende Abhängigkeiten werden ausschließlich zur Entwicklungszeit
+benötigt und sind nicht Teil des ausgelieferten Artefakts:
+
+/ `riverpod_generator` \^4.0.0+1: Generiert Riverpod-Provider aus
+  Annotationen.
+
+/ `riverpod_lint` \^3.0.0: Statische Analyse für korrekte
+  Riverpod-Verwendung.
+
+/ `json_serializable` \^6.11.1: Generiert JSON-Serialisierungscode
+  aus `json_annotation`-Annotationen.
+
+/ `auto_route_generator` \^10.2.4: Generiert Routing-Code aus
+  `auto_route`-Annotationen.
+
+/ `build_runner` \^2.7.1: Führt alle Code-Generatoren aus.
+
+/ `flutter_lints` \^6.0.0: Offizielles Lint-Regelwerk für Flutter;
+  stellt statische Codequalität sicher.
+
+=== Quellcode
+
+Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar:
+#link("https://github.com/Raphael2b3/floyd_rose_tuner")
+
 == Tests während der Entwicklung
 
 === Manuelle Tests
