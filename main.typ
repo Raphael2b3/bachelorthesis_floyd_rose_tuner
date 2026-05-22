@@ -174,13 +174,13 @@ $arrow(Delta L) -> arrow(f)$, wobei jede Komponente zu einer Saite gehört. Beim
 Das Ziel ist die Funktion $f(arrow(Delta L))$ zu bestimmen.
 Der Zusammenhang zwischen effektiver Saitenlänge $L_(S,i)$, Zugkraft $F_(S,i)$,
 linearer Massendichte $mu_i$ und Frequenz $f_i$ wird durch das Mersennesche Gesetz beschrieben
-@wiki_mersennes_laws:
+@jeans1968science:
 
 $
   f_i = 1 / (2 L_(S,i)) sqrt(F_(S,i) / mu_i)
 $<eqMersenne>
 
-Zunächst wird die Saitenkraft $F_(S,i)$ als Funktion der Aufwickelstrecken $arrow(Delta L)$ bestimmt. Die Kraft die auf die Saite wirkt, wird durch das Hooksche Gesetz beschrieben @wiki_hookes_law:
+Zunächst wird die Saitenkraft $F_(S,i)$ als Funktion der Aufwickelstrecken $arrow(Delta L)$ bestimmt. Die Kraft die auf die Saite wirkt, wird durch das Hooksche Gesetz beschrieben @beer2020:
 
 $ F_(S,i) = (L_(S,i) - L_(0S,i)) dot k_(S,i) $<eqSaitenkraft>
 
@@ -249,7 +249,7 @@ $
   L_hat(F) (beta) = abs(arrow(h_hat(F))(beta) - arrow(P_hat(F)))
 $ <eqTremolofederlänge>
 
-Nun soll die Variable $beta$ bestimmt werden, die sich aus dem Kräftegleichgewicht und der darausfolgenden Hebelposition ergibt. Nach den Gesetzen der Statik trägt ausschließlich der zur jeweiligen Hebelarmrichtung orthogonale Kraftanteil zum Drehmoment bei @hebel_wikipedia.
+Nun soll die Variable $beta$ bestimmt werden, die sich aus dem Kräftegleichgewicht und der darausfolgenden Hebelposition ergibt. Nach den Gesetzen der Statik trägt ausschließlich der zur jeweiligen Hebelarmrichtung orthogonale Kraftanteil zum Drehmoment bei @tipler2015.
 Im stationären Gleichgewicht gilt das Drehmomentgleichgewicht:
 
 $
@@ -257,7 +257,7 @@ $
 $ <eqBrückenkraftgleichgewicht>
 
 Dabei bezeichnen $F_(S,i, bot h_(S,i))$ und  $F_(hat(F) bot h_hat(F))$ jeweils die Anteile der Kräfte
-$arrow(F_(S,i))$ und $arrow(F_hat(F))$, die orthogonal zu den Hebelarmen $arrow(h_(S,i))$ und $arrow(h_hat(F))$ wirken. Auf der linken Seite von @eqBrückenkraftgleichgewicht müssen die Kräfte der 6 Saiten aufaddiert werden, da sich die Kräfte parallelgeschalteter Federn addieren @leifiphysik_kombination_federn.
+$arrow(F_(S,i))$ und $arrow(F_hat(F))$, die orthogonal zu den Hebelarmen $arrow(h_(S,i))$ und $arrow(h_hat(F))$ wirken. Auf der linken Seite von @eqBrückenkraftgleichgewicht müssen die Kräfte der 6 Saiten aufaddiert werden, da sich die Kräfte parallelgeschalteter Federn addieren @beer2020.
 
 Zunächst wird der Richtungsvektor von $F_(S,i)$, $h_(S,i)$, $F_hat(F)$ und $h_hat(F)$ normiert, wobei $P_hat(F)$ der Punkt ist, an dem die Tremolofeder an der Gitarre befestigt ist.
 
@@ -273,7 +273,7 @@ $
 $
   arrow(e_h_hat(F)) = vec(cos(beta), sin(beta))
 $
-Aus der orthogonalen Projektion eines Vektors $arrow(a)$ bezüglich eines Vektors $arrow(b)$ folgt @technikermathe_orthogonale_zerlegung_vektoren:
+Aus der orthogonalen Projektion eines Vektors $arrow(a)$ bezüglich eines Vektors $arrow(b)$ folgt @Glaister01032001:
 
 $
   F_(S,i bot h_(S,i))
@@ -376,6 +376,7 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
 ==== Relative Visualisierung der Frequenzänderungen
 #grid(
   columns: 2,
+  inset: 6pt,
   grid.cell([
     #figure(
       image("assets/plot_E2_relative Hz.png"),
@@ -425,7 +426,7 @@ Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen ei
 === Diskussion der Ergebnisse
 Das System ist elastisch, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind.
 
-Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem Korrelationskoeffizienten nach Bravais-Pearson @wiki_bravais_pearson zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen.
+Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem Korrelationskoeffizienten nach Bravais-Pearson @pearson1896 zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen.
 In @correlations sind die Korrelationskoeffizienten für jede Saite dargestellt. Der Betrag aller Werte liegt über 0.98, was auf eine sehr starke positive Korrelation hinweist. Das rechtfertigt die Annahme einer linearen Beziehung für kleine Änderungen.
 
 == Mathematische Lösung
@@ -566,7 +567,7 @@ Dabei kommen folgende Verfahren in Betracht:
 / Orthogonale Regression (Deming-Regression): Minimiert die Summe der
   quadrierten senkrechten Abstände der Datenpunkte zur Regressionsgeraden. Sie
   wird angewendet, wenn sowohl $Y$ als auch $X$ Messfehler aufweisen.
-  @orthogonale_regression
+  @Glaister01032001
 
 Da die Frequenzmessungen beider Achsen messtechnisch bedingte Fehler enthalten,
 wird die *orthogonale Regression* verwendet.
@@ -659,7 +660,7 @@ Da der YIN-Algorithmus verwendet wird, lässt sich eine implizite
 Bandpassfilterung durch gezielte Anpassung seiner Parameter erreichen. Durch
 Reduktion der Abtastrate werden Frequenzen oberhalb der halben Nyquist-Frequenz
 nicht mehr erfasst, was dem Nyquist-Shannon-Abtasttheorem entspricht.
-@nyquist_shannon_wikipedia
+@oppenheim1999discrete
 
 Die untere Grenzfrequenz wird durch die maximale Fensterlänge $W$ begrenzt.
 Gemäß $f = 1 slash T$ darf die Fensterlänge den Wert $T_"max" = 1 slash f_"min"$ #footnote[Mit "min" ist das Minimum gemeint.]
@@ -946,8 +947,7 @@ sowie nach der Wertigkeit gemäß Kano-Modell priorisiert. Anforderungen mit
 hohem Wert und hohem Ausfallrisiko erhalten dabei die höchste Priorität,
 gefolgt von Anforderungen mit hohem Nutzen bei geringem Risiko. Anforderungen
 mit geringem Nutzen und geringem Risiko werden zuletzt eingestuft. Dies folgt
-aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix nach
-Cohn (2005)_.
+aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 
 ==== Funktionale Benutzeranforderungen
 
@@ -1296,7 +1296,9 @@ Wird eine Gitarre Angelegt soll sie auch Benannt und Kalibriert werden.
 === Interaktionsdesign
 #figure(image("assets/interaktionsdesign.png"), caption: [Interaktionsdesign mit _visuelles Vokabular_])<visVoc>
 
-In @visVoc wurde die Grafische Sprache _visuelles Vokabular_ erstellt nach Garett [2012] zur erstellung des Interaktionsdesigns verwendet.
+#figure(image("assets/interaktionsdesign2.png"), caption: [Interaktionsdesign für Kalibrierung.])
+
+In @visVoc wurde die Grafische Sprache _visuelles Vokabular_ erstellt nach @Garrett2012 zur erstellung des Interaktionsdesigns verwendet.
 
 Man startet auf der Floyd-Rose-Initierungsseite von der man auf die Hilfspage, die Standard Stimmgerät Page, die Gitarren bennen Page, die Kalibrierungsapage auf der man die Verstimmungsmatrix bestimmt, auf die gitarren Messpage mit der man jede Gitarren Saite anspielt und misst.
 Nach dem man die gitarre Gemessen hat, kann man diese Information nutzen direkt zum Floyd-Rose-Stimmgerät navigieren. Vom Floyd-Rose-Stimmgerät kommt man wiederum zum Standard-Stimmgerät um das Ergebnis des Floyd-Rose-Stimmgeräts zu überprüfen.
@@ -1314,22 +1316,74 @@ Screenshots von älteren versionen.
 
 #image("assets/prototyp_calibration.png")
 === Finale Wireframes
+#grid(
+  columns: 3,
+  inset: 6pt,
+  grid.cell([
+    #figure(
+      image("assets/wf_landing.png"),
+      caption: [Wireframe: Initiierungspage für Floyd-Rose-Stimmgerät],
+    ) <wfLanding>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/wf_gitarren_editierung.png"),
+      caption: [Wireframe: Gitarre Editierungspage],
+    ) <wfGitarreEdit>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/wf_kalibrierung1.png"),
+      caption: [Wireframe: Kalibrierungspage Saite messen],
+    ) <wfKalMessen>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/wf_kalibrierung2.png"),
+      caption: [Wireframe: Kalibrierungspage Messungprüfen],
+    ) <wfKalPrüf>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/wf_kalibrierung3.png"),
+      caption: [Wireframe: Kalibrierungspage Saite verändern],
+    ) <wfKalVerändern>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/wf_check_kalibrierung.png"),
+      caption: [Wireframe: Überprüfung der Messwerte Seite],
+    ) <wfStandardTuner>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/wf_hilfe_page.png"),
+      caption: [Wireframe: Hilfsseite],
+    ) <wfHelp>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/wf_standard_tuner.png"),
+      caption: [Wireframe: Standard Stimmgerärtseite],
+    ) <wfStandardTuner>
+  ]),
+)
 === Seitenspezifikation
 
 ==== First Load
 
-#figure(image("assets/image-2.png", height: 40%), caption: [Landing Page])<appLanding>
-Wenn man die App startet, sieht man als erstes die Möglichkeit das _Tuning_ einzustellen, die bereits auf die standartmäßige Stimmung _E-A-D-G-H-e_ eingestellt ist (Siehe @appLanding).
-#figure(image("assets/image-3.png", height: 40%), caption: [Selecting Tuning Page])<appSelectTuning>
-Versucht man ein anderes _Tuning_ auszuwählen, sieht man wie in @appSelectTuning eine größere Auswahl von herkömmlichen Stimmungen.
+//#figure(image("assets/image-2.png", height: 40%), caption: [Landing Page])<appLanding>
+Wenn man die App startet, sieht man als erstes die Möglichkeit das _Tuning_ einzustellen, die bereits auf die standartmäßige Stimmung _E-A-D-G-H-e_ eingestellt ist //(Siehe @appLanding).
+//#figure(image("assets/image-3.png", height: 40%), caption: [Selecting Tuning Page])<appSelectTuning>
+Versucht man ein anderes _Tuning_ auszuwählen, sieht man wie in //@appSelectTuning eine größere Auswahl von herkömmlichen Stimmungen.
 
-Da die App noch keine Gitarre erlernt hat, wird in der Auswahl die Aufforderung angezeigt, eine Gitarre auszuwählen (@appLanding). Zu beginn der das Dropdown Menu enthält zunächst keine Gitarre. Allerdings kann, der Nutzer auf den Button "Add A New Guitar" klicken und kommt nun zur _Detuning Matrix Measure Page_.
+Da die App noch keine Gitarre erlernt hat, wird in der Auswahl die Aufforderung angezeigt, eine Gitarre auszuwähle//n (@appLanding). Zu beginn der das Dropdown Menu enthält zunächst keine Gitarre. Allerdings kann, der Nutzer auf den Button "Add A New Guitar" klicken und kommt nun zur _Detuning Matrix Measure Page_.
 
 === Detuning Matrix Measure Page
 Auf dieser Saite, nimmt man die Messdaten auf um die Verstimmungsmatrix zu bestimmen.
 
 
-#figure(image("assets/image-4.png", height: 40%), caption: [Measure Detuning Matrix Page])<appDetuningMatrixPage>
+//#figure(image("assets/image-4.png", height: 40%), caption: [Measure Detuning Matrix Page])<appDetuningMatrixPage>
 
 Diese Seite ist die Komplizierteste. Ganz oben ist ein Zufällig generierter Name für die Gitarre. Beim öffnen der Saite kann man direkt den Namen der Gitarre einstellen. Der Textinput ist direkt fokussiert. Das passiert nicht wenn man die Gitarre Editiert was in @editingGuitar näher erleutert wird.
 
@@ -1339,6 +1393,8 @@ Screenshots von der App einfügen
 //#image("assets/image.png")
 das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
 == Architektur
+mvc oder mvp oder mvvm,
+
 Backend der App konzipieren. Pipeline Modelletc
 == Implementierung
 
