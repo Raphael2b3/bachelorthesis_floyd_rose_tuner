@@ -113,7 +113,7 @@ Das Floyd-Rose-Tremolo hat einen Hebel, den man ziehen oder drücken kann. Beim 
 Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in einer bestimmten Frequenz. Beim Stimmen wickelt man die Saite um den Stimmwirbel, sodass sich Spannung und Frequenz ändert. Dass Saiten elastisch sind, wird im folgenden Experiment gezeigt:
 
 #figure(
-  image("assets/stimmwirbel.png", height: 34%),
+  image("assets/stimmwirbel.png", height: 27%),
   caption: [Gitarre Stimmwirbel],
 )<figStimmwirbel>
 
@@ -417,7 +417,7 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
 ==== Korrelationskoeffizienten und Fehler
 
 #figure(
-  image("assets/pearson_correlation.png"),
+  image("assets/pearson_correlation.png", height: 30%),
   caption: [Pearson-Korrelationskoeffizienten der Messdaten],
 ) <correlations>
 
@@ -667,7 +667,7 @@ Gemäß $f = 1 slash T$ darf die Fensterlänge den Wert $T_"max" = 1 slash f_"mi
 nicht überschreiten. Da der Frequenzbereich von Gitarrensaiten näherungsweise
 $50 "Hz"$ bis $350 "Hz"$ umfasst, lassen sich die Parameter entsprechend
 dimensionieren.
-=== Gleitender Mittelwert für Streaming-Messdaten
+=== Gleitender Mittelwert für Streaming-Messdaten<movingAverage>
 Mikrofonaufnahmen enthalten unvermeidlich Umgebungsgeräusche, die zu
 Schwankungen in der Frequenzschätzung führen. Um eine stabile Visualisierung zu
 gewährleisten, wird ein gleitender Mittelwert über die letzten $N$ Messwerte
@@ -929,13 +929,6 @@ Saiten ist die Gitarre korrekt gestimmt.
   Mikrofons so angepasst werden, dass Messungen nur ausgelöst werden, wenn die
   Lautstärke der gespielten Saite den Umgebungspegel deutlich übersteigt.
 
-// ============================================================
-// Hilfsfunktion: eine einzelne Anforderung als referenzierbaren
-// Block rendern. Aufruf:
-//   #req("FBA-01", "MUSS", [Inhalt]) <req-fba-01>
-// Referenz im Text:
-//   @req-fba-01
-// ============================================================
 
 === Anforderungen
 
@@ -952,13 +945,9 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 ==== Funktionale Benutzeranforderungen
 
 #req("FBA-01", "MUSS", [Ein Nutzer muss eine Floyd-Rose-Gitarre effizient stimmen können.]) <req-fba-01>
-
 #req("FBA-02", "MUSS", [Ein Nutzer muss die App auf seine Gitarre kalibrieren können.]) <req-fba-02>
-
 #req("FBA-03", "MUSS", [Ein Nutzer muss die Kalibrierung mehrerer Gitarren langfristig speichern können.]) <req-fba-03>
-
 #req("FBA-04", "MUSS", [Ein Nutzer muss den aktuellen Stimmzustand seiner Gitarre messen können.]) <req-fba-04>
-
 #req(
   "FBA-05",
   "MUSS",
@@ -1279,110 +1268,246 @@ nativen Implementierung deutlich.
 
 == Konzeption und Design
 === Informationsarchitektur
-#figure(image("assets/infoarch.png"), caption: [Informationsarchitektur der Floyd-Rose-Tuner-App]) <infArch>
 
-In @infArch ist die Informationsarchitektur zu sehen. Auf höchster Ebene soll der Kern zufinden Sein. Die Initiierung des Stimmvorgangs. In dieser sollen die Wichtigsten Informationen erreichbar sein.
-1. Hilfe
-2. Gitarre Auswählen für den Stimmprozess
-3. Standard Tuner da evtl nur geprüft werden soll ob eine gitarre in Stimmung ist.
-4. Stimmung Auswählen
-5. Gitarre Anlegen (Da die Persona Jonas -- Gitarrentechniker aus @jonasGit) täglich neue Gitarren stimmen muss.
-6. Floyd-Rose-Stimmen -- Das Herz der App
+#figure(
+  image("assets/infoarch.png"),
+  caption: [Informationsarchitektur der Floyd-Rose-Tuner-App],
+) <infArch>
 
-Wird eine Gitarre Ausgewählt sollte man sie Editieren(umbennenen und rekalibrieren) und Löschen können.
+@infArch zeigt die Informationsarchitektur der App. Den zentralen
+Einstiegspunkt bildet der Startbildschirm, von dem aus alle
+wesentlichen Funktionen erreichbar sind:
 
-Wird eine Gitarre Angelegt soll sie auch Benannt und Kalibriert werden.
++ *Hilfe* -- kontextsensitive Unterstützung zur Bedienung (@req-fba-06)
++ *Gitarre auswählen* -- Laden eines gespeicherten Gitarrenprofils für
+  den Stimmvorgang (@req-fba-03)
++ *Standard-Stimmgerät* -- konventionelles chromatisches Stimmgerät zur
+  schnellen Überprüfung der Stimmung ohne Floyd-Rose-Logik (@req-fba-10)
++ *Stimmung auswählen* -- Zielstimmung für den Stimmprozess festlegen
+  (@req-fba-09)
++ *Gitarre anlegen* -- neues Gitarrenprofil erstellen; relevant
+  insbesondere für Persona Jonas (@jonasGit), der täglich neue
+  Instrumente stimmt (@req-fba-02)
++ *Floyd-Rose-Stimmen* -- Kernfunktion der App (@req-fba-01)
 
+Wird eine bestehende Gitarre ausgewählt, stehen zusätzlich die Aktionen
+_Umbenennen_, _Rekalibrieren_ (@req-fba-11) und _Löschen_ zur
+Verfügung. Wird eine neue Gitarre angelegt, durchläuft der Nutzer
+unmittelbar die Benennung und den Kalibrierungsvorgang (@req-fba-12,
+@req-fba-02).
 === Interaktionsdesign
 
-
-
-In @iiakt1, @iiakt2 und @iiakt3 wurde die Grafische Sprache _visuelles Vokabular_ erstellt nach @Garrett2012 zur erstellung des Interaktionsdesigns verwendet.
+Für die Erstellung des Interaktionsdesigns wurde die grafische Sprache
+_Visuelles Vokabular_ nach @Garrett2012 verwendet. Die resultierenden
+Diagramme sind in @iiakt1, @iiakt2 und @iiakt3 dargestellt.
 
 ==== Navigation
-#figure(image("assets/interaktionsdesign.png"), caption: [Interaktionsdesign mit _visuelles Vokabular_])<iiakt1>
 
-Man startet auf der Floyd-Rose-Initierungsseite von der man auf die Hilfspage, die Standard Stimmgerät Page, die Gitarren Ansicht Page und den Stimm prozess Starten kann.
+#figure(
+  image("assets/interaktionsdesign.png", height: 30%),
+  caption: [Interaktionsdesign -- Navigation],
+) <iiakt1>
 
-Vom Standard Stimmgerät aus, kommt man direkt die Saite Gitarre Rekalibrieren, falls dem nutzer das ergebnis nicht passt.
+Den Einstiegspunkt bildet die Floyd-Rose-Initiierungsseite, von der aus
+der Nutzer die Hilfeseite, das Standard-Stimmgerät, die Gitarrenansicht
+sowie den Stimmprozess erreichen kann.
 
-Auf der Gitarrenansichts page kann man die Gitarre umbennen und die Gitarre Kalibrieren.
+Vom Standard-Stimmgerät aus ist es möglich, direkt in die Kalibrierung
+der aktuell ausgewählten Gitarre zu wechseln, falls das Ergebnis nicht
+den Erwartungen entspricht (@req-fba-11). Auf der Gitarrenansichtsseite
+kann die Gitarre umbenannt (@req-fba-12) und rekalibriert werden.
 
 ==== Kalibrierung
-#figure(image("assets/interaktionsdesign2.png"), caption: [Interaktionsdesign für Kalibrierung.])<iiakt2>
 
-Wenn man die Gitarre kalibrien möchte, wird man zunächst gebeten eine Saite zu messen, hat man das gemacht, kommt man auf eine Saite auf der man die Messung prüfen kann. Dann kommt man zurück zur alten saite wobei nun die nächste saite gemessen wird. Wenn man die letzte saite gemessen hat, kommt man auf die page auf der man die Saite verändern soll.
+#figure(
+  image("assets/interaktionsdesign2.png", height: 30%),
+  caption: [Interaktionsdesign -- Kalibrierung],
+) <iiakt2>
 
-von dort aus wird werden wieder alle saiten gemessen und überprüft. wenn mann jede saite verändert hat und den impact gemessen hat kann man nocheinmal alles überprüfen und ist fertig.
+Der Kalibrierungsvorgang gliedert sich in zwei Phasen. In der ersten
+Phase wird der Ausgangszustand der Gitarre erfasst: Der Nutzer spielt
+jede Saite einzeln an, überprüft den gemessenen Wert auf einer
+Bestätigungsseite und fährt mit der nächsten Saite fort, bis alle sechs
+Saiten gemessen sind (@req-fsa-07).
+
+In der zweiten Phase wird der Einfluss jeder Saite auf die übrigen
+ermittelt: Der Nutzer verstimmt nacheinander jede Saite, woraufhin alle
+Saiten erneut gemessen und überprüft werden. Nach Abschluss aller
+Messreihen kann der Nutzer die gesammelten Daten abschließend prüfen
+und die Kalibrierung bestätigen (@req-fsa-09).
 
 ==== Stimmen
-#figure(image("assets/interaktionsdesign3.png"), caption: [Interaktionsdesign für Stimmprozess.])<iiakt3>
 
+#figure(
+  image("assets/interaktionsdesign3.png", height: 30%),
+  caption: [Interaktionsdesign -- Stimmprozess],
+) <iiakt3>
+
+Der Stimmprozess folgt einem ähnlichen Ablauf wie die Kalibrierung.
+Zunächst spielt der Nutzer jede Saite einzeln an; nach jeder Messung
+kann er den erfassten Wert auf einer Bestätigungsseite prüfen. Sobald
+alle sechs Saiten gemessen sind, berechnet das System die individuellen
+Zielfrequenzen gemäß @req-fsa-03 und führt den Nutzer saitenweise
+durch den Stimmvorgang, bis die Gitarre korrekt gestimmt ist
+(@req-fba-01).
 
 === Visuelles Konzept
-Da die App zunächst nur auf Android getestet werden kann, werden die Gestaltungsrichtlinien und Componenten von Google, das Material 3 Designsystem verwendet. Dies Beinhaltet bereits standarts für Schriftgrößen, Farben, Icons, Buttonzuständen und Navigationsleisten.
 
-Da später flutter verwendet wird, ist von haus aus Material 3 komponenten importierbar. Außerdem werden für Konzept und Design entwicklung Figma benutzt, wo ebenfalls Material 3 Komponenten einfach importierbar und verwendbar sind.
+Da die App in der Entwicklungsphase primär auf Android getestet wird,
+werden die Gestaltungsrichtlinien von Google -- das Material-3-Design­system
+@material3 -- als visuelle Grundlage verwendet. Material 3 definiert
+verbindliche Standards für Typografie, Farbschemata, Icons,
+Interaktionszustände von Komponenten sowie Navigationsstrukturen und
+gewährleistet damit eine plattformkonforme, konsistente Darstellung
+(@req-nfa-ko-03).
+
+Da die App in Flutter implementiert wird, sind Material-3-Komponenten
+ohne zusätzliche Abhängigkeiten direkt importierbar. Für Konzeption und
+UI-Design wird Figma#footnote[https://www.figma.com/] eingesetzt, das ebenfalls ein offizielles
+Material-3-Komponentenset bereitstellt und so einen konsistenten
+Übergang vom Entwurf zur Implementierung ermöglicht.
+
 === Prototypen
-Die App wirde zunächst als sogenannten vertikalen Protyp entwickelt. Dabei wurde zuerst überprüft ob die Anforderung @req-fba-01 überhaupt umsetzbar ist. Anschließend wurde die UI überarbeitet, dass auch weniger technische Leute die App benutzen konnten.
 
-Screenshots von älteren versionen.
-#image("assets/prototyp_create_guitar.png")
+Die App wurde zunächst als vertikaler Prototyp entwickelt, um frühzeitig
+zu überprüfen, ob @req-fba-01 -- das erfolgreiche Stimmen einer
+Floyd-Rose-Gitarre -- grundsätzlich umsetzbar ist. Im Anschluss wurde
+die Benutzeroberfläche iterativ überarbeitet, um die App auch für
+weniger technisch versierte Nutzer zugänglich zu machen (@req-nfa-be-01).
 
-#image("assets/prototyp_calibration.png")
-=== Finale Wireframes
+@protCreateGuita zeigt einen frühen Prototyp der Kalibrierungsseite,
+der trotz technischer Funktionsfähigkeit eine hohe Informationsdichte
+aufwies und Testpersonen überforderte. In @protoCalib ist die
+überarbeitete Version zu sehen, in der die Oberfläche deutlich
+vereinfacht und die Nutzerführung strukturiert wurde.
+
+#grid(
+  columns: 2,
+  inset: 6pt,
+  grid.cell([
+    #figure(
+      image("assets/prototyp_create_guitar.png", height: 30%),
+      caption: [Früher Prototyp: Messung der Verstimmungsmatrix],
+    ) <protCreateGuita>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/prototyp_calibration.png", height: 30%),
+      caption: [Überarbeiteter Prototyp: Kalibrierungsansicht],
+    ) <protoCalib>
+  ]),
+)
+
+#pagebreak()
+=== Wireframes
+
+Auf Basis der Informationsarchitektur und des Interaktionsdesigns wurden
+Wireframes erstellt, um die Benutzeroberfläche zu konkretisieren und optimieren (@wfLanding bis @wfStandardTuner).
+
 #grid(
   columns: 3,
   inset: 6pt,
   grid.cell([
     #figure(
-      image("assets/wf_landing.png"),
-      caption: [Wireframe: Initiierungspage für Floyd-Rose-Stimmgerät],
+      image("assets/wf_landing.png", height: 25%),
+      caption: [Wireframe: Startseite],
     ) <wfLanding>
   ]),
   grid.cell([
     #figure(
-      image("assets/wf_gitarren_editierung.png"),
-      caption: [Wireframe: Gitarre Editierungspage],
+      image("assets/wf_gitarren_editierung.png", height: 25%),
+      caption: [Wireframe: Gitarre bearbeiten],
     ) <wfGitarreEdit>
   ]),
   grid.cell([
     #figure(
-      image("assets/wf_kalibrierung1.png"),
-      caption: [Wireframe: Kalibrierungspage Saite messen],
+      image("assets/wf_kalibrierung1.png", height: 25%),
+      caption: [Wireframe: Kalibrierung -- Saite messen],
     ) <wfKalMessen>
   ]),
+)
+
+@wfLanding zeigt die Startseite, deren Struktur der Informationsarchitektur
+aus @infArch folgt. Über eine Bottom-Tab-Navigation sind die Hilfsseite
+und das Standard-Stimmgerät jederzeit erreichbar. Auf der Startseite
+selbst kann der Nutzer eine Zielstimmung sowie ein Gitarrenprofil
+auswählen. Gemäß dem Nutzungsszenario von Jonas (@jonasGit) ist zudem
+das direkte Anlegen einer neuen Gitarre prominent platziert. Ein großer
+Stimmen-Button leitet den Floyd-Rose-Stimmprozess ein (@req-fba-01).
+
+@wfGitarreEdit zeigt die Bearbeitungsansicht einer gespeicherten
+Gitarre. Von hier aus kann der Nutzer das Profil umbenennen (@req-fba-12),
+löschen sowie die Kalibrierung starten (@req-fba-11).
+@wfKalMessen zeigt den ersten Schritt der Kalibrierung. Am oberen Rand
+informiert ein Fortschrittsindikator über den aktuellen Stand. Darunter
+wird der Nutzer aufgefordert, eine bestimmte Saite anzuspielen; die
+laufende Frequenzmessung wird unmittelbar darunter visualisiert. Ein
+Weiter-Button führt zu @wfKalPrüf.
+
+
+
+#grid(
+  columns: 3,
+  inset: 6pt,
   grid.cell([
     #figure(
-      image("assets/wf_kalibrierung2.png"),
-      caption: [Wireframe: Kalibrierungspage Messungprüfen],
+      image("assets/wf_kalibrierung2.png", height: 25%),
+      caption: [Wireframe: Kalibrierung -- Messung prüfen],
     ) <wfKalPrüf>
   ]),
   grid.cell([
     #figure(
-      image("assets/wf_kalibrierung3.png"),
-      caption: [Wireframe: Kalibrierungspage Saite verändern],
+      image("assets/wf_kalibrierung3.png", height: 25%),
+      caption: [Wireframe: Kalibrierung -- Saite verstimmen],
     ) <wfKalVerändern>
   ]),
   grid.cell([
     #figure(
-      image("assets/wf_check_kalibrierung.png"),
-      caption: [Wireframe: Überprüfung der Messwerte Seite],
-    ) <wfStandardTuner>
+      image("assets/wf_check_kalibrierung.png", height: 25%),
+      caption: [Wireframe: Kalibrierung -- Gesamtübersicht],
+    ) <wfKalib>
   ]),
+)
+
+Dort kann der Nutzer die erfasste Messung überprüfen. Anstelle einer
+numerischen Frequenzanzeige -- die in den Nutzertests zu Verwirrung
+führte (@nutzerTests, Nutzer 3) -- ist ein Button vorgesehen, der einen
+Ton in der gemessenen Frequenz abspielt. So kann der Nutzer auditiv
+beurteilen, ob die richtige Frequenz erkannt wurde, ohne Zahlenwerte
+interpretieren zu müssen (@req-fba-07). Bei einer fehlerhaften Messung
+kann er den Schritt wiederholen.
+Sind alle Saiten gemessen, führt das Interaktionsdesign (@iiakt2) zur
+nächsten Phase: @wfKalVerändern fordert den Nutzer auf, eine bestimmte
+Saite zu verstimmen. Ein visuelles Feedback-Element soll dabei
+bestätigen, dass die Verstimmung erkannt wurde (@req-fsa-09).
+
+Nach Abschluss aller Messreihen gelangt der Nutzer zu @wfKalib, einer
+Gesamtübersicht aller erfassten Messwerte. Von hier aus können einzelne
+Messungen gezielt korrigiert und die entsprechende Stelle im
+Kalibrierungsablauf direkt angesprungen werden (@req-fba-08).
+
+#grid(
+  columns: 3,
+  inset: 6pt,
   grid.cell([
     #figure(
-      image("assets/wf_hilfe_page.png"),
+      image("assets/wf_hilfe_page.png", height: 30%),
       caption: [Wireframe: Hilfsseite],
     ) <wfHelp>
   ]),
   grid.cell([
     #figure(
-      image("assets/wf_standard_tuner.png"),
-      caption: [Wireframe: Standard Stimmgerärtseite],
+      image("assets/wf_standard_tuner.png", height: 30%),
+      caption: [Wireframe: Standard-Stimmgerät],
     ) <wfStandardTuner>
   ]),
 )
+
+@wfHelp und @wfStandardTuner zeigen den Aufbau der Hilfsseite
+(@req-fba-06, @req-nfa-be-04) sowie des Standard-Stimmgeräts
+(@req-fsa-11, @req-fba-10), das unabhängig vom Floyd-Rose-Algorithmus
+zur schnellen Überprüfung der Stimmung genutzt werden kann.
+
 === Seitenspezifikation
 
 ==== First Load
@@ -1407,10 +1532,154 @@ Diese Seite ist die Komplizierteste. Ganz oben ist ein Zufällig generierter Nam
 Screenshots von der App einfügen
 //#image("assets/image.png")
 das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
+==== Tuner Page <sensitivitySlider>
 == Architektur
-mvc oder mvp oder mvvm,
 
-Backend der App konzipieren. Pipeline Modelletc
+#figure(
+  image("assets/architecture.png"),
+  caption: [Architektur der App],
+) <arch>
+
+Die App folgt dem Architekturmuster _Model-View-ViewModel_ (MVVM). Dieses
+Muster eignet sich besonders, weil das ViewModel die Schnittstelle
+zwischen View und Model kapselt: Die UI kennt keine Implementierungsdetails
+des Modells und das Modell ist unabhängig von der Darstellung. In
+Verbindung mit Riverpod (@abhaengigkeiten) wird dieses Muster durch
+sogenannte _Provider_ und _Notifier_ umgesetzt -- Provider stellen
+lesenden Zugriff auf den Zustand bereit, Notifier ermöglichen dessen
+Veränderung und benachrichtigen die UI automatisch über Änderungen,
+sodass betroffene Widgets neu gerendert werden. Ein wesentlicher Vorteil
+dieses Ansatzes ist, dass kein manuelles Prop-Passing durch den gesamten
+Widget-Baum erforderlich ist.
+
+=== Audio Stream Provider <audiostreamp>
+
+Der Audio Stream Provider stellt einen kontinuierlichen Datenstrom der
+Mikrofonaufnahme bereit. Der Datentyp ist ein `Stream<Int16List>`, der
+die rohen PCM-Samples des Mikrofons als 16-Bit-Integer ausgibt und von
+allen nachgelagerten Signalverarbeitungs-Providern konsumiert wird
+(@req-fsa-01).
+
+=== Volume Stream Provider <vol>
+
+Abonniert den Audio Stream Provider (@audiostreamp) und berechnet den
+Schalldruckpegel des Eingangssignals in dBFS gemäß @req-fsa-02. Der
+Ausgabewert ist ein `Stream<double>` im Wertebereich
+$[-60.0, 0.0]~"dBFS"$.
+
+=== Frequency Stream Provider <freq>
+
+Abonniert den Audio Stream Provider (@audiostreamp) und wendet den
+YIN-Algorithmus @YIN auf den Audiodatenstrom an (@req-fsa-01). Die
+Ausgabe ist ein `Stream<double>`, der die geschätzte Grundfrequenz in
+Hertz liefert.
+
+=== Smoothed Frequency Provider
+
+Abonniert den Frequency Stream Provider (@freq) und glättet die
+eingehenden Messwerte durch einen gleitenden Mittelwert (@req-fsa-05),
+um kurzfristige Ausreißer zu dämpfen. Die Ausgabe ist ein
+`Stream<double>`.
+
+=== Volume Threshold Provider
+
+Liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich
+$[-60.0, 0.0]~"dBFS"$ (@req-fsa-02). Der Wert wird über den
+Empfindlichkeits-Schieberegler in den Einstellungen gesteuert
+(@req-fba-05). <sensitivitySlider>
+
+=== Detected Frequency Provider
+
+Kombiniert die Ausgaben des Smoothed Frequency Providers, des Volume
+Stream Providers (@vol) und des Volume Threshold Providers und liefert
+die zuletzt erkannte Frequenz als `double`.
+
+Ist manuelle Erkennung aktiviert (`manualDetection == true`), wird die
+Frequenz ausschließlich über einen Notifier gesetzt -- etwa durch eine
+Texteingabe (@req-fba-14). Andernfalls wird der aktuelle Wert des
+Smoothed Frequency Providers übernommen, sofern der Schalldruckpegel
+zum selben Zeitpunkt den Schwellenwert überschreitet (@req-fsa-02).
+
+=== String Measure State Provider
+
+Stellt das `StringMeasureState`-Objekt bereit, das den aktuellen
+Fortschritt der saitenweisen Messung abbildet:
+
+```dart
+StringMeasureState {
+  int currentStringIndex   // Index der aktuell zu messenden Saite (0–5)
+  bool manualDetection     // Eingabemodus: automatisch oder manuell
+}
+```
+
+=== Guitar State Provider
+
+Repräsentiert den aktuellen Frequenzzustand aller sechs Saiten als
+`List<double>` der Länge 6. Jeder Eintrag entspricht der zuletzt
+gemessenen Frequenz der jeweiligen Saite. Dieser Provider bildet das
+zentrale zustandstragende Modell während des Stimm- und
+Kalibrierungsvorgangs und kann von beliebigen Widgets -- etwa über
+Button-Interaktionen -- aktualisiert werden.
+
+=== Calibration State Provider
+
+Stellt das `CalibrationState`-Objekt bereit, das den Fortschritt
+innerhalb der Kalibrierung verfolgt (@req-fsa-07):
+
+```dart
+CalibrationState {
+  int currentEffectingStringIndex  // Index der aktuell verstimmten Saite
+  int currentSampleIndex           // Index des aktuellen Messpunkts
+}
+```
+
+=== Guitars- und Selected-Guitar-Provider
+
+Der Guitars-Provider verwaltet die persistente Speicherung aller
+`Guitar`-Objekte auf dem Gerät (@req-fsa-10, @req-fba-03). Der
+Selected-Guitar-Provider hält das aktuell ausgewählte Profil vor.
+
+Ein `Guitar`-Objekt ist wie folgt aufgebaut:
+
+```dart
+Guitar {
+  String guitarName                      // Benutzerdefinierter Name (@req-fsa-13)
+  List<List<double>> matrix              // Verstimmungsmatrix C
+  List<List<double>> inverseMatrix       // Gecachte Inverse von C
+  Map<int, List<GuitarState>> samples    // Rohmessdaten der Kalibrierung
+}
+```
+
+`Guitar.samples` speichert alle Messpunkte, aus denen die
+Verstimmungsmatrix berechnet wird (@req-fsa-07). Der erste Schlüssel
+bezeichnet die verstimmte Saite, der zweite den Messpunkt-Index. So
+entspricht `samples[1][2]` dem dritten erfassten Gitarrenzustand, als
+Saite A2 (Index 1) verstimmt wurde -- also einem Frequenzvektor der
+Form $[f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4"]$.
+
+`matrix` und `inverseMatrix` lassen sich vollständig aus `samples`
+ableiten, werden jedoch aus Performancegründen gecacht und gemeinsam
+persistiert.
+
+=== Tunings- und Selected-Tuning-Provider
+
+Der Tunings-Provider verwaltet die persistente Speicherung aller
+`Tuning`-Objekte (@req-fsa-14, @req-fsa-15). Der
+Selected-Tuning-Provider hält die aktuell gewählte Stimmung vor.
+
+Ein `Tuning`-Objekt ist wie folgt aufgebaut:
+
+```dart
+Tuning {
+  String name               // Bezeichnung der Stimmung
+  List<String> goalNotes    // Zielnoten im Format "E2", "A2", …
+}
+```
+
+`Tuning.goalNotes` enthält die standardisierten Notenbezeichnungen im
+Format _Note + Oktave_ (z.~B. `"E2"` für das E in der zweiten Oktave)
+und definiert damit die Zielfrequenzen für den Stimmprozess (@req-fsa-03).
+
 == Implementierung
 
 === Auswahl des Cross-Platform-Frameworks
@@ -1481,75 +1750,77 @@ auf jedem Gerät identisch aussieht. Nachteile von
 Cross-Compiling-Ansätzen, die in @mobileAppEngineering (2017) beschrieben
 werden, sind durch Flutters AOT-Kompilierung, eigenständiges Rendering
 und die direkte Integration von Material 3 heute weitgehend überholt.
-=== Abhängigkeiten
+
+=== Abhängigkeiten <abhaengigkeiten>
 
 Die App verwendet folgende Laufzeit-Abhängigkeiten:
 
-/ `flutter_riverpod` \^3.0.0: State-Management-Framework. Ermöglicht
-  das Bereitstellen von gemeinsamem Zustand über mehrere Widgets hinweg
-  und bildet die Grundlage für Model und Controller im gewählten
-  Architekturmuster.
+#table(
+  columns: (auto, auto, 1fr),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (left, left, left),
+  table.header(strong[Paket], strong[Version], strong[Verwendung]),
+  [`flutter_riverpod`],
+  [`^3.0.0`],
+  [State-Management; stellt gemeinsamen Zustand über den Widget-Baum bereit und bildet die Grundlage für Provider und Notifier.],
 
-/ `riverpod_annotation` \^4.0.0: Annotationspaket für Riverpod;
-  wird zur Code-Generierung benötigt.
+  [`riverpod_annotation`], [`^4.0.0`], [Annotationspaket für Riverpod; wird zur Code-Generierung benötigt.],
 
-/ `shared_preferences` \^2.3.3: Plattformübergreifende Persistenz
-  einfacher Schlüssel-Wert-Paare. Wird verwendet, um Gitarrenprofile
-  und Stimmungen dauerhaft auf dem Gerät zu speichern (@req-fsa-10,
-  @req-fsa-13).
+  [`shared_preferences`],
+  [`^2.3.3`],
+  [Persistenz einfacher Schlüssel-Wert-Paare; speichert Gitarrenprofile und Stimmungen dauerhaft auf dem Gerät (@req-fsa-10, @req-fsa-13).],
 
-/ `json_annotation` \^4.9.0: Annotationspaket für JSON-Serialisierung;
-  ermöglicht das Speichern komplexer Datenobjekte als JSON-String in
-  `shared_preferences`.
+  [`json_annotation`],
+  [`^4.9.0`],
+  [Annotationspaket für JSON-Serialisierung; ermöglicht das Speichern komplexer Objekte als JSON-String in `shared_preferences`.],
 
-/ `record` \^6.1.1: Plattformunabhängiger Zugriff auf das Gerätmikrofon
-  für iOS und Android (@req-fsa-01).
+  [`record`], [`^6.1.1`], [Plattformunabhängiger Zugriff auf das Gerätmikrofon für iOS und Android (@req-fsa-01).],
 
-/ `pitch_detector_dart` \^0.0.7: Implementierung des YIN-Algorithmus
-  zur Grundfrequenzschätzung (@req-fsa-01).
+  [`pitch_detector_dart`], [`^0.0.7`], [Implementierung des YIN-Algorithmus zur Grundfrequenzschätzung (@req-fsa-01).],
 
-/ `buffered_list_stream` \^1.3.0: Puffert den kontinuierlichen
-  Audiodatenstrom des Mikrofons zu Blöcken, die der YIN-Algorithmus
-  verarbeiten kann.
+  [`buffered_list_stream`],
+  [`^1.3.0`],
+  [Puffert den kontinuierlichen Audiodatenstrom zu Blöcken, die der YIN-Algorithmus verarbeiten kann.],
 
-/ `ml_linalg` \^13.12.6: Optimierte Matrizenoperationen (Multiplikation,
-  Inversion) für die Berechnung der Verstimmungsmatrix und der
-  Zielfrequenzen (@req-fsa-07, @req-fsa-03).
+  [`ml_linalg`],
+  [`^13.12.6`],
+  [Optimierte Matrizenoperationen (Multiplikation, Inversion) für Verstimmungsmatrix und Zielfrequenzberechnung (@req-fsa-07, @req-fsa-03).],
 
-/ `statistics` \^1.2.1: Hilfsfunktionen für Listenoperationen, die in
-  der Signalverarbeitung und Plausibilitätsprüfung eingesetzt werden.
+  [`statistics`],
+  [`^1.2.1`],
+  [Hilfsfunktionen für Listenoperationen in der Signalverarbeitung und Plausibilitätsprüfung.],
 
-/ `async` \^2.13.0: Erweiterungen für asynchrone Programmierung und
-  Parallelverarbeitung des Audiostreams.
+  [`async`], [`^2.13.0`], [Erweiterungen für asynchrone Programmierung und Parallelverarbeitung des Audiostreams.],
 
-/ `flutter_sound` \^9.30.0: Wiedergabe eines Referenztons zur
-  auditiven Überprüfung der Stimmung.
+  [`flutter_sound`], [`^9.30.0`], [Wiedergabe eines Referenztons zur auditiven Überprüfung der Stimmung.],
 
-/ `auto_route` \^11.1.0: Typsicheres Routing mit reduziertem
-  Boilerplate-Code.
+  [`auto_route`], [`^11.1.0`], [Typsicheres Routing mit reduziertem Boilerplate-Code.],
 
-/ `url_launcher` \^6.3.2: Öffnet externe URLs; wird verwendet, um
-  Hilfevideos auf YouTube zu verlinken (@req-fba-06, @req-nfa-be-04).
+  [`url_launcher`], [`^6.3.2`], [Öffnet externe URLs; verlinkt Hilfevideos auf YouTube (@req-fba-06, @req-nfa-be-04).],
+)
 
 Folgende Abhängigkeiten werden ausschließlich zur Entwicklungszeit
 benötigt und sind nicht Teil des ausgelieferten Artefakts:
 
-/ `riverpod_generator` \^4.0.0+1: Generiert Riverpod-Provider aus
-  Annotationen.
+#table(
+  columns: (auto, auto, 1fr),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (left, left, left),
+  table.header(strong[Paket], strong[Version], strong[Verwendung]),
+  [`riverpod_generator`], [`^4.0.0+1`], [Generiert Riverpod-Provider aus Annotationen.],
 
-/ `riverpod_lint` \^3.0.0: Statische Analyse für korrekte
-  Riverpod-Verwendung.
+  [`riverpod_lint`], [`^3.0.0`], [Statische Analyse für korrekte Riverpod-Verwendung.],
 
-/ `json_serializable` \^6.11.1: Generiert JSON-Serialisierungscode
-  aus `json_annotation`-Annotationen.
+  [`json_serializable`], [`^6.11.1`], [Generiert JSON-Serialisierungscode aus `json_annotation`-Annotationen.],
 
-/ `auto_route_generator` \^10.2.4: Generiert Routing-Code aus
-  `auto_route`-Annotationen.
+  [`auto_route_generator`], [`^10.2.4`], [Generiert Routing-Code aus `auto_route`-Annotationen.],
 
-/ `build_runner` \^2.7.1: Führt alle Code-Generatoren aus.
+  [`build_runner`], [`^2.7.1`], [Führt alle Code-Generatoren aus.],
 
-/ `flutter_lints` \^6.0.0: Offizielles Lint-Regelwerk für Flutter;
-  stellt statische Codequalität sicher.
+  [`flutter_lints`], [`^6.0.0`], [Offizielles Lint-Regelwerk für Flutter; stellt statische Codequalität sicher.],
+)
 
 === Quellcode
 
@@ -1557,7 +1828,9 @@ Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar:
 #link("https://github.com/Raphael2b3/floyd_rose_tuner")
 
 === Kalibrierungslogik
-#image("assets/image.png")
+#image("assets/kalibrierungslogik.png")
+=== Stimmungslogik
+#image("assets/verstimmungslogik.png")
 == Tests während der Entwicklung
 
 === Manuelle Tests
@@ -1707,7 +1980,7 @@ der zwischenzeitlich behoben wurde (@nutzerTests, Nutzer 2).
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Kompatibilität*
   ],
-  [@req-nfa-ko-01], [Lauffähig auf iOS ≥ 16 und Android ≥ 10], [Nicht Überprüft],
+  [@req-nfa-ko-01], [Lauffähig auf iOS ≥ 16 und Android ≥ 10], [Android: Ja],
   [@req-nfa-ko-02], [Betrieb auf Geräten mit ≥ 2 GB RAM], [Nicht Überprüft],
   [@req-nfa-ko-03], [Kein Layoutbruch auf 4,7 – 6,7 Zoll Displays], [Nicht Überprüft],
 
@@ -1855,6 +2128,24 @@ verändert wird, und die Anzeige entsprechend umschalten. Voraussetzung
 ist, dass die Saite bereits näherungsweise auf der Zielfrequenz liegt,
 sodass eine eindeutige Zuordnung möglich ist.
 
+== Automatisches Fortfahren beim Stimmen
+
+Aktuell muss der Nutzer nach dem Stimmen jeder Saite manuell zur
+nächsten wechseln. Die App könnte stattdessen automatisch erkennen,
+wann eine Saite den Zielfrequenzbereich erreicht hat, und ohne
+Nutzerinteraktion zur nächsten Saite fortfahren. Dies würde den
+Stimmvorgang weiter beschleunigen und ist besonders für Persona Jonas
+(@jonasGit) relevant, der täglich mehrere Gitarren stimmt.
+
+== Automatische Kalibrierung der Mikrofonempfindlichkeit
+
+Derzeit muss der Nutzer den Empfindlichkeitsschwellenwert manuell über
+einen Schieberegler einstellen (@req-fba-05). Die App könnte stattdessen
+in einer kurzen Einmessphase den Umgebungsgeräuschpegel messen, daraus
+einen Basiswert ermitteln und den Schwellenwert automatisch so setzen,
+dass eine gespielte Saite ihn mit ausreichendem Abstand überschreitet.
+Dies würde @req-fba-05 obsolet machen und die Einstiegshürde für
+unerfahrene Nutzer wie Persona Emil weiter senken.
 == Mehr Konfigurationsfreiraum
 
 === Änderbare Referenzstimmung

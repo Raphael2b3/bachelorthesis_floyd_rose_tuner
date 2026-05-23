@@ -1,3 +1,7 @@
+Kalibrierungslogik aufschreiben
+Stimmungslogik aufschreiben
+Designs beschreiben
+
 Eher als fußnote?
 
 Youtube Quelle,
