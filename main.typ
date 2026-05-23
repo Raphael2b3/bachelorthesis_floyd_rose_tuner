@@ -1294,14 +1294,29 @@ Wird eine Gitarre Ausgewählt sollte man sie Editieren(umbennenen und rekalibrie
 Wird eine Gitarre Angelegt soll sie auch Benannt und Kalibriert werden.
 
 === Interaktionsdesign
-#figure(image("assets/interaktionsdesign.png"), caption: [Interaktionsdesign mit _visuelles Vokabular_])<visVoc>
 
-#figure(image("assets/interaktionsdesign2.png"), caption: [Interaktionsdesign für Kalibrierung.])
 
-In @visVoc wurde die Grafische Sprache _visuelles Vokabular_ erstellt nach @Garrett2012 zur erstellung des Interaktionsdesigns verwendet.
 
-Man startet auf der Floyd-Rose-Initierungsseite von der man auf die Hilfspage, die Standard Stimmgerät Page, die Gitarren bennen Page, die Kalibrierungsapage auf der man die Verstimmungsmatrix bestimmt, auf die gitarren Messpage mit der man jede Gitarren Saite anspielt und misst.
-Nach dem man die gitarre Gemessen hat, kann man diese Information nutzen direkt zum Floyd-Rose-Stimmgerät navigieren. Vom Floyd-Rose-Stimmgerät kommt man wiederum zum Standard-Stimmgerät um das Ergebnis des Floyd-Rose-Stimmgeräts zu überprüfen.
+In @iiakt1, @iiakt2 und @iiakt3 wurde die Grafische Sprache _visuelles Vokabular_ erstellt nach @Garrett2012 zur erstellung des Interaktionsdesigns verwendet.
+
+==== Navigation
+#figure(image("assets/interaktionsdesign.png"), caption: [Interaktionsdesign mit _visuelles Vokabular_])<iiakt1>
+
+Man startet auf der Floyd-Rose-Initierungsseite von der man auf die Hilfspage, die Standard Stimmgerät Page, die Gitarren Ansicht Page und den Stimm prozess Starten kann.
+
+Vom Standard Stimmgerät aus, kommt man direkt die Saite Gitarre Rekalibrieren, falls dem nutzer das ergebnis nicht passt.
+
+Auf der Gitarrenansichts page kann man die Gitarre umbennen und die Gitarre Kalibrieren.
+
+==== Kalibrierung
+#figure(image("assets/interaktionsdesign2.png"), caption: [Interaktionsdesign für Kalibrierung.])<iiakt2>
+
+Wenn man die Gitarre kalibrien möchte, wird man zunächst gebeten eine Saite zu messen, hat man das gemacht, kommt man auf eine Saite auf der man die Messung prüfen kann. Dann kommt man zurück zur alten saite wobei nun die nächste saite gemessen wird. Wenn man die letzte saite gemessen hat, kommt man auf die page auf der man die Saite verändern soll.
+
+von dort aus wird werden wieder alle saiten gemessen und überprüft. wenn mann jede saite verändert hat und den impact gemessen hat kann man nocheinmal alles überprüfen und ist fertig.
+
+==== Stimmen
+#figure(image("assets/interaktionsdesign3.png"), caption: [Interaktionsdesign für Stimmprozess.])<iiakt3>
 
 
 === Visuelles Konzept
@@ -1541,6 +1556,8 @@ benötigt und sind nicht Teil des ausgelieferten Artefakts:
 Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar:
 #link("https://github.com/Raphael2b3/floyd_rose_tuner")
 
+=== Kalibrierungslogik
+#image("assets/image.png")
 == Tests während der Entwicklung
 
 === Manuelle Tests
@@ -1782,6 +1799,9 @@ den größten Messfehler aufwiesen.
 
 Der effektive Zeitaufwand für den Stimmvorgang betrug 8 Minuten.
 
+=== Nutzer 5
+
+Mit der finalen UI, dauerte die Kalibrierung etwas länger ~7min.
 
 = Ausblick
 
