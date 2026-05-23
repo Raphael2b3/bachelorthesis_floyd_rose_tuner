@@ -1,9 +1,9 @@
 #let project(
-  title: "Entwicklung einer Mobilen Applikation zur effizienten Stimmung einer \n Floyd-Rose-Gitarre",
+  title: "Entwicklung einer Mobilen Applikation zur effizienten Stimmung einer\nFloyd-Rose-Gitarre",
   subtitle: none,
   author: "Raphael Schütz",
   matrikelnummer: "82832",
-  semester: "7",
+  semester: "8",
   erstprüfer: "Prof. Konrad Schöbel",
   zweitprüfer: "Prof. Ulf Schemmert",
   date: "09.06.2026",
@@ -1251,20 +1251,19 @@ Entwicklung für jede Plattform separat würde bedeuten, dieselbe
 Fachlogik -- insbesondere den YIN-Algorithmus (@req-fsa-01), die
 Berechnung der Verstimmungsmatrix (@req-fsa-07) sowie die
 Zielfrequenzformel (@req-fsa-03) -- doppelt zu implementieren und zu
-warten. Cross-Platform-Entwicklung mit _Flutter_ vermeidet diese
-Redundanz durch eine gemeinsame Codebasis, aus der plattformspezifische
-Artefakte für iOS und Android erzeugt werden.
+warten.
 
 Da die Applikation gemäß @req-nfa-dp-01 und @req-nfa-dp-02 vollständig
 lokal und ohne Netzwerkzugriff betrieben wird, entfallen die
 Hauptargumente gegen Cross-Platform-Ansätze: Es gibt keine
-plattformspezifischen Push-Benachrichtigungen, keine
-hardwarenahen Hintergrunddienste und keine nativen
-Zahlungsschnittstellen. Der einzige plattformnahe Zugriff -- das
-Gerätmikrofon -- wird von _Flutter_ über eine stabile,
+plattformspezifischen Push-Benachrichtigungen, keine hardwarenahen
+Hintergrunddienste und keine nativen Zahlungsschnittstellen. Der einzige
+plattformnahe Zugriff -- das Gerätmikrofon -- gehört zu den am weitesten
+verbreiteten hardwarenahen Features mobiler Geräte und wird von allen
+gängigen Cross-Compiling-Frameworks über eine stabile,
 plattformübergreifende API abgedeckt. Der Effizienzgewinn einer
-gemeinsamen Codebasis überwiegt daher den Mehraufwand einer rein
-nativen Implementierung deutlich.
+gemeinsamen Codebasis überwiegt daher den Mehraufwand einer rein nativen
+Implementierung deutlich.
 
 == Konzeption und Design
 === Informationsarchitektur
@@ -1324,17 +1323,24 @@ kann die Gitarre umbenannt (@req-fba-12) und rekalibriert werden.
   caption: [Interaktionsdesign -- Kalibrierung],
 ) <iiakt2>
 
-Der Kalibrierungsvorgang gliedert sich in zwei Phasen. In der ersten
-Phase wird der Ausgangszustand der Gitarre erfasst: Der Nutzer spielt
-jede Saite einzeln an, überprüft den gemessenen Wert auf einer
-Bestätigungsseite und fährt mit der nächsten Saite fort, bis alle sechs
-Saiten gemessen sind (@req-fsa-07).
+Der Kalibrierungsvorgang nutzt drei Seiten, die in einem festgelegten
+Ablauf durchlaufen werden.
 
-In der zweiten Phase wird der Einfluss jeder Saite auf die übrigen
-ermittelt: Der Nutzer verstimmt nacheinander jede Saite, woraufhin alle
-Saiten erneut gemessen und überprüft werden. Nach Abschluss aller
-Messreihen kann der Nutzer die gesammelten Daten abschließend prüfen
-und die Kalibrierung bestätigen (@req-fsa-09).
+*Seite 1 -- Saite messen* und *Seite 2 -- Messung prüfen* wechseln sich
+ab, bis alle sechs Saiten gemessen sind. So wird der Ausgangszustand der
+Gitarre als erster Messpunkt erfasst (@req-fsa-07).
+
+Anschließend folgt *Seite 3 -- Saite verändern*: Der Nutzer verstimmt
+eine bestimmte Saite. Daraufhin wechseln sich Seite 1 und Seite 2 erneut
+ab, bis alle sechs Saiten gemessen sind und der Einfluss der Verstimmung
+auf die übrigen Saiten erfasst ist. Der zuletzt gemessene Zustand dient
+dabei jeweils als Ausgangslage für die folgende Verstimmung. Dieser
+Vorgang wiederholt sich für jede der sechs Saiten (@req-fsa-07,
+@req-fsa-09).
+
+Sobald alle Messpunkte erfasst sind, kann der Nutzer sämtliche Messdaten
+in einer Gesamtübersicht einsehen und fehlerhafte Einträge korrigieren
+(@req-fba-08), bevor die Kalibrierung abgeschlossen wird.
 
 ==== Stimmen
 
@@ -1361,8 +1367,7 @@ Interaktionszustände von Komponenten sowie Navigationsstrukturen und
 gewährleistet damit eine plattformkonforme, konsistente Darstellung
 (@req-nfa-ko-03).
 
-Da die App in Flutter implementiert wird, sind Material-3-Komponenten
-ohne zusätzliche Abhängigkeiten direkt importierbar. Für Konzeption und
+Für Konzeption und
 UI-Design wird Figma#footnote[https://www.figma.com/] eingesetzt, das ebenfalls ein offizielles
 Material-3-Komponentenset bereitstellt und so einen konsistenten
 Übergang vom Entwurf zur Implementierung ermöglicht.
@@ -1398,7 +1403,6 @@ vereinfacht und die Nutzerführung strukturiert wurde.
   ]),
 )
 
-#pagebreak()
 === Wireframes
 
 Auf Basis der Informationsarchitektur und des Interaktionsdesigns wurden
@@ -1508,30 +1512,111 @@ Kalibrierungsablauf direkt angesprungen werden (@req-fba-08).
 (@req-fsa-11, @req-fba-10), das unabhängig vom Floyd-Rose-Algorithmus
 zur schnellen Überprüfung der Stimmung genutzt werden kann.
 
-=== Seitenspezifikation
+=== Design
 
-==== First Load
+==== Onboarding
+#grid(
+  columns: 3,
+  inset: 6pt,
 
-//#figure(image("assets/image-2.png", height: 40%), caption: [Landing Page])<appLanding>
-Wenn man die App startet, sieht man als erstes die Möglichkeit das _Tuning_ einzustellen, die bereits auf die standartmäßige Stimmung _E-A-D-G-H-e_ eingestellt ist //(Siehe @appLanding).
-//#figure(image("assets/image-3.png", height: 40%), caption: [Selecting Tuning Page])<appSelectTuning>
-Versucht man ein anderes _Tuning_ auszuwählen, sieht man wie in //@appSelectTuning eine größere Auswahl von herkömmlichen Stimmungen.
+  grid.cell([
+    #figure(
+      image("assets/d_help.png", height: 30%),
+      caption: [Design: Hilfsseite],
+    ) <dHelp>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_setup.png", height: 30%),
+      caption: [Design: Startseite],
+    ) <dLanding>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_gitarre.png", height: 30%),
+      caption: [Design: Gitarre bearbeiten],
+    ) <dGitarreEdit>
+  ]),
+)
+Zunächst sieht man die Hilfsseite wie in @dHelp zu sehen ist. Diese Saite enthält allgemeine Informationen zur App so wie ein Link zu einem Tutorial Video. Anschließend kann man zur Floyd-Rose-Tuner Setup Page (Siehe @dLanding) navigieren um loszulegen. Bei späteren Appsstart, wird das die Startseite sein. Gespeicherte Gitarren und Tuning sind vorausgewählt. Ein Prominenter Button "Start Tuning" erlaubt es einem sofort zu starten mit dem Stimm Vorgang. Klickt man "Add A New Guitar" wird eine Neue Gitarre angelegt und man kommt zu @dGitarreEdit. Dort kann man der Gitarre einen Namen geben. Es wird Vorab ein Name generiert mit einer zufälligen ID. Auffällig ist der "Calibrate The Guitar" Button, der einen Punkt (Badge) aufweist um die Aufmerksamkeit, des Nutzers zu gewinnen. Unter halb des Buttens wird dem Nutzer mitgeteilt "This Guitar Needs Calibration". Klickt der Nutzer Auf den Butten startet sofort der Kalibrierungs Prozess.
 
-Da die App noch keine Gitarre erlernt hat, wird in der Auswahl die Aufforderung angezeigt, eine Gitarre auszuwähle//n (@appLanding). Zu beginn der das Dropdown Menu enthält zunächst keine Gitarre. Allerdings kann, der Nutzer auf den Button "Add A New Guitar" klicken und kommt nun zur _Detuning Matrix Measure Page_.
+==== Kalibrierung
+#grid(
+  columns: 3,
+  inset: 6pt,
+  grid.cell([
+    #figure(
+      image("assets/d_cal_m.png"),
+      caption: [Design: Kalibrierung -- Saite messen],
+    ) <dKalMessen>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_manualdetect.png"),
+      caption: [Design: Manuelle Detektion -- Saite messen],
+    ) <dManDet>
+  ]),
+  grid.cell([
 
-=== Detuning Matrix Measure Page
-Auf dieser Saite, nimmt man die Messdaten auf um die Verstimmungsmatrix zu bestimmen.
+    #figure(
+      image("assets/d_cal_check.png"),
+      caption: [Design: Kalibrierung -- Messung prüfen],
+    ) <dKalPrüf>
+  ]),
+)
 
+In @dKalMessen ist die Umsetzung der Messpage zusehen. Dort hat man einen Sensitivity regeler mit einem Lautstärke indikitor, der live immer die gemessene Lautstärke indikiert. Darunter ist eine Checkbox mit dem Laben "Auto Detect". Entfernt man den Haken aktiviert man die Manuelle Detection der Frequenzen und ein Textfeld taucht auf in dem man die Frequenz z.B. extern gemessen eintragen kann (Siehe @dManDet). Hat man nun eine Frequenz eingetragen oder die App hat eine Erkannt, klickt man auf "Continue". Nun kommt man zu Saite auf der man die Gemessene Frequenz überprüfen kann. Mittig, gut erreichbar und groß gibt es den Butten "Play Sound" Drückt man diesen, wird die zuvor erkannte frequenz als ton abgespielt. Ein Text gibt den Hinweis und frag ob der Ton der gleiche ist wie den man zuvor gespielt hat. Wenn Nein geht es zurück und man misst erneut, wenn ja, kommt man wieder zur Messpage, nur dass Man nun eine andere Saite spielen soll.
+#grid(
+  columns: 3,
+  inset: 6pt,
 
-//#figure(image("assets/image-4.png", height: 40%), caption: [Measure Detuning Matrix Page])<appDetuningMatrixPage>
-
-Diese Seite ist die Komplizierteste. Ganz oben ist ein Zufällig generierter Name für die Gitarre. Beim öffnen der Saite kann man direkt den Namen der Gitarre einstellen. Der Textinput ist direkt fokussiert. Das passiert nicht wenn man die Gitarre Editiert was in @editingGuitar näher erleutert wird.
-
-=== Editing GuitarConfig <editingGuitar>
-
-Screenshots von der App einfügen
-//#image("assets/image.png")
-das hatte zuviele buttons, buttons werden reduziert und usability verbessert, allerdings sind jetzt die schritte nicht mehr offensichtlich
+  grid.cell([
+    #figure(
+      image("assets/d_cal_cha.png", height: 30%),
+      caption: [Design: Kalibrierung -- Saite verstimmen],
+    ) <dKalVerändern>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_control.png", height: 30%),
+      caption: [Design: Kalibrierung -- Gesamtübersicht],
+    ) <dKalib>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_standard_tuner.png", height: 30%),
+      caption: [Design: Standard-Stimmgerät],
+    ) <dStandardTuner>
+  ]),
+)
+#grid(
+  columns: 3,
+  inset: 6pt,
+  grid.cell([
+    #figure(
+      image("assets/d_recal.png", height: 30%),
+      caption: [Design: Rekalibrieren],
+    ) <drecal>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_select_guit.png", height: 30%),
+      caption: [Design: Auswahl einer Gitarre],
+    ) <dStandardTuner>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_fr_tuner.png", height: 30%),
+      caption: [Design: Floyd-Rose-Tuner Page],
+    ) <dFRTuner>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_fr_tuner.png", height: 30%),
+      caption: [Design: Floyd-Rose-Tuner Page],
+    ) <dFRTuner>
+  ]),
+)
 ==== Tuner Page <sensitivitySlider>
 == Architektur
 
@@ -1621,6 +1706,7 @@ zentrale zustandstragende Modell während des Stimm- und
 Kalibrierungsvorgangs und kann von beliebigen Widgets -- etwa über
 Button-Interaktionen -- aktualisiert werden.
 
+
 === Calibration State Provider
 
 Stellt das `CalibrationState`-Objekt bereit, das den Fortschritt
@@ -1679,8 +1765,7 @@ Tuning {
 `Tuning.goalNotes` enthält die standardisierten Notenbezeichnungen im
 Format _Note + Oktave_ (z.~B. `"E2"` für das E in der zweiten Oktave)
 und definiert damit die Zielfrequenzen für den Stimmprozess (@req-fsa-03).
-
-== Implementierung
+== Implementierung <impl>
 
 === Auswahl des Cross-Platform-Frameworks
 
