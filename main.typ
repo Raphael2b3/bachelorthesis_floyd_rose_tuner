@@ -1511,113 +1511,177 @@ Kalibrierungsablauf direkt angesprungen werden (@req-fba-08).
 (@req-fba-06, @req-nfa-be-04) sowie des Standard-Stimmgeräts
 (@req-fsa-11, @req-fba-10), das unabhängig vom Floyd-Rose-Algorithmus
 zur schnellen Überprüfung der Stimmung genutzt werden kann.
-
 === Design
 
 ==== Onboarding
+
 #grid(
   columns: 3,
   inset: 6pt,
-
   grid.cell([
     #figure(
-      image("assets/d_help.png", height: 30%),
+      image("assets/d_help.png", height: 26%),
       caption: [Design: Hilfsseite],
     ) <dHelp>
   ]),
   grid.cell([
     #figure(
-      image("assets/d_setup.png", height: 30%),
+      image("assets/d_setup.png", height: 26%),
       caption: [Design: Startseite],
     ) <dLanding>
   ]),
   grid.cell([
     #figure(
-      image("assets/d_gitarre.png", height: 30%),
+      image("assets/d_gitarre.png", height: 26%),
       caption: [Design: Gitarre bearbeiten],
     ) <dGitarreEdit>
   ]),
 )
-Zunächst sieht man die Hilfsseite wie in @dHelp zu sehen ist. Diese Saite enthält allgemeine Informationen zur App so wie ein Link zu einem Tutorial Video. Anschließend kann man zur Floyd-Rose-Tuner Setup Page (Siehe @dLanding) navigieren um loszulegen. Bei späteren Appsstart, wird das die Startseite sein. Gespeicherte Gitarren und Tuning sind vorausgewählt. Ein Prominenter Button "Start Tuning" erlaubt es einem sofort zu starten mit dem Stimm Vorgang. Klickt man "Add A New Guitar" wird eine Neue Gitarre angelegt und man kommt zu @dGitarreEdit. Dort kann man der Gitarre einen Namen geben. Es wird Vorab ein Name generiert mit einer zufälligen ID. Auffällig ist der "Calibrate The Guitar" Button, der einen Punkt (Badge) aufweist um die Aufmerksamkeit, des Nutzers zu gewinnen. Unter halb des Buttens wird dem Nutzer mitgeteilt "This Guitar Needs Calibration". Klickt der Nutzer Auf den Butten startet sofort der Kalibrierungs Prozess.
+
+Beim ersten Start der App wird der Nutzer auf die Hilfsseite (@dHelp)
+geleitet, die eine Übersicht der App-Funktionen sowie einen Link zu
+einem Tutorial-Video enthält (@req-fba-06, @req-nfa-be-04). Von dort
+gelangt er zur Startseite (@dLanding), die bei allen folgenden Starts
+direkt angezeigt wird. Bereits gespeicherte Gitarrenprofile und
+Stimmungen sind vorausgewählt; ein prominenter „Start Tuning"-Button
+leitet den Stimmvorgang unmittelbar ein (@req-fba-01).
+
+Über „Add A New Guitar" legt der Nutzer ein neues Gitarrenprofil an und
+gelangt zur Gitarrenansicht (@dGitarreEdit). Dort wird vorab ein Name
+mit zufälliger ID generiert, der frei angepasst werden kann
+(@req-fba-12). Der „Calibrate This Guitar"-Button ist mit einem Badge
+versehen und zieht damit die Aufmerksamkeit des Nutzers auf sich; der
+begleitende Hinweistext „This Guitar Needs Calibration" macht den
+nächsten Schritt unmissverständlich deutlich (@req-nfa-be-01). Ein Klick
+auf den Button startet sofort den Kalibrierungsvorgang.
 
 ==== Kalibrierung
+
 #grid(
   columns: 3,
   inset: 6pt,
   grid.cell([
     #figure(
-      image("assets/d_cal_m.png"),
+      image("assets/d_cal_m.png", height: 26%),
       caption: [Design: Kalibrierung -- Saite messen],
     ) <dKalMessen>
   ]),
   grid.cell([
     #figure(
-      image("assets/d_manualdetect.png"),
-      caption: [Design: Manuelle Detektion -- Saite messen],
+      image("assets/d_manualdetect.png", height: 26%),
+      caption: [Design: Manuelle Frequenzeingabe],
     ) <dManDet>
   ]),
   grid.cell([
-
     #figure(
-      image("assets/d_cal_check.png"),
+      image("assets/d_cal_check.png", height: 26%),
       caption: [Design: Kalibrierung -- Messung prüfen],
     ) <dKalPrüf>
   ]),
 )
 
-In @dKalMessen ist die Umsetzung der Messpage zusehen. Dort hat man einen Sensitivity regeler mit einem Lautstärke indikitor, der live immer die gemessene Lautstärke indikiert. Darunter ist eine Checkbox mit dem Laben "Auto Detect". Entfernt man den Haken aktiviert man die Manuelle Detection der Frequenzen und ein Textfeld taucht auf in dem man die Frequenz z.B. extern gemessen eintragen kann (Siehe @dManDet). Hat man nun eine Frequenz eingetragen oder die App hat eine Erkannt, klickt man auf "Continue". Nun kommt man zu Saite auf der man die Gemessene Frequenz überprüfen kann. Mittig, gut erreichbar und groß gibt es den Butten "Play Sound" Drückt man diesen, wird die zuvor erkannte frequenz als ton abgespielt. Ein Text gibt den Hinweis und frag ob der Ton der gleiche ist wie den man zuvor gespielt hat. Wenn Nein geht es zurück und man misst erneut, wenn ja, kommt man wieder zur Messpage, nur dass Man nun eine andere Saite spielen soll.
+@dKalMessen zeigt die Messseite. Ein Empfindlichkeitsregler mit
+Live-Lautstärkeanzeige erlaubt die Anpassung des Mikrofonschwellenwerts
+(@req-fba-05). Eine Checkbox „Auto Detect" steuert
+den Erkennungsmodus: Wird sie deaktiviert, erscheint ein Textfeld, in
+das der Nutzer eine extern gemessene Frequenz manuell eintragen kann
+(@dManDet, @req-fba-14). Sobald eine Frequenz erkannt oder eingetragen
+wurde, führt „Continue" zur Prüfseite.
+
+Auf der Prüfseite (@dKalPrüf) befindet sich zentral und gut erreichbar
+ein „Play Sound"-Button, der die erkannte Frequenz als Ton abspielt.
+Der begleitende Text fragt den Nutzer, ob der abgespielte Ton mit dem
+zuvor gespielten übereinstimmt. Bei Nein kehrt er zur Messseite zurück
+und wiederholt die Aufnahme; bei Ja wird die nächste Saite gemessen
+(@req-fba-07, @req-fba-08).
+
 #grid(
   columns: 3,
   inset: 6pt,
-
   grid.cell([
     #figure(
-      image("assets/d_cal_cha.png", height: 30%),
+      image("assets/d_cal_cha.png", height: 35%),
       caption: [Design: Kalibrierung -- Saite verstimmen],
     ) <dKalVerändern>
   ]),
   grid.cell([
     #figure(
-      image("assets/d_control.png", height: 30%),
+      image("assets/d_control.png", height: 35%),
       caption: [Design: Kalibrierung -- Gesamtübersicht],
     ) <dKalib>
   ]),
   grid.cell([
     #figure(
-      image("assets/d_standard_tuner.png", height: 30%),
-      caption: [Design: Standard-Stimmgerät],
-    ) <dStandardTuner>
+      image("assets/d_select_guit.png", height: 35%),
+      caption: [Design: Gitarre auswählen],
+    ) <dselect>
   ]),
 )
+
+@dKalVerändern fordert den Nutzer auf, eine bestimmte Saite zu
+verstimmen. Für den Fall, dass versehentlich die falsche Saite verändert
+wurde, steht ein „Wrong String Changed"-Button zur Verfügung, der den
+Schritt zurücksetzt (@req-fsa-09). Nach dem Verstimmen bestätigt der
+Nutzer mit „Done" und der Ablauf folgt dem Interaktionsdesign aus
+@iiakt2.
+
+Nach Abschluss aller Messreihen gelangt der Nutzer zur Gesamtübersicht
+(@dKalib). Die obere Tab-Navigation zeigt die Saite, deren Verstimmung
+das jeweilige Sample beschreibt; die untere Tab-Navigation wechselt
+zwischen den einzelnen Messpunkten. Jedes Sample besteht aus sechs
+Einträgen -- einem Frequenzwert pro Saite -- die auf zwei
+Nachkommastellen gerundet angezeigt werden. Über „Done" wird die
+Kalibrierung abgeschlossen und der Nutzer kehrt zur Startseite zurück
+(@dLanding, @req-fba-08).
+
+Möchte der Nutzer auf der Startseite (@dLanding) eine gespeicherte
+Gitarre auswählen, öffnet sich eine Auswahlliste (@dselect). Jeder
+Eintrag enthält ein Stift-Icon, über das der Nutzer direkt zur
+Gitarrenansicht navigiert. Wurde eine Gitarre bereits kalibriert, zeigt
+@drecal, dass der Kalibrierungsbutton weiterhin vorhanden, aber weniger
+prominent gestaltet ist, um erfahrene Nutzer nicht zu bremsen
+(@req-fba-11).
 #grid(
   columns: 3,
   inset: 6pt,
   grid.cell([
     #figure(
-      image("assets/d_recal.png", height: 30%),
+      image("assets/d_recal.png", height: 35%),
       caption: [Design: Rekalibrieren],
     ) <drecal>
   ]),
   grid.cell([
     #figure(
-      image("assets/d_select_guit.png", height: 30%),
-      caption: [Design: Auswahl einer Gitarre],
+      image("assets/d_fr_tuner.png", height: 35%),
+      caption: [Design: Floyd-Rose-Tuner],
+    ) <dFRTuner>
+  ]),
+  grid.cell([
+    #figure(
+      image("assets/d_standard_tuner.png", height: 35%),
+      caption: [Design: Standard-Stimmgerät],
     ) <dStandardTuner>
   ]),
-  grid.cell([
-    #figure(
-      image("assets/d_fr_tuner.png", height: 30%),
-      caption: [Design: Floyd-Rose-Tuner Page],
-    ) <dFRTuner>
-  ]),
-  grid.cell([
-    #figure(
-      image("assets/d_fr_tuner.png", height: 30%),
-      caption: [Design: Floyd-Rose-Tuner Page],
-    ) <dFRTuner>
-  ]),
 )
-==== Tuner Page <sensitivitySlider>
+
+
+
+==== Stimmvorgang
+
+Ein Klick auf „Start Tuning" führt zunächst durch dieselben Mess- und
+Prüfseiten wie die Kalibrierung (@dKalMessen, @dKalPrüf), um den
+aktuellen Zustand der Gitarre zu erfassen. Nach dem Messen aller sechs
+Saiten wird der Nutzer zur Floyd-Rose-Tuner-Seite weitergeleitet
+(@dFRTuner). Dort spielt er die angezeigte Saite an und stimmt sie, bis
+der Slider in den grünen Zielbereich rückt. „Next" wechselt zur
+nächsten Saite (@req-fba-01, @req-fsa-03, @req-fsa-04).
+
+Nach dem Stimmen aller Saiten gelangt der Nutzer zum
+Standard-Stimmgerät (@dStandardTuner), das die gespielte Note, die
+Frequenz in Hertz sowie die Abweichung in Cent anzeigt und so eine
+abschließende Überprüfung der Stimmung ermöglicht (@req-fsa-11,
+@req-fba-10).
+
 == Architektur
 
 #figure(
@@ -1671,7 +1735,7 @@ um kurzfristige Ausreißer zu dämpfen. Die Ausgabe ist ein
 Liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich
 $[-60.0, 0.0]~"dBFS"$ (@req-fsa-02). Der Wert wird über den
 Empfindlichkeits-Schieberegler in den Einstellungen gesteuert
-(@req-fba-05). <sensitivitySlider>
+(@req-fba-05).
 
 === Detected Frequency Provider
 
@@ -1913,9 +1977,178 @@ Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar:
 #link("https://github.com/Raphael2b3/floyd_rose_tuner")
 
 === Kalibrierungslogik
-#image("assets/kalibrierungslogik.png")
+
+==== Navigation und Fortschrittsanzeige der Kalibrierung
+
+Um die Fortschrittsanzeige und eine Zurück-Funktion zu implementieren,
+muss zu jedem Zeitpunkt eindeutig bestimmbar sein, in welchem Schritt
+des Kalibrierungsvorgangs sich die App befindet und wie der Zustand bei
+„Weiter" bzw. „Zurück" zu setzen ist.
+
+#figure(image("assets/kaliblogik.png"), caption: [Zustandsdiagramm: Kalibrierungslogik])<zstKalib>
+===== Zustandsvariablen
+
+Der Kalibrierungsablauf wird durch fünf Variablen vollständig
+beschrieben:
+
+#table(
+  columns: (auto, auto, 1fr),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (left, center, left),
+  table.header(strong[Variable], strong[Wertebereich], strong[Bedeutung]),
+  [`pageIndex`], [$\{0, 1, 2\}$], [Aktuelle Seite: 0 = Messen, 1 = Prüfen, 2 = Verändern],
+  [`stringIndex`], [$[0, 5]$], [Index der Saite, mit der aktuell interagiert wird],
+  [`sampleIndex`], [$[0, N-1]$], [Index des aktuellen Messpunkts],
+  [`effectIndex`], [$[0, 5]$], [Index der Saite, deren Verstimmung das Sample beschreibt],
+)
+
+===== Fortschrittsberechnung
+
+Aus diesen Variablen lässt sich ein linearer Fortschrittswert ableiten:
+
+$
+  "progress" = "pageIndex" + 2 dot "stringIndex" + 13 dot "sampleIndex"
+  + 26 dot "effectIndex"
+$
+
+Der maximale Wert ergibt sich zu:
+
+$
+  "max" = 2 + 2 dot 5 + 13 dot 2 + 26 dot 5 = 168
+$
+
+Der normierte Fortschritt $p = "progress" \/ "max" in [0, 1]$ wird
+direkt als Füllstand der Fortschrittsanzeige verwendet.
+
+===== Vorwärtsnavigation
+
+Die folgende Tabelle beschreibt die Zustandsübergänge beim Drücken von
+„Weiter", geordnet nach dem Übergangs­label aus @dKalMessen:
+
+#table(
+  columns: (auto, auto, auto),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (center, left, left),
+  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
+  [a], [Messen → Prüfen], [`isPrüf = true`],
+
+  [b], [Prüfen → Messen \ (kein Fehler, nicht letzte Saite)], [`isPrüf = false; stringIndex++`],
+
+  [c], [Prüfen → Messen \ (Fehler)], [`isPrüf = false` -- Messung wird wiederholt],
+
+  [d], [Prüfen → Verändern \ (`stringIndex == last`)], [`isPrüf = false; isChange = true; stringIndex = effectIndex`],
+
+  [e], [Verändern → Messen \ (kein Fehler)], [`isChange = false; sampleIndex++; stringIndex = 0`],
+
+  [f], [Verändern → Messen \ (Fehler)], [`isChange = false; sampleIndex = 0; stringIndex = 0`],
+
+  [g],
+  [Prüfen → nächste Verstimmung \ (`sampleIndex == last` & `stringIndex == last`)],
+  [`effectIndex++; stringIndex = effectIndex;` \ `saveStateToSample0(); sampleIndex = 0`],
+
+  [h], [Abschluss \ (`sampleIndex == last` & `stringIndex == last` & `effectIndex == last`)], [`calculateMatrix()`],
+)
+
+===== Rückwärtsnavigation
+
+Beim Drücken von „Zurück" wird der Zustand wie folgt zurückgesetzt:
+
+#table(
+  columns: (auto, auto, 1fr),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (center, left, left),
+  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
+  [a], [Messen, `stringIndex == 0` & `sampleIndex == 0` & `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
+
+  [b], [Messen → vorherige Saite \ (kein Fehler, `stringIndex > 0`)], [`stringIndex--`],
+
+  [c], [Messen bei Fehler, `stringIndex > 0`], [Keine Zustandsänderung -- Messung wiederholen],
+
+  [d], [Prüfen → Messen], [`stringIndex = last`],
+
+  [e], [Messen, `stringIndex == 0` & `sampleIndex > 0`], [`sampleIndex--; stringIndex = last`],
+
+  [f],
+  [Messen, `stringIndex == 0` & `sampleIndex == 0` & `effectIndex > 0`],
+  [`effectIndex--; stringIndex = last; sampleIndex = last`],
+
+  [g], [Messen, `sampleIndex == last` & `effectIndex > 0`], [`effectIndex--; stringIndex = last`],
+
+  [x], [Verändern, `sampleIndex == 0` & `stringIndex == 0` & `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
+
+  [h], [Verändern, `sampleIndex == last` & `stringIndex == last` & `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
+)
+
+
+
 === Stimmungslogik
-#image("assets/verstimmungslogik.png")
+
+#figure(image("assets/stimmlogic.png"), caption: [Zustandsdiagramm: Stimmungslogik])<zstKalib>
+==== Navigation und Fortschrittsanzeige des Stimmvorgangs
+
+===== Zustandsvariablen
+
+Der Stimmvorgang wird durch zwei Variablen beschrieben:
+
+#table(
+  columns: (auto, auto, 1fr),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (left, center, left),
+  table.header(strong[Variable], strong[Wertebereich], strong[Bedeutung]),
+  [`pageId`], [$\{0, 1, 2\}$], [Aktuelle Seite: 0 = Messen, 1 = Prüfen, 2 = Stimmen],
+  [`stringIndex`], [$[0, 5]$], [Index der Saite, mit der aktuell interagiert wird],
+)
+
+===== Fortschrittsberechnung
+
+Da die Stimmseite eine abweichende Gewichtung benötigt, ist der
+Fortschritts­wert stückweise definiert:
+
+$
+  "progress" = cases(
+    "pageId" + 2 dot "stringIndex" & "pageId" != 2,
+    12 + "stringIndex" & "pageId" = 2
+  )
+  quad "max" = 18
+$
+
+===== Vorwärtsnavigation
+
+#table(
+  columns: (auto, auto, 1fr),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (center, left, left),
+  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
+  [x], [Start → Messen], [`stringIndex = 0`],
+  [a], [Messen → Prüfen], [Keine Zustandsänderung],
+  [b], [Prüfen → Messen\ _string_ < last], [`stringIndex++`],
+  [c], [Prüfen → Stimmen\ _string_ = last], [`stringIndex = 0`],
+  [d], [Stimmen → Stimmen\ _string_ < last], [`stringIndex++`],
+  [e], [Stimmen → Ende\ _string_ = last], [Stimmvorgang abgeschlossen],
+  [f], [Prüfen → Messen\ Fehler], [Keine Zustandsänderung -- Messung wiederholen],
+)
+
+===== Rückwärtsnavigation
+
+#table(
+  columns: (auto, auto, 1fr),
+  inset: 7pt,
+  stroke: 0.5pt,
+  align: (center, left, left),
+  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
+  [x], [Messen, _string_ = 0], [Stimmvorgang verlassen (Exit)],
+  [a], [Prüfen → Messen], [Keine Zustandsänderung],
+  [b], [Messen → Prüfen\ _string_ > 0], [`stringIndex--`],
+  [c], [Prüfen → Stimmen\ _string_ = 0], [`stringIndex = last`],
+  [d], [Stimmen → Stimmen\ _string_ > 0], [`stringIndex--`],
+  [e], [Stimmen → Prüfen\ _string_ = 0], [`stringIndex = last`],
+  [f], [Prüfen, Fehler], [Keine Zustandsänderung],
+)
 == Tests während der Entwicklung
 
 === Manuelle Tests
