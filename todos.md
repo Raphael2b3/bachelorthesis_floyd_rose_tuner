@@ -1,6 +1,6 @@
 Kalibrierungslogik aufschreiben
 Stimmungslogik aufschreiben
-Designs beschreiben
+double check ^^^^ und vielleicht zusammenfassen der buttons, also pseudo code ableitung
 
 Eher als fußnote?
 

@@ -1983,12 +1983,12 @@ Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar:
 Um die Fortschrittsanzeige und eine Zurück-Funktion zu implementieren,
 muss zu jedem Zeitpunkt eindeutig bestimmbar sein, in welchem Schritt
 des Kalibrierungsvorgangs sich die App befindet und wie der Zustand bei
-„Weiter" bzw. „Zurück" zu setzen ist.
+„Weiter" bzw. „Zurück" zu setzen ist. In @zstKalib ist das Zustandsdiagramm visualisert.
 
 #figure(image("assets/kaliblogik.png"), caption: [Zustandsdiagramm: Kalibrierungslogik])<zstKalib>
 ===== Zustandsvariablen
 
-Der Kalibrierungsablauf wird durch fünf Variablen vollständig
+Der Kalibrierungsablauf wird durch vier Variablen vollständig
 beschrieben:
 
 #table(
@@ -2002,6 +2002,8 @@ beschrieben:
   [`sampleIndex`], [$[0, N-1]$], [Index des aktuellen Messpunkts],
   [`effectIndex`], [$[0, 5]$], [Index der Saite, deren Verstimmung das Sample beschreibt],
 )
+
+Es wird davon ausgegangen das nur die minimale Anzahl der benötigten Messpunkt gewählt werden $N=2$.
 
 ===== Fortschrittsberechnung
 
@@ -2018,13 +2020,13 @@ $
   "max" = 2 + 2 dot 5 + 13 dot 2 + 26 dot 5 = 168
 $
 
-Der normierte Fortschritt $p = "progress" \/ "max" in [0, 1]$ wird
+Der normierte Fortschritt $p = ("progress") /( "max") in [0, 1]$ wird
 direkt als Füllstand der Fortschrittsanzeige verwendet.
 
 ===== Vorwärtsnavigation
 
 Die folgende Tabelle beschreibt die Zustandsübergänge beim Drücken von
-„Weiter", geordnet nach dem Übergangs­label aus @dKalMessen:
+„Weiter", geordnet nach dem Übergangslabel aus @zstKalib:
 
 #table(
   columns: (auto, auto, auto),
@@ -2032,23 +2034,23 @@ Die folgende Tabelle beschreibt die Zustandsübergänge beim Drücken von
   stroke: 0.5pt,
   align: (center, left, left),
   table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
-  [a], [Messen → Prüfen], [`isPrüf = true`],
+  [a)], [Messen → Prüfen], [--],
 
-  [b], [Prüfen → Messen \ (kein Fehler, nicht letzte Saite)], [`isPrüf = false; stringIndex++`],
+  [b)], [Prüfen → Messen \ (kein Fehler, nicht letzte Saite)], [`stringIndex++`],
 
-  [c], [Prüfen → Messen \ (Fehler)], [`isPrüf = false` -- Messung wird wiederholt],
+  [c)], [Prüfen → Messen \ (Fehler)], [-- / Messung wird wiederholt],
 
-  [d], [Prüfen → Verändern \ (`stringIndex == last`)], [`isPrüf = false; isChange = true; stringIndex = effectIndex`],
+  [d)], [Prüfen → Verändern \ (`stringIndex == 5`)], [`stringIndex = effectIndex`],
 
-  [e], [Verändern → Messen \ (kein Fehler)], [`isChange = false; sampleIndex++; stringIndex = 0`],
+  [e)], [Verändern → Messen \ (kein Fehler)], [`sampleIndex++; stringIndex = 0`],
 
-  [f], [Verändern → Messen \ (Fehler)], [`isChange = false; sampleIndex = 0; stringIndex = 0`],
+  [f)], [Verändern → Messen \ (Fehler)], [`sampleIndex = 0; stringIndex = 0`],
 
-  [g],
-  [Prüfen → nächste Verstimmung \ (`sampleIndex == last` & `stringIndex == last`)],
-  [`effectIndex++; stringIndex = effectIndex;` \ `saveStateToSample0(); sampleIndex = 0`],
+  [g)],
+  [Prüfen → nächste Verstimmung \ (`sampleIndex == 1` & \ `stringIndex == 5`)],
+  [`effectIndex++; sampleIndex = 0;`\ `stringIndex = effectIndex;` \ Wiederverwendung der Ausgangslage für nächste beeinflussende Saite],
 
-  [h], [Abschluss \ (`sampleIndex == last` & `stringIndex == last` & `effectIndex == last`)], [`calculateMatrix()`],
+  [h)], [Abschluss \ (`sampleIndex == 1` & \ `stringIndex == 5` & \ `effectIndex == 5`)], [`calculateMatrix()`],
 )
 
 ===== Rückwärtsnavigation
@@ -2056,37 +2058,41 @@ Die folgende Tabelle beschreibt die Zustandsübergänge beim Drücken von
 Beim Drücken von „Zurück" wird der Zustand wie folgt zurückgesetzt:
 
 #table(
-  columns: (auto, auto, 1fr),
+  columns: (auto, auto, auto),
   inset: 7pt,
   stroke: 0.5pt,
   align: (center, left, left),
-  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
-  [a], [Messen, `stringIndex == 0` & `sampleIndex == 0` & `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
+  table.header(strong[Übergang (Rückwärts)], strong[Bedingung], strong[Aktion]),
+  [a)], [Messen, `stringIndex == 0` & \ `sampleIndex == 0` & \ `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
 
-  [b], [Messen → vorherige Saite \ (kein Fehler, `stringIndex > 0`)], [`stringIndex--`],
+  [b)], [Messen → vorherige Saite \ (kein Fehler, `stringIndex > 0`)], [`stringIndex--`],
 
-  [c], [Messen bei Fehler, `stringIndex > 0`], [Keine Zustandsänderung -- Messung wiederholen],
+  [c)], [Messen bei Fehler, \ `stringIndex > 0`], [Keine Zustandsänderung --\  Messung wiederholen],
 
-  [d], [Prüfen → Messen], [`stringIndex = last`],
+  [d)], [Prüfen → Messen], [`stringIndex = last`],
 
-  [e], [Messen, `stringIndex == 0` & `sampleIndex > 0`], [`sampleIndex--; stringIndex = last`],
+  [e)], [Messen, `stringIndex == 0` & \ `sampleIndex > 0`], [`sampleIndex--;` \ `stringIndex = last`],
 
-  [f],
-  [Messen, `stringIndex == 0` & `sampleIndex == 0` & `effectIndex > 0`],
-  [`effectIndex--; stringIndex = last; sampleIndex = last`],
+  [f)],
+  [Messen, `stringIndex == 0` & \ `sampleIndex == 0` & \ `effectIndex > 0`],
+  [`effectIndex--;` \ `stringIndex = last;` \ `sampleIndex = last;`],
 
-  [g], [Messen, `sampleIndex == last` & `effectIndex > 0`], [`effectIndex--; stringIndex = last`],
+  [g)], [Messen,\  `sampleIndex == last` & \ `effectIndex > 0`], [`effectIndex--;` \ `stringIndex = last`],
 
-  [x], [Verändern, `sampleIndex == 0` & `stringIndex == 0` & `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
+  [h)],
+  [Verändern,\  `sampleIndex == last` & \ `stringIndex == last` & \ `effectIndex == 0`],
+  [Kalibrierung verlassen (Exit)],
 
-  [h], [Verändern, `sampleIndex == last` & `stringIndex == last` & `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
+  [x)],
+  [Verändern, \ `sampleIndex == 0` & \ `stringIndex == 0` & \ `effectIndex == 0`],
+  [Kalibrierung verlassen (Exit)],
 )
 
 
 
 === Stimmungslogik
 
-#figure(image("assets/stimmlogic.png"), caption: [Zustandsdiagramm: Stimmungslogik])<zstKalib>
+#figure(image("assets/stimlgc.png"), caption: [Zustandsdiagramm: Stimmungslogik])<zststm>
 ==== Navigation und Fortschrittsanzeige des Stimmvorgangs
 
 ===== Zustandsvariablen
@@ -2119,18 +2125,18 @@ $
 ===== Vorwärtsnavigation
 
 #table(
-  columns: (auto, auto, 1fr),
+  columns: (auto, auto, auto),
   inset: 7pt,
   stroke: 0.5pt,
   align: (center, left, left),
   table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
-  [x], [Start → Messen], [`stringIndex = 0`],
-  [a], [Messen → Prüfen], [Keine Zustandsänderung],
-  [b], [Prüfen → Messen\ _string_ < last], [`stringIndex++`],
-  [c], [Prüfen → Stimmen\ _string_ = last], [`stringIndex = 0`],
-  [d], [Stimmen → Stimmen\ _string_ < last], [`stringIndex++`],
-  [e], [Stimmen → Ende\ _string_ = last], [Stimmvorgang abgeschlossen],
-  [f], [Prüfen → Messen\ Fehler], [Keine Zustandsänderung -- Messung wiederholen],
+  [x)], [Start → Messen], [`stringIndex = 0`],
+  [a)], [Messen → Prüfen], [Keine Zustandsänderung],
+  [b)], [Prüfen → Messen\ _string_ < last], [`stringIndex++`],
+  [c)], [Prüfen → Stimmen\ _string_ = last], [`stringIndex = 0`],
+  [d)], [Stimmen → Stimmen\ _string_ < last], [`stringIndex++`],
+  [e)], [Stimmen → Ende\ _string_ = last], [Stimmvorgang abgeschlossen],
+  [f)], [Prüfen → Messen\ Fehler], [Keine Zustandsänderung -- Messung wiederholen],
 )
 
 ===== Rückwärtsnavigation
@@ -2140,14 +2146,14 @@ $
   inset: 7pt,
   stroke: 0.5pt,
   align: (center, left, left),
-  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
-  [x], [Messen, _string_ = 0], [Stimmvorgang verlassen (Exit)],
-  [a], [Prüfen → Messen], [Keine Zustandsänderung],
-  [b], [Messen → Prüfen\ _string_ > 0], [`stringIndex--`],
-  [c], [Prüfen → Stimmen\ _string_ = 0], [`stringIndex = last`],
-  [d], [Stimmen → Stimmen\ _string_ > 0], [`stringIndex--`],
-  [e], [Stimmen → Prüfen\ _string_ = 0], [`stringIndex = last`],
-  [f], [Prüfen, Fehler], [Keine Zustandsänderung],
+  table.header(strong[Übergang (Rückwärts)], strong[Bedingung], strong[Aktion]),
+  [x)], [Messen, _string_ = 0], [Stimmvorgang verlassen (Exit)],
+  [a)], [Prüfen → Messen], [Keine Zustandsänderung],
+  [b)], [Messen → Prüfen\ _string_ > 0], [`stringIndex--`],
+  [c)], [Prüfen → Stimmen\ _string_ = 0], [`stringIndex = last`],
+  [d)], [Stimmen → Stimmen\ _string_ > 0], [`stringIndex--`],
+  [e)], [Stimmen → Prüfen\ _string_ = 0], [`stringIndex = last`],
+  [f)], [Prüfen, Fehler], [Keine Zustandsänderung],
 )
 == Tests während der Entwicklung
 
