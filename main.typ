@@ -1978,18 +1978,12 @@ Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar:
 
 === Kalibrierungslogik
 
-==== Navigation und Fortschrittsanzeige der Kalibrierung
-
 Um die Fortschrittsanzeige und eine Zurück-Funktion zu implementieren,
 muss zu jedem Zeitpunkt eindeutig bestimmbar sein, in welchem Schritt
 des Kalibrierungsvorgangs sich die App befindet und wie der Zustand bei
-„Weiter" bzw. „Zurück" zu setzen ist. In @zstKalib ist das Zustandsdiagramm visualisert.
+„Weiter" bzw. „Zurück" zu setzen ist.
 
-#figure(image("assets/kaliblogik.png"), caption: [Zustandsdiagramm: Kalibrierungslogik])<zstKalib>
-===== Zustandsvariablen
-
-Der Kalibrierungsablauf wird durch vier Variablen vollständig
-beschrieben:
+Der Kalibrierungsablauf wird durch vier Variablen vollständig beschrieben:
 
 #table(
   columns: (auto, auto, 1fr),
@@ -1997,21 +1991,21 @@ beschrieben:
   stroke: 0.5pt,
   align: (left, center, left),
   table.header(strong[Variable], strong[Wertebereich], strong[Bedeutung]),
-  [`pageIndex`], [$\{0, 1, 2\}$], [Aktuelle Seite: 0 = Messen, 1 = Prüfen, 2 = Verändern],
-  [`stringIndex`], [$[0, 5]$], [Index der Saite, mit der aktuell interagiert wird],
-  [`sampleIndex`], [$[0, N-1]$], [Index des aktuellen Messpunkts],
-  [`effectIndex`], [$[0, 5]$], [Index der Saite, deren Verstimmung das Sample beschreibt],
+  [`pageIndex`], [$in NN, [0, 2]$], [Aktuelle Seite: 0 = Messen, 1 = Prüfen, 2 = Verändern],
+  [`stringIndex`], [$in NN, [0, 5]$], [Index der Saite, mit der aktuell interagiert wird],
+  [`sampleIndex`], [$in NN, [0, N-1]$], [Index des aktuellen Messpunkts],
+  [`effectIndex`], [$in NN, [0, 5]$], [Index der Saite, deren Verstimmung das Sample beschreibt],
 )
 
-Es wird davon ausgegangen das nur die minimale Anzahl der benötigten Messpunkt gewählt werden $N=2$.
+Es wird die minimale Anzahl der benötigten Messpunkte verwendet: $N = 2$.
 
-===== Fortschrittsberechnung
+==== Fortschrittsberechnung
 
 Aus diesen Variablen lässt sich ein linearer Fortschrittswert ableiten:
 
 $
-  "progress" = "pageIndex" + 2 dot "stringIndex" + 13 dot "sampleIndex"
-  + 26 dot "effectIndex"
+  "progress" = "pageIndex" + 2 dot "stringIndex"
+  + 13 dot "sampleIndex" + 26 dot "effectIndex"
 $
 
 Der maximale Wert ergibt sich zu:
@@ -2020,82 +2014,113 @@ $
   "max" = 2 + 2 dot 5 + 13 dot 2 + 26 dot 5 = 168
 $
 
-Der normierte Fortschritt $p = ("progress") /( "max") in [0, 1]$ wird
+Der normierte Fortschritt $p = "progress" \/ "max" in [0, 1]$ wird
 direkt als Füllstand der Fortschrittsanzeige verwendet.
 
-===== Vorwärtsnavigation
+==== Navigationslogik
 
-Die folgende Tabelle beschreibt die Zustandsübergänge beim Drücken von
-„Weiter", geordnet nach dem Übergangslabel aus @zstKalib:
+#figure(
+  image("assets/kaliblogik.png"),
+  caption: [Zustandsdiagramm: Kalibrierungslogik],
+) <zstKalib>
 
-#table(
-  columns: (auto, auto, auto),
-  inset: 7pt,
-  stroke: 0.5pt,
-  align: (center, left, left),
-  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
-  [a)], [Messen → Prüfen], [--],
+Die Zustandsübergänge beim Drücken von „Weiter" sind in @zstKalib mit
+den Labels a) bis h) dargestellt und werden im Folgenden als
+Pseudocode ausformuliert. #footnote([`++` ist die Kurzform für
+  $v = v + 1$; analog gilt `--` für $v = v - 1$.])
 
-  [b)], [Prüfen → Messen \ (kein Fehler, nicht letzte Saite)], [`stringIndex++`],
+Um Übergang c) und b) auf der Rückwärtsnavigation unterscheiden zu
+können, wird die Hilfsvariable `prüfungFehler` eingeführt. Sie ist
+`true`, wenn der Nutzer auf der Prüfseite „Zurück" gedrückt und damit
+Übergang c) ausgelöst hat; andernfalls ist sie `false`.
+#pagebreak()
+*Messseite*
+```
+Weiter-Button{ // Übergang a)
+    navigate(Prüfseite);
+}
 
-  [c)], [Prüfen → Messen \ (Fehler)], [-- / Messung wird wiederholt],
+Zurück-Button{
+    if stringIndex == 0 && sampleIndex == 0 && effectIndex == 0:
+        // Übergang x)
+        exit()
+    else if stringIndex > 0: // Übergang b)
+        if not prüfungFehler:
+            stringIndex--
+        // Übergang c) → keine Zustandsänderung
+        navigate(Prüfseite)
+    else:  // stringIndex == 0
+        stringIndex = 5
+        if sampleIndex > 0: // Übergang e)
+            sampleIndex--
+        else:               // Übergang f)
+            sampleIndex = 1 // letztes Sample der vorherigen Verstimmung
+        navigate(Veränderungsseite)
+}
+```
 
-  [d)], [Prüfen → Verändern \ (`stringIndex == 5`)], [`stringIndex = effectIndex`],
+*Prüfseite*
 
-  [e)], [Verändern → Messen \ (kein Fehler)], [`sampleIndex++; stringIndex = 0`],
+```
+Weiter-Button{
+    samples[effectIndex][sampleIndex][stringIndex] = messung
 
-  [f)], [Verändern → Messen \ (Fehler)], [`sampleIndex = 0; stringIndex = 0`],
+    if stringIndex < 5: // Übergang b)
+        stringIndex++
+        navigate(Messseite)
 
-  [g)],
-  [Prüfen → nächste Verstimmung \ (`sampleIndex == 1` & \ `stringIndex == 5`)],
-  [`effectIndex++; sampleIndex = 0;`\ `stringIndex = effectIndex;` \ Wiederverwendung der Ausgangslage für nächste beeinflussende Saite],
+    else if sampleIndex == 1 && effectIndex == 5:
+        calculateMatrix() // Übergang h)
+        saveGuitar()
+        navigate(Kontrollansicht)
 
-  [h)], [Abschluss \ (`sampleIndex == 1` & \ `stringIndex == 5` & \ `effectIndex == 5`)], [`calculateMatrix()`],
-)
+    else:
+        if sampleIndex == 0: // Übergang d)
+            stringIndex = effectIndex
+        else: // Übergang g)  sampleIndex==1 && effectIndex<5
+            samples[effectIndex + 1][0] = samples[effectIndex][1]
+            // Ausgangslage für nächste Verstimmung übernehmen
+            effectIndex++
+            stringIndex = effectIndex
+            sampleIndex = 0
+        navigate(Veränderungsseite)
+}
 
-===== Rückwärtsnavigation
+Zurück-Button{ // Übergang c)
+    prüfungFehler = true
+    navigate(Messseite)
+}
+```
 
-Beim Drücken von „Zurück" wird der Zustand wie folgt zurückgesetzt:
+*Veränderungsseite*
 
-#table(
-  columns: (auto, auto, auto),
-  inset: 7pt,
-  stroke: 0.5pt,
-  align: (center, left, left),
-  table.header(strong[Übergang (Rückwärts)], strong[Bedingung], strong[Aktion]),
-  [a)], [Messen, `stringIndex == 0` & \ `sampleIndex == 0` & \ `effectIndex == 0`], [Kalibrierung verlassen (Exit)],
+```
+Fertig-Button{ // Übergang e)
+    sampleIndex++
+    stringIndex = 0
+    navigate(Messseite)
+}
 
-  [b)], [Messen → vorherige Saite \ (kein Fehler, `stringIndex > 0`)], [`stringIndex--`],
+WrongStringChanged-Button{ // Übergang f)
+    sampleIndex = 0
+    stringIndex = 0
+    navigate(Messseite)
+}
 
-  [c)], [Messen bei Fehler, \ `stringIndex > 0`], [Keine Zustandsänderung --\  Messung wiederholen],
+Zurück-Button{ // Übergang d) rückwärts
+    stringIndex = 5
+    if sampleIndex == 1 && effectIndex > 0: // Übergang g) rückwärts
+        effectIndex--
+    navigate(Prüfseite)
+}
+```
 
-  [d)], [Prüfen → Messen], [`stringIndex = last`],
+=== Stimmlogik
 
-  [e)], [Messen, `stringIndex == 0` & \ `sampleIndex > 0`], [`sampleIndex--;` \ `stringIndex = last`],
-
-  [f)],
-  [Messen, `stringIndex == 0` & \ `sampleIndex == 0` & \ `effectIndex > 0`],
-  [`effectIndex--;` \ `stringIndex = last;` \ `sampleIndex = last;`],
-
-  [g)], [Messen,\  `sampleIndex == last` & \ `effectIndex > 0`], [`effectIndex--;` \ `stringIndex = last`],
-
-  [h)],
-  [Verändern,\  `sampleIndex == last` & \ `stringIndex == last` & \ `effectIndex == 0`],
-  [Kalibrierung verlassen (Exit)],
-
-  [x)],
-  [Verändern, \ `sampleIndex == 0` & \ `stringIndex == 0` & \ `effectIndex == 0`],
-  [Kalibrierung verlassen (Exit)],
-)
-
-
-
-=== Stimmungslogik
-
-#figure(image("assets/stimlgc.png"), caption: [Zustandsdiagramm: Stimmungslogik])<zststm>
-==== Navigation und Fortschrittsanzeige des Stimmvorgangs
-
-===== Zustandsvariablen
+#figure(
+  image("assets/stimlgcc.png"),
+  caption: [Zustandsdiagramm: Stimmlogik],
+) <zststm>
 
 Der Stimmvorgang wird durch zwei Variablen beschrieben:
 
@@ -2105,56 +2130,88 @@ Der Stimmvorgang wird durch zwei Variablen beschrieben:
   stroke: 0.5pt,
   align: (left, center, left),
   table.header(strong[Variable], strong[Wertebereich], strong[Bedeutung]),
-  [`pageId`], [$\{0, 1, 2\}$], [Aktuelle Seite: 0 = Messen, 1 = Prüfen, 2 = Stimmen],
-  [`stringIndex`], [$[0, 5]$], [Index der Saite, mit der aktuell interagiert wird],
+  [`pageId`], [$in NN, {0, 1, 2}$], [Aktuelle Seite: 0 = Messen, 1 = Prüfen, 2 = Stimmen],
+  [`stringIndex`], [$in NN, [0, 5]$], [Index der Saite, mit der aktuell interagiert wird],
 )
 
-===== Fortschrittsberechnung
+==== Fortschrittsberechnung
 
 Da die Stimmseite eine abweichende Gewichtung benötigt, ist der
-Fortschritts­wert stückweise definiert:
+Fortschrittswert stückweise definiert:
 
 $
   "progress" = cases(
     "pageId" + 2 dot "stringIndex" & "pageId" != 2,
-    12 + "stringIndex" & "pageId" = 2
+    12 + "stringIndex" & "pageId" = 2,
   )
   quad "max" = 18
 $
+#pagebreak()
+==== Navigationslogik
 
-===== Vorwärtsnavigation
+Die Zustandsübergänge beim Drücken von „Weiter" und „Zurück" sind in
+@zststm mit den Labels a) bis f) dargestellt und werden im Folgenden
+als Pseudocode ausformuliert.
 
-#table(
-  columns: (auto, auto, auto),
-  inset: 7pt,
-  stroke: 0.5pt,
-  align: (center, left, left),
-  table.header(strong[Übergang], strong[Bedingung], strong[Aktion]),
-  [x)], [Start → Messen], [`stringIndex = 0`],
-  [a)], [Messen → Prüfen], [Keine Zustandsänderung],
-  [b)], [Prüfen → Messen\ _string_ < last], [`stringIndex++`],
-  [c)], [Prüfen → Stimmen\ _string_ = last], [`stringIndex = 0`],
-  [d)], [Stimmen → Stimmen\ _string_ < last], [`stringIndex++`],
-  [e)], [Stimmen → Ende\ _string_ = last], [Stimmvorgang abgeschlossen],
-  [f)], [Prüfen → Messen\ Fehler], [Keine Zustandsänderung -- Messung wiederholen],
-)
+*Messseite*
 
-===== Rückwärtsnavigation
+```
+Weiter-Button:{ // Übergang a)
+    navigate(Prüfseite)
+}
 
-#table(
-  columns: (auto, auto, 1fr),
-  inset: 7pt,
-  stroke: 0.5pt,
-  align: (center, left, left),
-  table.header(strong[Übergang (Rückwärts)], strong[Bedingung], strong[Aktion]),
-  [x)], [Messen, _string_ = 0], [Stimmvorgang verlassen (Exit)],
-  [a)], [Prüfen → Messen], [Keine Zustandsänderung],
-  [b)], [Messen → Prüfen\ _string_ > 0], [`stringIndex--`],
-  [c)], [Prüfen → Stimmen\ _string_ = 0], [`stringIndex = last`],
-  [d)], [Stimmen → Stimmen\ _string_ > 0], [`stringIndex--`],
-  [e)], [Stimmen → Prüfen\ _string_ = 0], [`stringIndex = last`],
-  [f)], [Prüfen, Fehler], [Keine Zustandsänderung],
-)
+Zurück-Button{
+    if stringIndex == 0: // Übergang x)
+        exit()
+    else: // Übergang b)
+        stringIndex--
+        navigate(Prüfseite)
+}
+```
+
+*Prüfseite*
+
+```
+Weiter-Button{
+    speicherMessung(stringMeasureState[stringIndex] = messung)
+
+    if stringIndex < 5: // Übergang b)
+        stringIndex++
+        navigate(Messseite)
+    else: // Übergang c)
+        stringIndex = 0
+        berechneZielfrequenzen()
+        navigate(Stimmseite)
+}
+
+Zurück-Button{ // reverse a)
+    prüfungFehler=true
+    navigate(Messseite)
+}
+```
+
+*Stimmseite*
+
+```
+Weiter-Button{
+    if stringIndex < 5: // Übergang d)
+        stringIndex++
+    else: // Übergang e)
+        navigate(Ende)
+        return
+    navigate(Stimmseite) // gleiche Seite, neue Saite
+}
+Zurück-Button{
+    if stringIndex > 0: // Übergang d) rückwärts
+        stringIndex--
+    else: // Übergang e) rückwärts
+        stringIndex = 5
+        navigate(Prüfseite)
+        return
+    navigate(Stimmseite)
+}
+```
+
 == Tests während der Entwicklung
 
 === Manuelle Tests
