@@ -2356,7 +2356,7 @@ Kompensation von Folgeverstimmungen beim schrittweisen Stimmen --
 der zwischenzeitlich behoben wurde (@nutzerTests, Nutzer 2).
 
 == Erfüllung der Requirements aus SWE
-#figure(caption: [ Erfüllungsgrad der definierten Anforderungen], table(
+#table(
   columns: (auto, 1fr, auto),
   inset: 7pt,
   stroke: 0.5pt,
@@ -2452,7 +2452,7 @@ der zwischenzeitlich behoben wurde (@nutzerTests, Nutzer 2).
   [@req-nfa-dp-01], [Keine Datenübermittlung an externe Server], [Ja],
   [@req-nfa-dp-02], [Vollständig offline nutzbar], [Ja],
   [@req-nfa-dp-03], [Profile und Stimmungen exportierbar/importierbar], [Nein],
-))
+)
 
 Die folgenden MUSS-Anforderungen wurden nicht erfüllt oder konnten
 nicht überprüft werden:
