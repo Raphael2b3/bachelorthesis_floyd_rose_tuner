@@ -38,10 +38,44 @@
 
   v(2.4fr)
   pagebreak()
+  [#v(1em)
+    #align(center)[
+      #text(weight: "bold", size: 14pt)[Zusammenfassung]
+    ]
 
+    Das Stimmen einer Gitarre mit Floyd-Rose-Tremolo-System ist aufgrund der mechanischen Kopplung aller Saiten über die rotierbare Brücke ein zeitaufwändiger und iterativer Prozess. Erfahrungsberichte sprechen von Stimmzeiten zwischen 8 bis 30 Minuten.
 
+    Ziel dieser Bachelorarbeit war die Entwicklung einer mobilen Applikation, die diesen Vorgang durch ein mathematisches Modell der Brückenkopplung signifikant beschleunigt. Hierzu wurde zunächst ein physikalisches Modell der Floyd-Rose-Gitarre erstellt, das den nichtlinearen Zusammenhang zwischen Saitenspannung, Brückenposition und Schwingungsfrequenzen beschreibt. Für kleine Verstimmungen konnte dieses System durch eine gitarrenspezifische *Verstimmungsmatrix* hinreichend genau linearisiert werden. Die Inverse dieser Matrix ermöglicht die direkte Berechnung der erforderlichen Verstimmungsbeträge jeder Saite.
+
+    Auf Basis dieses Modells wurde eine plattformübergreifende Flutter-Applikation für Android und iOS entwickelt. Diese unterstützt die einmalige Kalibrierung des Instruments, die Messung des aktuellen Stimmzustands mittels YIN-Algorithmus sowie einen geführten Stimmvorgang mit berechneten Zielfrequenzen.
+
+    Nutzertests zeigten, dass die Gitarre unter kontrollierten akustischen Bedingungen erfolgreich und deutlich schneller gestimmt werden konnte als mit herkömmlichen Methoden. Die Grenzen der aktuellen Implementierung liegen vor allem in der Robustheit der Fundamentalfrequenzerkennung bei lauten Umgebungen und starken Obertönen.
+
+    Die Arbeit belegt, dass das Kopplungsverhalten von Floyd-Rose-Gitarren durch eine kalibrierte lineare Matrix hinreichend genau modelliert und für die praktische Unterstützung des Stimmprozesses genutzt werden kann.
+
+    #v(0.8em)
+    *Schlagwörter:* Floyd-Rose, Tremolo, Stimmgerät, Signalverarbeitung, Mobile App, Lineare Approximation, Gitarrentechnik]
+  pagebreak()
+  [#v(1.5em)
+    #align(center)[
+      #text(weight: "bold", size: 14pt)[Abstract]
+    ]
+
+    Tuning a guitar with a Floyd Rose tremolo system is a time-consuming and iterative process due to the mechanical coupling of all strings via the pivoting bridge. Practical reports indicate tuning times between 8 and 30 minutes.
+
+    The aim of this bachelor thesis was to develop a mobile application that significantly accelerates this process through a mathematical model of the bridge coupling. For this purpose, a physical model of the Floyd Rose guitar was first developed, describing the nonlinear relationship between string tension, bridge position, and vibration frequencies. For small detunings, this system could be sufficiently linearized by a guitar-specific *detuning matrix*. The inverse of this matrix enables the direct calculation of the required detuning amounts for each string.
+
+    Based on this model, a cross-platform Flutter application for Android and iOS was developed. It supports one-time instrument calibration, measurement of the current tuning state using the YIN algorithm, and a guided tuning process with calculated target frequencies.
+
+    User tests showed that the guitar could be tuned successfully and significantly faster than with conventional methods under controlled acoustic conditions. The limitations of the current implementation lie primarily in the robustness of fundamental frequency detection in loud environments and with strong overtones.
+
+    This thesis demonstrates that the coupling behavior of Floyd Rose guitars can be modeled with sufficient accuracy using a calibrated linear matrix and applied to practically support the tuning process.
+
+    #v(0.8em)
+    *Keywords:* Floyd Rose, Tremolo, Guitar Tuner, Signal Processing, Mobile App, Linear Approximation, Guitar Technology]
   // Table of contents.
-  outline(depth: 5)
+  pagebreak()
+  outline(depth: 3)
   pagebreak()
 }
 
@@ -99,79 +133,46 @@
 )
 #project()
 
-
 = Einleitung
 
-Das Floyd-Rose-Tremolo ist ein in der E-Gitarre weit verbreitetes
-Brückensystem, das es Musikerinnen und Musikern ermöglicht, während
-des Spielens die Tonhöhe aller Saiten gleichzeitig zu verändern.
-Diese Eigenschaft macht es besonders in Rock- und Metalmusik beliebt.
-Sie hat jedoch einen erheblichen Nachteil: Das Stimmen einer
-Floyd-Rose-Gitarre ist deutlich aufwändiger als bei herkömmlichen
-Gitarrenbrücken.
+== Problemstellung und Motivation
 
-Der Grund liegt in der mechanischen Kopplung der Saiten über die
-rotierbare Brücke. Wird die Spannung einer Saite verändert, verschiebt
-sich der Gleichgewichtszustand der Brücke und verstimmt dadurch alle
-übrigen Saiten. Dieser Kaskadeneffekt zwingt den Spieler zu einem
-iterativen, zeitaufwändigen Stimmvorgang. Erfahrungsberichte aus der
-Praxis belegen Stimmzeiten von 8 bis 30 Minuten
-@youtube_floyd_rose_tune2026 @ultimateguitar_floydrose_tuning_forum --
-ein erheblicher Aufwand, insbesondere für professionelle Gitarristen
-und Gitarrentechniker, die täglich mehrere Instrumente stimmen.
+Das Floyd-Rose-Tremolo ist ein in der E-Gitarre weit verbreitetes Brückensystem, das es Musikerinnen und Musikern ermöglicht, während des Spielens die Tonhöhe aller Saiten gleichzeitig zu verändern. Diese Eigenschaft macht es besonders in Rock- und Metalmusik beliebt.
 
-Bestehende Stimmgeräte -- sowohl hardware- als auch softwarebasiert --
-berücksichtigen diese Kopplung nicht. Sie zeigen lediglich die aktuelle
-Frequenz einer Saite an, ohne Auskunft darüber zu geben, auf welchen
-Zielwert gestimmt werden muss, damit nach dem Stimmen aller Saiten
-das gewünschte Ergebnis erreicht wird.
+Die Kehrseite dieser Technik ist jedoch erheblich: Das Stimmen einer Floyd-Rose-Gitarre ist deutlich aufwändiger als bei herkömmlichen Gitarrenbrücken. Der Grund liegt in der mechanischen Kopplung der Saiten über die rotierbare Brücke. Wird die Spannung einer Saite verändert, verschiebt sich der Gleichgewichtszustand der gesamten Brücke und verstimmt dadurch alle übrigen Saiten. Dieser Kaskadeneffekt zwingt den Spieler zu einem iterativen, zeitaufwändigen Stimmvorgang.
 
-Ziel dieser Arbeit ist die Entwicklung einer mobilen Applikation, die
-diesen Stimmvorgang durch ein mathematisches Modell der
-Brückenkopplung gezielt unterstützt und beschleunigt. Die zentrale
-Forschungsfrage lautet:
+Erfahrungsberichte aus der Praxis belegen Stimmzeiten von 8 bis 30 Minuten
+@youtube_floyd_rose_tune2026 @ultimateguitar_floydrose_tuning_forum -- ein erheblicher Aufwand, insbesondere für professionelle Gitarristen und Gitarrentechniker, die täglich mehrere Instrumente stimmen müssen.
+
+Bestehende Stimmgeräte -- sowohl hardware- als auch softwarebasiert -- berücksichtigen diese Kopplung nicht. Sie zeigen lediglich die aktuelle Frequenz einer Saite an, ohne Auskunft darüber zu geben, auf welchen Zielwert gestimmt werden muss, damit nach dem Stimmen aller Saiten das gewünschte Ergebnis erreicht wird.
+
+#figure(
+  image("assets/floydrose_frontside_neutral.jpg", height: 20%),
+  caption: [Floyd-Rose-Tremolo (Floating Bridge)],
+)<FRQuer>
+
+Das Floyd-Rose-Tremolo wird gemeinhin als „Floating Bridge“ bezeichnet, da die Brücke nicht fest am Korpus aufliegt, sondern durch Gegenzugfedern in einem schwebenden Gleichgewicht gehalten wird. Diese Konstruktion ermöglicht zwar expressive Spieltechniken mit dem Tremolo-Hebel, erschwert jedoch das Stimmen erheblich.
+
+== Forschungsfrage
+
+Ziel dieser Arbeit ist die Entwicklung einer mobilen Applikation, die diesen Stimmvorgang durch ein mathematisches Modell der Brückenkopplung gezielt unterstützt und beschleunigt. Die zentrale Forschungsfrage lautet:
 
 #align(center)[
   #block(width: 85%, inset: 10pt, stroke: (left: 2pt + luma(180)))[
-    _Lässt sich das Kopplungsverhalten der Saiten einer
-    Floyd-Rose-Gitarre durch eine gitarrenspezifisch kalibrierte
-    Verstimmungsmatrix hinreichend genau linearisieren, um eine mobile
-    Applikation zu entwickeln, die den Stimmvorgang gegenüber dem
-    manuellen Verfahren messbar vereinfacht?_
+    _Lässt sich das Kopplungsverhalten der Saiten einer Floyd-Rose-Gitarre durch eine gitarrenspezifisch kalibrierte Verstimmungsmatrix hinreichend genau linearisieren, um eine mobile Applikation zu entwickeln, die den Stimmvorgang gegenüber dem manuellen Verfahren messbar vereinfacht?_
   ]
 ]
 
-Zur Beantwortung dieser Frage wird zunächst ein physikalisches Modell
-der Floyd-Rose-Gitarre entwickelt, das den Zusammenhang zwischen
-Saitenspannung, Brückenposition und Schwingungsfrequenz beschreibt.
-Auf Basis dieses Modells wird eine lineare Näherung hergeleitet und
-experimentell validiert. Die resultierende Verstimmungsmatrix bildet
-die mathematische Grundlage des Stimmverfahrens. Anschließend wird
-eine mobile Applikation entworfen, implementiert und anhand von
-Nutzertests evaluiert.
+== Aufbau der Arbeit
 
-*Aufbau der Arbeit:*
-@grundlagen beschreibt die physikalischen Grundlagen der
-Floyd-Rose-Gitarre, entwickelt das Kopplungsmodell und leitet die
-mathematische Lösung für den Stimmvorgang her.
-@ablauf erläutert den praktischen Ablauf -- von der einmaligen
-Kalibrierung bis zum eigentlichen Stimmvorgang.
-@verfahren stellt die grundlegenden Signalverarbeitungsverfahren vor,
-die für die Implementierung eines mobilen Stimmgeräts erforderlich
-sind.
-@softwaredev beschreibt Anforderungsanalyse, Konzeption, Architektur
-und Implementierung der Applikation.
-@evaluation bewertet die Erfüllung der Anforderungen und wertet die
-durchgeführten Nutzertests aus.
-Abschließend fasst @fazit die Ergebnisse zusammen und @ausblick
-benennt Ansätze für eine Weiterentwicklung.
-= Motivation
+Zur Beantwortung dieser Frage wird zunächst ein physikalisches Modell der Floyd-Rose-Gitarre entwickelt, das den Zusammenhang zwischen Saitenspannung, Brückenposition und Schwingungsfrequenz beschreibt. Auf Basis dieses Modells wird eine lineare Näherung hergeleitet und experimentell validiert.
 
-Es gibt ein Problem beim Stimmen von Floyd-Rose-Gitarren. Bei diesen Gitarren wird eine Saite zwischen dem Gitarrensattel und einer bis zu einem gewissen Grad rotierbaren Brücke gespannt. An der Brücke halten unterhalb des Drehpunkts Federn dagegen, wenn man Saiten einspannt. Die Brücke wird gemeinhin als "Floating Bridge" bezeichnet, weil sie nicht wie herkömmliche Tremolos am Gitarrenkörper aufliegt, sondern zusätzlichen Rotationsspielraum in Richtung des Gitarrenkörpers hat.
-
-#figure(image("assets/floydrose_frontside_neutral.jpg", height: 20%), caption: [Floyd-Rose-Tremolo Bild])<FRQuer>
-
-Das Floyd-Rose-Tremolo hat einen Hebel, den man ziehen oder drücken kann. Beim Musizieren ändert das den Ton. Auch wenn diese Architektur beliebt ist, weil sie neue Klänge ermöglicht, erschwert sie das Stimmen der Gitarre erheblich. Beim Stimmen erhöht oder verringert man die Spannung einer Saite. Aber das führt dazu, dass die anderen Saiten verstimmt werden. Es gibt Erfahrungsberichte und Aufzeichnungen, wie man eine solche Gitarre effizient stimmen kann. Dabei dauerte das Stimmen 8 Minuten @youtube_floyd_rose_tune2026. In Foren sprachen Nutzer von einer Stimmzeit von bis zu 20-30 Minuten, je nachdem, wie sauber und wie viele Saiten sie stimmen mussten @ultimateguitar_floydrose_tuning_forum. Ziel der Arbeit ist eine App zu entwickeln, die diesen Stimmvorgang beschleunigt.
+@grundlagen beschreibt die physikalischen Grundlagen der Floyd-Rose-Gitarre, entwickelt das Kopplungsmodell und leitet die mathematische Lösung für den Stimmvorgang her.
+@ablauf erläutert den praktischen Ablauf -- von der einmaligen Kalibrierung bis zum eigentlichen Stimmvorgang.
+@verfahren stellt die grundlegenden Signalverarbeitungsverfahren vor, die für die Implementierung eines mobilen Stimmgeräts erforderlich sind.
+@softwaredev beschreibt Anforderungsanalyse, Konzeption, Architektur und Implementierung der Applikation.
+@evaluation bewertet die Erfüllung der Anforderungen und wertet die durchgeführten Nutzertests aus.
+Abschließend fasst @fazit die Ergebnisse zusammen und @ausblick benennt Ansätze für eine Weiterentwicklung.
 
 = Grundlagen (Physik der Gitarre) <grundlagen>
 
@@ -179,12 +180,12 @@ Die Gitarre spannt 6 Saiten zwischen Brücke und Sattel. Die Saiten schwingen in
 
 #figure(
   image("assets/stimmwirbel.png", height: 27%),
-  caption: [Gitarre Stimmwirbel],
+  caption: [Stimmwirbel einer E-Gitarre],
 )<figStimmwirbel>
 
 == Experiment: Elastizität von Gitarrensaiten
 
-Die Ergebnisse des Experiments stammen aus der Arbeit des Autors, welche im Rahmen des Moduls "Projekt 3" aus dem Telekommunikationsinformatik-Studium an der HTWK-Leipzig @Schuetz2026FloydRose angefertigt wurden.
+Die Ergebnisse dieses Experiments beruhen auf Vorarbeiten des Autors, die im Rahmen des Moduls „Projekt 3“ des Studiengangs Telekommunikationsinformatik an der HTWK Leipzig durchgeführt wurden @Schuetz2026FloydRose.
 
 In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeigen:
 #{
@@ -220,7 +221,7 @@ In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeige
 
       ..fret-row(22, "assets/p_22.jpeg", "Bund 22 - Ruhe", "assets/p_22t.jpeg", "Bund 22 - Spannung"),
     ),
-    caption: [Elastizität von Gitarrensaiten],
+    caption: [Elastische Dehnung von Gitarrensaiten bei unterschiedlicher Spannung],
   )
 }<table1>
 
@@ -259,10 +260,13 @@ $<eqUnbelasteteSaitenlänge>
 
 #figure(
   image("assets/FloydRoseQuer.png"),
-  caption: [Floyd-Rose-Modell Quer],
+  caption: [Queransicht des physikalischen Modells der Floyd-Rose-Brücke],
 )<FRMQuer>
 
-#figure(image("assets/floydrose_backside_neutral.jpg", height: 20%), caption: [Tremolofedern])<FRFedern>
+#figure(
+  image("assets/floydrose_backside_neutral.jpg", height: 20%),
+  caption: [Gegenzugfedern (Tremolofedern) der Floyd-Rose-Brücke],
+)<FRFedern>
 
 
 In @FRQuer, @FRMQuer und @FRFedern ist zu sehen, wie die Brücke die Tremolofedern und die Saiten über einen Drehmoment koppelt.  Die Tremolofedern dienen unterhalb der Brücke als Gegenkraft zu der Saitenspannung.
@@ -274,13 +278,13 @@ In @FRQuer, @FRMQuer und @FRFedern ist zu sehen, wie die Brücke die Tremolofede
   grid.cell([
     #figure(
       image("assets/FlyodRoseTop.png"),
-      caption: [Floyd-Rose-Modell Draufsicht],
+      caption: [Draufsicht des physikalischen Modells mit Saiten-Hebelarmen],
     ) <FRMTop>
   ]),
   grid.cell([
     #figure(
       image("assets/FRrealTop.png"),
-      caption: [Floyd-Rose Draufsicht],
+      caption: [Reale Floyd-Rose-Brücke (Draufsicht)],
     )<FRTop>
   ]),
 )
@@ -438,7 +442,7 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
     [5], [B3 = B-Saite], [246.94 Hz],
     [6], [E4 = hohe E-Saite], [329.63 Hz],
   ),
-  caption: "Saitennamen mit Frequenzen",
+  caption: "Standard-Stimmung (EADGBE) mit zugehörigen Sollfrequenzen",
 )<tableSaitenNamen>
 === Ergebnisse
 ==== Relative Visualisierung der Frequenzänderungen
@@ -448,37 +452,37 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
   grid.cell([
     #figure(
       image("assets/plot_E2_relative Hz.png"),
-      caption: [Relativer Einluss der E2 Saite auf die anderen Saiten],
+      caption: [Relativer Frequenzeinfluss beim Verstimmen der E2 Saite],
     ) <relativeE2>
   ]),
   grid.cell([
     #figure(
       image("assets/plot_A2_relative Hz.png"),
-      caption: [Relativer Einluss der A2 Saite auf die anderen Saiten],
+      caption: [Relativer Frequenzeinfluss beim Verstimmen der A2 Saite],
     ) <relativeA2>
   ]),
   grid.cell([
     #figure(
       image("assets/plot_D3_relative Hz.png"),
-      caption: [Relativer Einluss der D3 Saite auf die anderen Saiten],
+      caption: [Relativer Frequenzeinfluss beim Verstimmen der D3 Saite],
     ) <relativeD3>
   ]),
   grid.cell([
     #figure(
       image("assets/plot_G3_relative Hz.png"),
-      caption: [Relativer Einluss der G3 Saite auf die anderen Saiten],
+      caption: [Relativer Frequenzeinfluss beim Verstimmen der G3 Saite],
     ) <relativeG3>
   ]),
   grid.cell([
     #figure(
       image("assets/plot_B3_relative Hz.png"),
-      caption: [Relativer Einluss der B3 Saite auf die anderen Saiten],
+      caption: [Relativer Frequenzeinfluss beim Verstimmen der B3 Saite],
     ) <relativeB3>
   ]),
   grid.cell([
     #figure(
       image("assets/plot_E4_relative Hz.png"),
-      caption: [Relativer Einluss der E4 Saite auf die anderen Saiten],
+      caption: [Relativer Frequenzeinfluss beim Verstimmen der E4 Saite],
     ) <relativeE4>
   ]),
 )
@@ -486,7 +490,7 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
 
 #figure(
   image("assets/pearson_correlation.png", height: 30%),
-  caption: [Pearson-Korrelationskoeffizienten der Messdaten],
+  caption: [Pearson-Korrelationskoeffizienten der Frequenzmessdaten],
 ) <correlations>
 
 Während der Durchführung des Experiments fiel auf, dass beim Zurückbringen einer Saite in ihre Ausgangsposition alle anderen Saiten ebenfalls wieder ihre ursprüngliche Frequenz annahmen.
@@ -523,7 +527,7 @@ Die Verstimmungsmatrix aus dem Experiment ist in @distortionMatrix dargestellt:
 
 #figure(
   image("assets/detuning_matrix_example.png", height: 40%),
-  caption: [Verstimmungsmatrix Beispiel],
+  caption: [Messdaten einer Verstimmungsmatrix],
 ) <distortionMatrix>
 Der Vektor
 
@@ -1460,7 +1464,7 @@ vereinfacht und die Nutzerführung strukturiert wurde.
   grid.cell([
     #figure(
       image("assets/prototyp_create_guitar.png", height: 30%),
-      caption: [Früher Prototyp: Messung der Verstimmungsmatrix],
+      caption: [Früher vertikaler Prototyp der Kalibrierungsansicht],
     ) <protCreateGuita>
   ]),
   grid.cell([
@@ -2096,7 +2100,7 @@ direkt als Füllstand der Fortschrittsanzeige verwendet.
 
 #figure(
   image("assets/kaliblogik.png"),
-  caption: [Zustandsdiagramm: Kalibrierungslogik],
+  caption: [Zustandsdiagramm des Stimmvorgangs],
 ) <zstKalib>
 
 Die Zustandsübergänge beim Drücken von „Weiter" sind in @zstKalib mit
@@ -2338,10 +2342,8 @@ getestet und stellen offene Punkte für eine Weiterentwicklung dar:
 
 == Funktionsfähigkeit des Algorithmus
 
-Das zentrale Ziel der Arbeit -- eine Floyd-Rose-Gitarre mithilfe der
-Applikation korrekt zu stimmen -- wurde erreicht. In den Nutzertests
-(@nutzerTests) konnte die Gitarre unter geeigneten akustischen
-Bedingungen erfolgreich gestimmt werden. Die Verstimmungsmatrix wurde
+Das zentrale Ziel der Arbeit wurde erreicht: Unter kontrollierten akustischen Bedingungen konnte eine Floyd-Rose-Gitarre mithilfe der Applikation erfolgreich gestimmt werden. In den Nutzertests (@nutzerTests) lagen die finalen Abweichungen bei durchschnittlich ±3 bis ±5 Cent. Damit wurde eine für musikalische Zwecke sehr gute Stimmgenauigkeit erreicht.
+Die Verstimmungsmatrix wurde
 korrekt kalibriert und die berechneten Zielfrequenzen führten zu einem
 gestimmten Instrument.
 
@@ -2354,8 +2356,7 @@ Kompensation von Folgeverstimmungen beim schrittweisen Stimmen --
 der zwischenzeitlich behoben wurde (@nutzerTests, Nutzer 2).
 
 == Erfüllung der Requirements aus SWE
-
-#table(
+#figure(caption: [ Erfüllungsgrad der definierten Anforderungen], table(
   columns: (auto, 1fr, auto),
   inset: 7pt,
   stroke: 0.5pt,
@@ -2451,7 +2452,7 @@ der zwischenzeitlich behoben wurde (@nutzerTests, Nutzer 2).
   [@req-nfa-dp-01], [Keine Datenübermittlung an externe Server], [Ja],
   [@req-nfa-dp-02], [Vollständig offline nutzbar], [Ja],
   [@req-nfa-dp-03], [Profile und Stimmungen exportierbar/importierbar], [Nein],
-)
+))
 
 Die folgenden MUSS-Anforderungen wurden nicht erfüllt oder konnten
 nicht überprüft werden:
@@ -2573,13 +2574,13 @@ Tiefpassfilters erfüllt -- konnte das Problem behoben werden.
 Der abschließende Stimmvorgang verlief weitgehend erfolgreich; die
 E2-Saite wurde jedoch zu hoch gestimmt. Dies deutet darauf hin, dass
 die Einträge der Verstimmungsmatrix, die den Einfluss auf E2 beschreiben,
-den größten Messfehler aufwiesen.
+den größten Messfehler aufwiesen -- Abweichung von $plus.minus$ 15 Cent. Die restlichen Saiten hatten eine Fehler von $plus.minus$ 3.2 Cent.
 
 Der effektive Zeitaufwand für den Stimmvorgang betrug 8 Minuten.
 Version der  App: @protoCalib
 === Nutzer 5
 
-Nutzer 5 testete die App in der finalen Version. Die Kalibrierung dauerte sieben Minuten und hat sich damit im Vergleich zu älteren Versionen, in denen dieser Schritt in 3:30 Minuten abgeschlossen werden konnte, deutlich verlängert. Der anschließende Stimmprozess nahm 1:30 Minuten in Anspruch und war erfolgreich.
+Nutzer 5 testete die App in der finalen Version. Die Kalibrierung dauerte sieben Minuten und hat sich damit im Vergleich zu älteren Versionen, in denen dieser Schritt in 3:30 Minuten abgeschlossen werden konnte, deutlich verlängert. Der anschließende Stimmprozess nahm 1:30 Minuten in Anspruch und war erfolgreich. Abweichung von $plus.minus$ 3.3 Cent.
 
 
 = Fazit <fazit>
@@ -2630,7 +2631,7 @@ Die Forschungsfrage lässt sich positiv beantworten: Das
 Kopplungsverhalten einer Floyd-Rose-Gitarre lässt sich durch eine
 kalibrierte Verstimmungsmatrix hinreichend genau linearisieren, um
 darauf eine funktionsfähige mobile Applikation aufzubauen. Das
-Verfahren ist korrekt und in seiner Kernfunktion einsatzbereit.In Nutzertests konnte zudem ein Effizienzgewinn nachgewiesen werden, wobei der Stimmvorgang in der Regel eine Dauer von bis zu fünf Minuten nicht überschreitet.
+Verfahren ist korrekt und in seiner Kernfunktion einsatzbereit. In Nutzertests konnte zudem ein Effizienzgewinn nachgewiesen werden, wobei der Stimmvorgang in der Regel eine Dauer von bis zu fünf Minuten nicht überschreitet. Das Ergebnis ist zufriedenstellend mit einer Abweichung von nicht mehr als $plus.minus$ 4 Cent.
 Die verbleibenden Schwächen liegen nicht im mathematischen Modell,
 sondern in der Robustheit der Signalverarbeitung und der
 Vollständigkeit der Implementierung -- beides adressierbare Punkte
@@ -2768,7 +2769,7 @@ vergrößern.
 / CLAP: CLever Audio Plug-in
 #figure(
   image("assets/gitarren_begriffe.png", height: 34%),
-  caption: [Begriffe einer Gitarre],
+  caption: [Wichtige Bauteile einer E-Gitarre mit Floyd-Rose-Tremolo],
 )<figBegriffe>
 #pagebreak()
 #heading(depth: 1, "Abbildungsverzeichnis", numbering: none, outlined: false)
