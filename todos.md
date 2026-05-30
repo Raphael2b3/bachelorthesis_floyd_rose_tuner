@@ -26,3 +26,9 @@ Aufbau Implementierungsteil
 --- Verteidigung
 
 Alles was ich gemacht habe,
+
+Todo:
+
+Entscheidungsmatrix ordentlich machen
+
+Mehr richtige Nutzertests echte Messdaten...
