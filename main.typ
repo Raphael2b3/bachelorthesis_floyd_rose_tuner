@@ -144,7 +144,7 @@
 
 Das Floyd-Rose-Tremolo ist ein in der E-Gitarre weit verbreitetes Brückensystem, das es Musikerinnen und Musikern ermöglicht, während des Spielens die Tonhöhe aller Saiten gleichzeitig zu verändern. Diese Eigenschaft macht es besonders in Rock- und Metalmusik beliebt.
 
-Die Kehrseite dieser Technik ist jedoch erheblich: Das Stimmen einer Floyd-Rose-Gitarre ist deutlich aufwändiger als bei herkömmlichen Gitarrenbrücken. Der Grund liegt in der mechanischen Kopplung der Saiten über die rotierbare Brücke. Wird die Spannung einer Saite verändert, verschiebt sich der Gleichgewichtszustand der gesamten Brücke und verstimmt dadurch alle übrigen Saiten. Dieser Kaskadeneffekt zwingt den Spieler zu einem iterativen, zeitaufwändigen Stimmvorgang.
+Diese Flexibilität hat jedoch einen erheblichen Nachteil: Das Stimmen einer Floyd-Rose-Gitarre ist deutlich aufwändiger als bei herkömmlichen Gitarrenbrücken. Der Grund liegt in der mechanischen Kopplung der Saiten über die rotierbare Brücke. Wird die Spannung einer Saite verändert, verschiebt sich der Gleichgewichtszustand der gesamten Brücke und verstimmt dadurch alle übrigen Saiten. Dieser Kaskadeneffekt zwingt den Spieler zu einem iterativen, zeitaufwändigen Stimmvorgang.
 
 Erfahrungsberichte aus der Praxis belegen Stimmzeiten von 8 bis 30 Minuten
 @youtube_floyd_rose_tune2026 @ultimateguitar_floydrose_tuning_forum -- ein erheblicher Aufwand, insbesondere für professionelle Gitarristen und Gitarrentechniker, die täglich mehrere Instrumente stimmen müssen.
@@ -190,9 +190,10 @@ $
 
 Cent eignen sich für diesen Zweck besonders, da gleiche Cent-Abstände
 unabhängig von der absoluten Tonhöhe als gleich groß wahrgenommen werden.
-Im Folgenden werden gängige Verfahren vorgestellt und später in @auswahlf0
-Genauigkeit, Rechenaufwand und Anwendungsbereich bewertet.
+Im Folgenden werden gängige Verfahren zur F0-Schätzung vorgestellt.
 
+In @auswahlf0 werden diese Verfahren hinsichtlich Genauigkeit, Effizienz,
+Robustheit und Implementierbarkeit bewertet und das geeignetste ausgewählt.
 
 === Autokorrelation
 Die Grundidee der Autokorrelation beruht darauf, dass ein periodisches Signal
@@ -307,15 +308,25 @@ Genauigkeit bei niedrigen Frequenzen und verrauschten Signalen aus, da das
 Verfahren Periodizität und harmonische Obertöne voraussetzt -- Annahmen, die in
 realen Umgebungen nicht immer erfüllt sind. @Noll1967Cepstrum
 
-=== Moderne Deep-Learning-Ansätze
+=== CREPE -- Neuronale Netze
 
-Neuronale Netze wie CREPE oder DeepPitch nutzen Convolutional Neural Networks
-oder Recurrent Neural Networks, um die Grundfrequenz direkt aus Rohaudio oder
-Spektrogrammen zu schätzen. Vorteile sind die hohe Robustheit gegenüber
-Polyphonie, Hintergrundgeräuschen und verschiedenen Instrumenten. Nachteilig
-sind der erhebliche Rechenaufwand, der Bedarf an großen Trainingsdatensätzen
-sowie die eingeschränkte Eignung für ressourcenbeschränkte Mobilgeräte.
-@Kim2019CREPE
+Neuronale Netze stellen einen grundlegend anderen Ansatz zur F0-Schätzung dar
+als die klassischen Verfahren: Anstatt die Grundfrequenz durch mathematische
+Regeln abzuleiten, lernen sie anhand großer Mengen annotierter Audioaufnahmen,
+welche Muster im Signal welcher Tonhöhe entsprechen.
+
+Ein prominentes Beispiel ist CREPE @Kim2019CREPE (Convolutional Representation
+for Pitch Estimation), das ein sogenanntes Convolutional Neural Network (CNN)
+direkt auf dem Rohaudiosignal anwendet. CNNs sind eine Klasse neuronaler Netze,
+die ursprünglich für die Bilderkennung entwickelt wurden und lokale Muster --
+im Falle von Audio also charakteristische Wellenformabschnitte -- besonders
+effizient erkennen können. CREPE erreicht dadurch eine hohe Genauigkeit und
+ist gegenüber verschiedenen Klangfarben, Rauschpegeln und Instrumenten
+robuster als regelbasierte Verfahren.
+
+Der wesentliche Nachteil dieser Ansätze liegt im Ressourcenbedarf: Die
+Berechnung eines neuronalen Netzes ist rechenintensiver als klassische
+Algorithmen, und das Training erfordert große annotierte Datensätze.
 
 == Physikalisches Modell der Gitarre
 Im Folgenden wird ein physikalisches Modell der Gitarre beschrieben, um zu verstehen, warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
@@ -723,8 +734,7 @@ Wird zum Beispiel $Delta_"E2"$ geändert, berechnet sich der neue Zustand der Fr
 $
   arrow(f) = arrow(f_0) + vec(c_11 Delta_"E2", c_21 Delta_"E2", c_31 Delta_"E2", c_41 Delta_"E2", c_51 Delta_"E2", c_61 Delta_"E2")
 $
-Ändert man nun die weiteren Saiten, addieren sich die Änderungen auf.
-
+Werden weitere Saiten verstimmt, addieren sich die jeweiligen Einflüsse auf.
 $
   arrow(f) = arrow(f_0) + vec(c_11 Delta_"E2", dots.v, c_61 Delta_"E2") +vec(c_12 Delta_"A2", dots.v, c_62 Delta_"A2") + ... +vec(c_16 Delta_"E4", dots.v, c_66 Delta_"E4") = arrow(f_0) + sum_(j=1)^(6) vec(c_(1 j) Delta_j, dots.v, c_(6 j) Delta_j)
 $
@@ -812,17 +822,17 @@ verschieben Saite $N$ noch weiter. Die Endfrequenz aller Saiten konvergiert
 dennoch zu $arrow(g)$, da die $Delta_j$ aus der vollen Verstimmungsmatrix $C$
 berechnet wurden.
 
+== Auswahl des Verfahrens zur Bestimmung der Fundamentalfrequenz <auswahlf0>
 
+Zur systematischen Auswahl wurde eine multikriterielle
+Entscheidungsanalyse nach dem Analytic Hierarchy Process (AHP) @Saaty1980
+durchgeführt.
 
-=== Auswahl des Verfahrens zur Bestimmung der Fundamentalfrequenz <auswahlf0>
-
-Zur systematischen Auswahl wurde eine multikriterielle Entscheidungsanalyse
-nach dem Analytic Hierarchy Process (AHP) @Saaty1980 durchgeführt.
-
-==== Bewertungskriterien und Gewichtung
+=== Bewertungskriterien und Gewichtung
 
 Die Kriterien leiten sich direkt aus den Anforderungen einer mobilen
-Echtzeit-Implementierung ab:
+Echtzeit-Implementierung in Flutter ab. In @auswahlflutter wird erläutert,
+was Flutter ist und warum es eingesetzt wird.
 
 #figure(
   table(
@@ -830,22 +840,29 @@ Echtzeit-Implementierung ab:
     stroke: none,
     table.header([*Kriterium*], [*Beschreibung*], [*Gewichtung*]),
     [Genauigkeit], [Zuverlässigkeit der F0-Schätzung bei realen Musiksignalen], [0,35],
-    [Rechenaufwand], [CPU-Last und Speicherverbrauch unter Echtzeit-Bedingungen], [0,30],
-    [Robustheit], [Stabilität gegenüber Rauschen und Amplitudenschwankungen], [0,20],
-    [Mobile Eignung], [Implementierbarkeit ohne spezialisierte Hardware], [0,15],
+    [Effizienz], [CPU-Last und Speicherverbrauch unter Echtzeit-Bedingungen], [0,20],
+    [Robustheit], [Stabilität gegenüber Rauschen und Amplitudenschwankungen], [0,30],
+    [Implementierbarkeit], [Verfügbarkeit als Bibliothek oder Integrationsaufwand in Flutter/Dart], [0,15],
   ),
   caption: [Bewertungskriterien und Gewichtung],
 )
 
-*Genauigkeit* erhält das höchste Gewicht, da Abweichungen über ±5 Cent für
-ein Stimmgerät nicht tolerierbar sind @Loosen1995. *Rechenaufwand* ist
-zweitwichtigster Faktor, da Mobilgeräte Echtzeit-Verarbeitung bei begrenzter
-CPU-Leistung und Akkulaufzeit leisten müssen. *Robustheit* wird höher gewichtet
-als *Mobile Eignung*, da das Einsatzgebiet auch verrauschte Umgebungen umfasst.
-Beide Kriterien fallen gegenüber Genauigkeit und Rechenaufwand jedoch weniger
-ins Gewicht.
+*Genauigkeit* erhält das höchste Gewicht (0,35), da sie die Präzision des
+Stimmgeräts unmittelbar beeinflusst -- ungenaue F0-Schätzungen wirken sich
+direkt auf die Messwerte der Verstimmungsmatrix und damit auf die Berechnung
+der Zwischenzielfrequenz aus. *Effizienz* wird mit 0,20 gewichtet, da moderne
+Mobilgeräte in der Regel ausreichend Rechenleistung bereitstellen.
+*Robustheit* erhält 0,30, da das Einsatzgebiet auch verrauschte Umgebungen
+wie Bühnen oder Proberäume umfasst. *Implementierbarkeit* erhält ein Gewicht
+von 0,15, fließt jedoch als praktischer Faktor ein, da die Verfügbarkeit
+einer Bibliothek den Entwicklungsaufwand erheblich beeinflusst -- dies ist
+relevant, da die Entwicklung im Rahmen der Bachelorarbeit einer festen Frist
+unterliegt.
 
-==== Entscheidungsmatrix
+=== Entscheidungsmatrix
+
+Die vier Verfahren wurden auf einer Skala von 1 (schlecht) bis 10 (sehr gut)
+bewertet und anschließend mit den Gewichtungen multipliziert:
 
 #figure(
   table(
@@ -854,44 +871,98 @@ ins Gewicht.
     table.header(
       [*Verfahren*],
       [*Genauigkeit* \ (×0,35)],
-      [*Rechenaufwand* \ (×0,30)],
-      [*Robustheit* \ (×0,20)],
-      [*Mobile Eignung* \ (×0,15)],
+      [*Effizienz* \ (×0,20)],
+      [*Robustheit* \ (×0,30)],
+      [*Implementierbarkeit* \ (×0,15)],
       [*Gesamt*],
     ),
-    [Klassische Autokorrelation], [6,5], [8,5], [6,0], [7,5], [7,1],
-    [YIN-Algorithmus], [8,0], [8,0], [8,5], [9,0], [8,3],
-    [Fourier-/Cepstrum-Analyse], [6,0], [5,5], [6,5], [6,0], [6,0],
-    [Deep-Learning-Ansätze], [9,0], [2,5], [9,0], [3,0], [6,1],
+    [Klassische Autokorrelation], [3,0], [9,5], [3,0], [7,0], [4,90],
+    [YIN-Algorithmus], [7,0], [7,0], [7,0], [9,5], [7,375],
+    [Fourier-/Cepstrum-Analyse], [6,5], [6,0], [7,0], [6,0], [6,475],
+    [CREPE], [8,0], [4,5], [9,0], [5,0], [7,150],
   ),
   caption: [Entscheidungsmatrix zur Auswahl des Verfahrens],
 )
 
-Die Einzelbewertungen begründen sich wie folgt:
+=== Bewertung der Einzelverfahren
 
-Die *klassische Autokorrelation* erzielt bei Genauigkeit lediglich 6,5 Punkte,
-da sie gegenüber Oktavfehlern und harmonischen Obertönen anfällig ist @YIN.
-Ihr geringer Rechenaufwand (8,5) und die einfache Implementierung sind Stärken,
-gleichen den Genauigkeitsnachteil jedoch nicht aus.
+==== Klassische Autokorrelation
 
-Der *YIN-Algorithmus* erreicht 8,0 Punkte bei Genauigkeit -- die
-Differenzfunktion reduziert Oktavfehler auf unter $2%$ @YIN. Trotz zusätzlicher
-Verarbeitungsschritte bleibt der Rechenaufwand mit einer Komplexität von
-$O(W log W)$ durch FFT-Optimierung gering (8,0). Die hohe Mobile Eignung (9,0)
-belegen bestehende Implementierungen in Swift und Kotlin @Six2014TarsosDSP.
+Die klassische Autokorrelation erzielt bei Genauigkeit lediglich 3,0 Punkte,
+da sie gegenüber Oktavfehlern und harmonischen Obertönen strukturell anfällig
+ist @YIN -- insbesondere bei Gitarrensignalen mit starken Obertönen kann das
+erste Nebenmaximum fälschlicherweise als Grundfrequenz detektiert werden.
+Die Robustheit (3,0 Punkte) leidet zusätzlich unter der Empfindlichkeit
+gegenüber additivem Rauschen. Ihre hohe Effizienz (9,5 Punkte) und eine
+moderate Implementierbarkeit (7,0 Punkte) gleichen den Genauigkeitsnachteil
+für den Anwendungsfall nicht aus.
 
-Die *Fourier-/Cepstrum-Analyse* verliert bei Rechenaufwand (5,5) durch die
-doppelte Transformation sowie bei Genauigkeit (6,0), da für tiefe
-Gitarrenfrequenzen unter 80~Hz hohe Abtastraten erforderlich sind
-@FFT_NEEDS_HIGH_SAMPLING.
+==== YIN-Algorithmus
 
-*Deep-Learning-Ansätze* erzielen zwar die höchste Genauigkeit (9,0) -- CREPE
-erreicht einen mittleren Fehler von unter 10~Cent @Kim2019CREPE -- scheitern
-jedoch am Rechenaufwand (2,5): Das kleinste CREPE-Modell belegt 32~MB Speicher
-und erreicht auf mobiler CPU keine echtzeitfähige Latenz @Kim2019CREPE.
+Der YIN-Algorithmus reduziert Oktavfehler gegenüber der klassischen
+Autokorrelation deutlich. Er erzielt 7,0 Punkte bei Genauigkeit mit einem
+mittleren Fehler von unter 2~% bei periodischen Signalen @YIN. Die Nachbearbeitungsschritte -- parabolische Interpolation sowie ein absoluter
+Schwellenwert zur Voicing-Entscheidung -- erhöhen die Zeitkomplexität gegenüber
+der einfachen Autokorrelation geringfügig, weshalb die Effizienz mit 7,0 Punkten
+dennoch gut bewertet wird. Die Robustheit (7,0 Punkte) profitiert von der
+Differenzbildung, die stationäres Rauschen teilweise unterdrückt.
 
-Der *YIN-Algorithmus* erreicht mit 8,3 Punkten die höchste Gesamtbewertung
-und wird daher für die Implementierung ausgewählt.
+
+Entscheidend für die Implementierbarkeit ist die Verfügbarkeit des Algorithmus
+als natives Dart-Paket für Flutter, wodurch kein eigener Portierungsaufwand
+entsteht. Dieser Umstand wird mit 9,5 Punkten bewertet und trägt maßgeblich
+zur Gesamtbewertung bei.
+
+==== Fourier-/Cepstrum-Analyse
+
+Die Genauigkeit wird mit 6,5 Punkten
+bewertet; für tiefe Gitarrenfrequenzen unter 80~Hz sind lange Fensterlängen
+erforderlich, was die zeitliche Auflösung verschlechtert
+@FFT_NEEDS_HIGH_SAMPLING. Der Genauigkeitsunterschied gegenüber YIN ist dabei
+vergleichsweise gering @SUKHOSTAT2015410. Die zweifache Transformation erhöht
+den Rechenaufwand gegenüber der klassischen Autokorrelation spürbar (6,0
+Punkte Effizienz). Die Robustheit (7,0 Punkte) ist mit der von YIN vergleichbar
+@SUKHOSTAT2015410. Die Implementierbarkeit (6,0 Punkte) ist moderat, da
+FFT-Bibliotheken für Dart verfügbar sind, die Cepstrum-Verarbeitung jedoch
+manuell implementiert werden müsste.
+
+==== CREPE
+
+Die Genauigkeit wird mit 8,0 Punkten bewertet; gemäß
+@kroon2022comparingconventionalpitchdetection ist die Leistung mit YIN
+vergleichbar. Da das Modell auf allgemeinen Audiodaten trainiert wurde, wären
+durch ein nachträgliches Training auf Gitarrenaufnahmen weitere Verbesserungen
+erzielbar.
+
+Die Robustheit (9,0 Punkte) ist hoch: Da das Modell während des Trainings
+eine Vielzahl an Klangfarben, Rauschpegeln und Aufnahmebedingungen gesehen
+hat, ist es gegenüber solchen Schwankungen widerstandsfähiger als regelbasierte
+Verfahren.
+
+Die Effizienz wird mit 4,5 Punkten geringer bewertet. Das Netz verarbeitet
+1024 Rohsamples in sechs aufeinanderfolgenden Rechenschritten (Faltungslayern),
+in denen jeweils lokale Muster im Signal gesucht werden, gefolgt von einer
+abschließenden Klassifikationsschicht mit 360 möglichen Ausgaben. Bereits der
+erste Rechenschritt erzeugt dabei $128 times 1024 = 131,072$ Zwischenwerte
+(~512~KB), was etwa dem 16-fachen aller nachfolgenden Schritte entspricht. Der
+gesamte Arbeitsspeicherbedarf pro Berechnung beträgt ca.\ 600~KB, die
+Modellgröße rund 4--5~MB.
+
+Die Implementierbarkeit wird mit 5,0 Punkten bewertet: CREPE ist als
+Python-Bibliothek verfügbar, eine direkt einbindbare Lösung für Flutter
+existiert jedoch nicht. Eine Integration würde die Umwandlung des Modells
+in ein mobiltaugliches Format (TensorFlow Lite) sowie eine entsprechende
+Anbindung an Flutter erfordern -- ein erheblicher Mehraufwand gegenüber
+einer fertigen Bibliothek.
+=== Auswahl
+
+Der *YIN-Algorithmus* erzielt mit 7,375 Punkten die höchste Gesamtbewertung
+und wird daher für die Implementierung ausgewählt. Trotz etwas geringerer
+Genauigkeit gegenüber CREPE überzeugt YIN durch die direkte Verfügbarkeit als
+Flutter-Bibliothek, gute Effizienz sowie ausreichende Robustheit für den
+vorgesehenen Einsatzbereich. Für zukünftige Iterationen bleibt CREPE eine
+interessante Option, da das Modell durch gitarrenspezifisches Training weiter
+optimiert werden könnte.
 == Signal-Filter
 Um die Zuverlässigkeit der Grundfrequenzschätzung zu erhöhen, wird Ein- und Ausgangssignal gefiltert und aufbereitet.
 === Bandpassfilterung durch Parameteranpassung
@@ -1348,7 +1419,7 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 #req(
   "NFA-MG-01",
   "MUSS",
-  [Das System muss die Grundfrequenz einer Gitarrensaite mit einer Abweichung von maximal $±0,2 "Hz"$ vom wahren Wert schätzen, gemessen unter kontrollierten akustischen Bedingungen.],
+  [Das System muss die Grundfrequenz einer Gitarrensaite mit einer Abweichung von maximal $±5 "Cent"$ vom wahren Wert schätzen, gemessen unter kontrollierten akustischen Bedingungen.],
 ) <req-nfa-mg-01>
 
 #req(
@@ -1360,7 +1431,7 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 #req(
   "NFA-MG-03",
   "SOLL",
-  [Das System sollte auch bei unverstärktem Spiel eine Messgenauigkeit von $±0,1 "Hz"$ einhalten.#footnote([Da Töne logarithmisch wahrgenommen werden, steigt die geforderte absolute Genauigkeit mit sinkender Frequenz.])],
+  [Das System sollte auch bei unverstärktem Spiel eine Messgenauigkeit von $±5 "Cent"$ einhalten.],
 ) <req-nfa-mg-03>
 
 ===== Latenz
@@ -2070,7 +2141,7 @@ Format _Note + Oktave_ (z.~B. `"E2"` für das E in der zweiten Oktave)
 und definiert damit die Zielfrequenzen für den Stimmprozess (@req-fsa-03).
 == Implementierung <impl>
 
-=== Auswahl des Cross-Platform-Frameworks
+=== Auswahl des Cross-Platform-Frameworks<auswahlflutter>
 
 Da die App gemäß @req-nfa-ko-01 auf iOS und Android lauffähig sein muss,
 wird ein Cross-Platform-Framework eingesetzt, um eine gemeinsame Codebasis
@@ -2265,7 +2336,7 @@ direkt als Füllstand der Fortschrittsanzeige verwendet.
 ==== Navigationslogik
 
 #figure(
-  image("assets/kaliblogik.png"),
+  image("assets/kalog.png"),
   caption: [Zustandsdiagramm des Stimmvorgangs],
 ) <zstKalib>
 
@@ -2274,10 +2345,6 @@ den Labels a) bis h) dargestellt und werden im Folgenden als
 Pseudocode ausformuliert. #footnote([`++` ist die Kurzform für
   $v = v + 1$; analog gilt `--` für $v = v - 1$.])
 
-Um Übergang c) und b) auf der Rückwärtsnavigation unterscheiden zu
-können, wird die Hilfsvariable `prüfungFehler` eingeführt. Sie ist
-`true`, wenn der Nutzer auf der Prüfseite „Zurück" gedrückt und damit
-Übergang c) ausgelöst hat; andernfalls ist sie `false`.
 
 *Messseite*
 ```
@@ -2289,16 +2356,14 @@ Zurück-Button{
     if stringIndex == 0 && sampleIndex == 0 && effectIndex == 0:
         // Übergang x)
         exit()
-    else if stringIndex > 0: // Übergang b)
-        if not prüfungFehler:
-            stringIndex--
-        // Übergang c) → keine Zustandsänderung
+    else if stringIndex > 0: // Übergang reverse b) rückwärts
+        stringIndex--
         navigate(Prüfseite)
     else:  // stringIndex == 0
         stringIndex = 5
-        if sampleIndex > 0: // Übergang e)
+        if sampleIndex > 0: // Übergang d)
             sampleIndex--
-        else:               // Übergang f)
+        else:               // Übergang e)
             sampleIndex = 1 // letztes Sample der vorherigen Verstimmung
         navigate(Veränderungsseite)
 }
@@ -2316,12 +2381,12 @@ Weiter-Button{
         navigate(Messseite)
 
     else if sampleIndex == 1 && effectIndex == 5:
-        calculateMatrix() // Übergang h)
+        calculateMatrix() // Übergang g)
         saveGuitar()
         navigate(Kontrollansicht)
 
     else:
-        if sampleIndex == 0: // Übergang d)
+        if sampleIndex == 0: // Übergang c)
             stringIndex = effectIndex
         else: // Übergang g)  sampleIndex==1 && effectIndex<5
             samples[effectIndex + 1][0] = samples[effectIndex][1]
@@ -2332,8 +2397,7 @@ Weiter-Button{
         navigate(Veränderungsseite)
 }
 
-Zurück-Button{ // Übergang c)
-    prüfungFehler = true
+Zurück-Button{ // Übergang a) rückwärts
     navigate(Messseite)
 }
 ```
@@ -2341,23 +2405,23 @@ Zurück-Button{ // Übergang c)
 *Veränderungsseite*
 
 ```
-Fertig-Button{ // Übergang e)
+Fertig-Button{ // Übergang d)
     sampleIndex++
     stringIndex = 0
     prüfungFehler=false
     navigate(Messseite)
 }
 
-WrongStringChanged-Button{ // Übergang f)
+WrongStringChanged-Button{ // Übergang e)
     sampleIndex = 0
     stringIndex = 0
     prüfungFehler=false
     navigate(Messseite)
 }
 
-Zurück-Button{ // Übergang d) rückwärts
+Zurück-Button{ // Übergang c) rückwärts
     stringIndex = 5
-    if sampleIndex == 1 && effectIndex > 0: // Übergang g) rückwärts
+    if sampleIndex == 1 && effectIndex > 0: // Übergang f) rückwärts
         effectIndex--
     navigate(Prüfseite)
 }
@@ -2411,7 +2475,7 @@ Weiter-Button:{ // Übergang a)
 Zurück-Button{
     if stringIndex == 0: // Übergang x)
         exit()
-    else: // Übergang b)
+    else: // Übergang b) rückwärts
         stringIndex--
         navigate(Prüfseite)
 }
@@ -2425,7 +2489,6 @@ Weiter-Button{
 
     if stringIndex < 5: // Übergang b)
         stringIndex++
-        prüfungFehler=false
         navigate(Messseite)
     else: // Übergang c)
         stringIndex = 0
@@ -2434,7 +2497,6 @@ Weiter-Button{
 }
 
 Zurück-Button{ // reverse a)
-    prüfungFehler=true
     navigate(Messseite)
 }
 ```
@@ -2508,7 +2570,7 @@ getestet und stellen offene Punkte für eine Weiterentwicklung dar:
 
 == Funktionsfähigkeit des Algorithmus
 
-Das zentrale Ziel der Arbeit wurde erreicht: Unter kontrollierten akustischen Bedingungen konnte eine Floyd-Rose-Gitarre mithilfe der Applikation erfolgreich gestimmt werden. In den Nutzertests (@nutzerTests) lagen die finalen Abweichungen bei durchschnittlich ±3 bis ±5 Cent. Damit wurde eine für musikalische Zwecke sehr gute Stimmgenauigkeit erreicht.
+Das zentrale Ziel der Arbeit wurde erreicht: Unter kontrollierten akustischen Bedingungen konnte eine Floyd-Rose-Gitarre mithilfe der Applikation erfolgreich gestimmt werden. In den Nutzertests (@nutzerTests) lagen die finalen Abweichungen bei durchschnittlich ±3 bis ±14 Cent. Damit wurde eine für musikalische Zwecke sehr gute Stimmgenauigkeit erreicht.
 Die Verstimmungsmatrix wurde
 korrekt kalibriert und die berechneten Zielfrequenzen führten zu einem
 gestimmten Instrument.
@@ -2575,9 +2637,9 @@ der zwischenzeitlich behoben wurde (@nutzerTests, Nutzer 2).
   table.cell(colspan: 3, fill: luma(230))[
     *Nichtfunktionale Anforderungen – Messgenauigkeit*
   ],
-  [@req-nfa-mg-01], [Grundfrequenz mit max. $±0,2 "Hz"$ Abweichung], [Nein],
+  [@req-nfa-mg-01], [Grundfrequenz mit max. $±5 "Cent"$ Abweichung], [Ja],
   [@req-nfa-mg-02], [Obertöne nicht als Grundfrequenz ausgeben], [Teilweise],
-  [@req-nfa-mg-03], [Bei unverstärktem Spiel max. $±0,1 "Hz"$ Abweichung], [Nein],
+  [@req-nfa-mg-03], [Bei unverstärktem Spiel max. $±5 "Cent"$ Abweichung], [Ja],
 
   // ── Nichtfunktionale: Latenz ───────────────────────────────────
   table.cell(colspan: 3, fill: luma(230))[
@@ -2629,14 +2691,6 @@ Kernmerkmal des Stimmvorgangs darstellt, sondern ein Beitrag zur
 Nutzererfahrung ist, der in einer späteren Iteration ergänzt werden
 kann.
 
-@req-nfa-mg-01 und @req-nfa-mg-02 erwiesen sich als unzureichend
-formuliert: Da die menschliche Wahrnehmung von Tonhöhen logarithmisch
-skaliert, entspricht eine Abweichung von $0,2 "Hz"$ bei 80 Hz einer
-anderen wahrgenommenen Verstimmung als bei 320 Hz. Eine Angabe in Cent
-wäre als plattformunabhängige Genauigkeitsmetrik besser geeignet
-gewesen. Darüber hinaus ist die messtechnische Verifikation einer
-definierten Frequenzgenauigkeit mit erheblichem Testaufwand verbunden,
-der im Rahmen dieser Arbeit nicht leistbar war.
 
 @req-nfa-ro-01 konnte nicht getestet werden, da der Aufbau einer
 kontrollierten akustischen Testumgebung mit definiertem Umgebungspegel
@@ -2681,8 +2735,9 @@ Die Auswertung erfolgte qualitativ-deskriptiv auf Basis der dokumentierten Testv
     Überprüfung der Messdaten dauerte 3:47 Minuten; der gesamte
     Stimmvorgang war nach ca. 7 Minuten abgeschlossen.
 
-    Version der  App: @protCreateGuita
-
+    Version der  App: @protCreateGuita \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
     === Nutzer 1
 
     Die App wurde auf einer Jam-Session vorgestellt. Beim Versuch, die
@@ -2695,7 +2750,9 @@ Die Auswertung erfolgte qualitativ-deskriptiv auf Basis der dokumentierten Testv
     Dieser Test macht deutlich, dass die Fundamentalfrequenzerkennung unter
     ungünstigen akustischen Bedingungen robuster gestaltet werden muss.
 
-    Version der  App: @protCreateGuita
+    Version der App: @protCreateGuita \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
     === Nutzer 2
 
     Die App wurde unter guten akustischen Bedingungen verwendet.
@@ -2716,7 +2773,11 @@ Die Auswertung erfolgte qualitativ-deskriptiv auf Basis der dokumentierten Testv
     war. Als Konsequenz muss der Stimmvorgang die durch jede
     Saitenänderung verursachten Folgeverstimmungen schrittweise
     vorausberechnen und kompensieren.
-    Version der  App: @protCreateGuita
+
+
+    Version der App: @protCreateGuita \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
     === Nutzer 3
 
     Nutzer 3 war mit der Darstellung roher Frequenzwerte (in Hz) überfordert
@@ -2749,11 +2810,120 @@ Die Auswertung erfolgte qualitativ-deskriptiv auf Basis der dokumentierten Testv
     den größten Messfehler aufwiesen -- Abweichung von $plus.minus$ 15 Cent. Die restlichen Saiten hatten einen Fehler von $plus.minus$ 3,2 Cent.
 
     Der effektive Zeitaufwand für den Stimmvorgang betrug 8 Minuten.
-    Version der  App: @protoCalib
+    Version der  App: @protoCalib \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
+
     === Nutzer 5
 
-    Nutzer 5 testete die App in der finalen Version. Die Kalibrierung dauerte sieben Minuten und hat sich damit im Vergleich zu älteren Versionen, in denen dieser Schritt in 3:30 Minuten abgeschlossen werden konnte, deutlich verlängert. Der anschließende Stimmprozess nahm 1:30 Minuten in Anspruch und war erfolgreich. Abweichung von $plus.minus$ 3,3 Cent.
+    Nutzer 5 testete die App in der finalen Version. Die Kalibrierung dauerte
+    7:00 Minuten und hat sich damit im Vergleich zu älteren Versionen, in denen
+    dieser Schritt in 3:30 Minuten abgeschlossen werden konnte, deutlich
+    verlängert. Der anschließende Stimmprozess nahm 1:30 Minuten in Anspruch
+    und war erfolgreich. Die mittlere Abweichung betrug $plus.minus$~3,3~Cent. \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
 
+    === Nutzer 6
+
+    Nutzer 6 benötigte 6:26 Minuten für die Kalibrierung und 5:40 Minuten für
+    den Stimmprozess. Das größte Problem war die Erkennung tiefer Frequenzen
+    im Bereich von 60--80~Hz. Die Ursache liegt darin, dass Vielfache dieser
+    Frequenzen -- etwa 120~Hz und 160~Hz -- ebenfalls plausible Messwerte für
+    benachbarte Saiten darstellen, was zu Verwechslungen führt. Daraus ergibt
+    sich die Empfehlung, tiefe Frequenzen bei der Schätzung bevorzugt zu
+    behandeln.
+
+    #figure(
+      table(
+        columns: (auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header([*Saite*], [*Abweichung*]),
+        [E2], [+15 Cent],
+        [A2], [+8 Cent],
+        [D3], [+5 Cent],
+        [G3], [+20 Cent],
+        [B3], [+7 Cent],
+        [E4], [+0 Cent],
+      ),
+      caption: [Nutzer 6 -- Abweichungen nach dem Stimmen],
+    )
+
+    === Nutzer 7
+
+    Nutzer 7 testete den Wechsel von Standard-E- zur Drop-D-Stimmung, bei dem
+    die tiefe E-Saite auf D2 umgestimmt wird. Der Stimmprozess dauerte
+    3:00 Minuten. Auch bei diesem Test traten Schwierigkeiten bei der Erkennung
+    tiefer Frequenzen auf. Der Test wurde auf einem Redmi 10 2022 durchgeführt.
+
+    #figure(
+      table(
+        columns: (auto, auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header([*Saite*], [*Ausgangsfrequenz*], [*Abweichung*]),
+        [D2], [82,97 Hz], [+0 Cent],
+        [A2], [110,4 Hz], [+6 Cent],
+        [D3], [147,4 Hz], [+3 Cent],
+        [G3], [198,4 Hz], [+12 Cent],
+        [B3], [247,3 Hz], [+2 Cent],
+        [E4], [329,9 Hz], [+4 Cent],
+      ),
+      caption: [Nutzer 7 -- Ausgangsfrequenzen und Abweichungen nach dem Stimmen],
+    )
+    Mobilgerät: Redmi 10 2022 \
+    Modell: ~22011119UY
+    === Nutzer 8
+
+    Nutzer 8 führte Kalibrierung und Stimmvorgang durch, wobei die Saiten
+    nach oben verstimmt wurden. Die Kalibrierung dauerte 5:18 Minuten, der
+    Stimmprozess 3:20 Minuten.
+
+    #figure(
+      table(
+        columns: (auto, auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header([*Saite*], [*Ausgangsfrequenz*], [*Abweichung*]),
+        [E2], [85,49 Hz], [+4 Cent],
+        [A2], [118,6 Hz], [+15 Cent],
+        [D3], [147,63 Hz], [+10 Cent],
+        [G3], [202,85 Hz], [+20 Cent],
+        [B3], [250,3 Hz], [+13 Cent],
+        [E4], [334,0 Hz], [+10 Cent],
+      ),
+      caption: [Nutzer 8 -- Ausgangsfrequenzen und Abweichungen nach dem Stimmen],
+    )
+    Mobilgerät: Redmi 10 2022 \
+    Modell: ~22011119UY
+    === Nutzer 9
+
+    Nutzer 9 führte Kalibrierung und Stimmvorgang durch, wobei die Saiten
+    nach unten verstimmt wurden. Die Kalibrierung dauerte 5:18 Minuten, der
+    Stimmprozess 2:29 Minuten. Nach einer zweiten Iteration lagen alle Saiten
+    innerhalb einer Abweichung von maximal $plus.minus$~5~Cent. Der Test wurde
+    auf einem Redmi~10 (2022, Modell~22011119UY) durchgeführt.
+
+    #figure(
+      table(
+        columns: (auto, auto, auto, auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header(
+          [*Saite*],
+          [*Ausgangs- \ frequenz*],
+          [*Abweichung \ Iteration 1*],
+          [*End- \ frequenz*],
+          [*Abweichung \ Iteration 2*],
+        ),
+        [E2], [84,0 Hz], [+0 Cent], [82,5 Hz], [$lt.eq$ 5 Cent],
+        [A2], [106,2 Hz], [+5 Cent], [111,3 Hz], [$lt.eq$ 5 Cent],
+        [D3], [144,96 Hz], [+8 Cent], [147,8 Hz], [$lt.eq$ 5 Cent],
+        [G3], [192,5 Hz], [+6 Cent], [197,4 Hz], [$lt.eq$ 5 Cent],
+        [B3], [232,0 Hz], [+0 Cent], [247,2 Hz], [$lt.eq$ 5 Cent],
+        [E4], [312,58 Hz], [+0 Cent], [330,1 Hz], [$lt.eq$ 5 Cent],
+      ),
+      caption: [Nutzer 9 -- Ausgangsfrequenzen, Abweichungen und Endfrequenzen nach zwei Iterationen],
+    )
+    Mobilgerät: Redmi 10 2022 \
+    Modell: ~22011119UY
   ]
 }
 = Fazit <fazit>
@@ -2771,7 +2941,7 @@ sich dieses System durch eine gitarrenspezifische Verstimmungsmatrix $C$
 linearisieren. Die Linearitätsannahme wurde experimentell mit Beträgen von
 Pearson-Korrelationskoeffizienten von über $0,98$ für alle Saiten
 bestätigt. Die Matrixinversion liefert die erforderlichen
-Verstimmungsbeträge; die sequentielle Zielfrequenzformel macht diese
+Verstimmungsbeträge; die sequentielle Zwischenzielfrequenzformel macht diese
 für den Nutzer direkt anwendbar, ohne mentale Zwischenrechnungen.
 
 *Zur Applikation:*
@@ -2792,10 +2962,12 @@ strukturierte Stimmvorgänge in ruhigen Umgebungen einsetzbar.
 Unter lauten Umgebungsbedingungen oder bei Gitarren mit ausgeprägtem
 Obertonanteil -- etwa durch Verzerrungseffekte -- war die
 Fundamentalfrequenzschätzung nicht zuverlässig genug, um den
-Stimmvorgang abzuschließen. Die Messgenauigkeitsanforderung
-NFA-MG-01 (±0,2 Hz) konnte nicht systematisch verifiziert werden;
-eine Angabe in Cent wäre als Genauigkeitsmetrik geeigneter gewesen,
-da sie die logarithmische Wahrnehmung von Tonhöhen berücksichtigt.
+Stimmvorgang abzuschließen. Darüber hinaus akkumulieren sich
+Messungenauigkeiten über die Kalibrierungs- und Stimmschritte hinweg,
+was in einzelnen Fällen zu Abweichungen von bis zu 20~Cent führte.
+Dieser Wert liegt an der Wahrnehmungsgrenze ungeübter Ohren und sollte
+in einer Weiterentwicklung reduziert werden.
+
 Mehrere SOLL-Anforderungen -- darunter benutzerdefinierte Stimmungen
 und Erklärvideos -- wurden im Rahmen dieser Arbeit nicht implementiert.
 
@@ -2804,12 +2976,17 @@ Die Forschungsfrage lässt sich positiv beantworten: Das
 Kopplungsverhalten einer Floyd-Rose-Gitarre lässt sich durch eine
 kalibrierte Verstimmungsmatrix hinreichend genau linearisieren, um
 darauf eine funktionsfähige mobile Applikation aufzubauen. Das
-Verfahren ist korrekt und in seiner Kernfunktion einsatzbereit. In Nutzertests konnte zudem ein Effizienzgewinn nachgewiesen werden, wobei der Stimmvorgang in der Regel eine Dauer von bis zu fünf Minuten nicht überschreitet. Das Ergebnis ist zufriedenstellend mit einer Abweichung von nicht mehr als $plus.minus$ 4 Cent.
+Verfahren ist korrekt und in seiner Kernfunktion einsatzbereit. In
+Nutzertests konnte zudem ein Effizienzgewinn nachgewiesen werden, wobei
+der Stimmvorgang typischerweise zwischen fünf und acht Minuten in
+Anspruch nimmt. Das Ergebnis ist zufriedenstellend: Bei einmaliger
+Iteration beträgt die Abweichung in der Regel nicht mehr als
+$plus.minus$~20~Cent, bei zweimaliger Iteration nicht mehr als
+$plus.minus$~5~Cent.
 Die verbleibenden Schwächen liegen nicht im mathematischen Modell,
 sondern in der Robustheit der Signalverarbeitung und der
 Vollständigkeit der Implementierung -- beides adressierbare Punkte
 für eine Weiterentwicklung.
-
 = Ausblick<ausblick>
 
 == Optimierung der Fundamentalfrequenzschätzung
@@ -2821,12 +2998,7 @@ Obertonanteil wie tiefen Stahlsaiten (Nutzer 4). In beiden Fällen wurde
 der erste Oberton -- also die doppelte Grundfrequenz -- als Schätzwert
 ausgegeben.
 
-Als Gegenmaßnahme wurde gemäß @req-fsa-12 eine Plausibilitätsprüfung
-implementiert: Liegt der geschätzte Wert außerhalb des erwarteten
-Frequenzbereichs der jeweiligen Saite, wird durch Halbierung auf die
-Grundfrequenz rückgeschlossen. Diese Heuristik behebt den Oktavfehler in
-den beobachteten Fällen, setzt jedoch voraus, dass der Fehler genau eine
-Oktave beträgt. Für stärker verrauschte Signale oder höhere Obertöne
+Für stärker verrauschte Signale oder höhere Obertöne
 (Faktor 3, 4, ...) greift sie nicht zuverlässig.
 
 Eine robustere Alternative wäre das _Harmonic Product Spectrum_ (HPS):
@@ -2854,7 +3026,7 @@ als lokale Maxima identifizieren und harmonische Obertöne herausrechnen.
 Der Nutzer könnte so alle Saiten gleichzeitig anschlagen, was den
 Messvorgang erheblich beschleunigen würde.
 
-== Automatische Saiten­erkennung beim Stimmen
+== Automatische Saitenerkennung beim Stimmen
 
 Wenn der Nutzer während des Stimmvorgangs eine Saite anspielt, könnte
 die App anhand der gemessenen Frequenz automatisch erkennen, welche Saite
@@ -2894,9 +3066,11 @@ präzise auf solche Ensembles abzustimmen.
 
 Die aktuelle Implementierung setzt sechs Saiten voraus. Es gibt jedoch
 Gitarren mit sieben, acht oder mehr Saiten sowie Bassgitarren mit vier
-oder fünf Saiten. Eine Verallgemeinerung der Verstimmungsmatrix $C$ auf
-$n times n$ wäre konzeptuell _umsetzbar_ und würde die Applikation
-für eine deutlich breitere Instrumentenvielfalt nutzbar machen.
+oder fünf Saiten. Zudem ist dieser Effekt auch bei Harfen beobachtbar,
+da gespannte Saiten auf ähnlicher Weise in Wechselwirkung miteinander stehen.
+Eine Verallgemeinerung der Verstimmungsmatrix $C$ auf $n times n$ Saiten
+wäre konzeptuell umsetzbar und würde die Applikation für eine breitere
+Instrumentenvielfalt nutzbar machen.
 
 == Implementierung als DAW-Plugin
 
@@ -2964,4 +3138,5 @@ vergrößern.
 // #pagebreak()
 
 #bibliography("bib.bib")
+
 
