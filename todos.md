@@ -29,6 +29,6 @@ Alles was ich gemacht habe,
 
 Todo:
 
-Entscheidungsmatrix ordentlich machen
+cleane sprache für das was ich geändert habe,
 
-Mehr richtige Nutzertests echte Messdaten...
+entscheidungsmatrix farben.
