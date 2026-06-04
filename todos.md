@@ -32,3 +32,5 @@ Todo:
 cleane sprache für das was ich geändert habe,
 
 entscheidungsmatrix farben.
+
+johannes feedback einarbeiten
