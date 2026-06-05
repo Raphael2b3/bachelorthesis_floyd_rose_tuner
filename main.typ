@@ -878,10 +878,21 @@ Die Kriterien wurden qualitativ in die Kategorien "_unwichtig_", "_weniger wicht
     columns: (auto, auto, auto),
 
     table.header([*Kriterium*], [*Beschreibung*], [*Gewichtung*]),
-    [Genauigkeit], [Zuverlässigkeit der F0-Schätzung bei realen Musiksignalen], [_sehr wichtig_],
-    [Effizienz], [CPU-Last und Speicherverbrauch unter \ Echtzeitbedingungen], [_weniger wichtig_],
-    [Robustheit], [Stabilität gegenüber Rauschen und \ Amplitudenschwankungen], [_weniger wichtig_],
-    [Implementierbarkeit], [Verfügbarkeit als Bibliothek oder Integrationsaufwand in Flutter/Dart], [_sehr wichtig_],
+    [Genauigkeit],
+    [Zuverlässigkeit der F0-Schätzung bei realen Musiksignalen],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_sehr wichtig_],
+
+    [Effizienz],
+    [CPU-Last und Speicherverbrauch unter \ Echtzeitbedingungen],
+    table.cell(fill: rgb("e67e22").lighten(60%))[_weniger wichtig_],
+
+    [Robustheit],
+    [Stabilität gegenüber Rauschen und \ Amplitudenschwankungen],
+    table.cell(fill: rgb("e67e22").lighten(60%))[_weniger wichtig_],
+
+    [Implementierbarkeit],
+    [Verfügbarkeit als Bibliothek oder Integrationsaufwand in Flutter/Dart],
+    [#table.cell(fill: rgb("27ae60").lighten(40%))[_sehr wichtig_]],
   ),
 
   kind: image,
@@ -906,15 +917,31 @@ Die vier Verfahren wurden auf einer ordinalen Skala (_schlecht_, _mittel_, _gut_
     columns: (auto, 1fr, 1fr, 1fr, 1fr),
     table.header(
       [*Verfahren*],
-      [*Genauigkeit* \ _sehr wichtig_],
-      [*Effizienz* \ _weniger \ wichtig_],
-      [*Robustheit* \ _weniger \ wichtig_],
-      [*Implementierbarkeit* \ _sehr wichtig_],
+      table.cell(fill: rgb("27ae60").lighten(40%))[*Genauigkeit* \ _sehr wichtig_],
+      table.cell(fill: rgb("f1c40f").lighten(60%))[*Effizienz* \ _weniger \ wichtig_],
+      table.cell(fill: rgb("f1c40f").lighten(60%))[*Robustheit* \ _weniger \ wichtig_],
+      table.cell(fill: rgb("27ae60").lighten(40%))[*Implementierbarkeit* \ _sehr wichtig_],
     ),
-    [Klassische Autokorrelation], [_schlecht_], [_gut_], [_schlecht_], [_gut_],
-    [YIN-Algorithmus], [_gut_], [_mittel_], [_mittel_], [_gut_],
-    [Fourier-/Cepstrum-Analyse], [_gut_], [_mittel_], [_mittel_], [_mittel_],
-    [CREPE], [_gut_], [_schlecht_], [_gut_], [_mittel_],
+    [Klassische Autokorrelation],
+    table.cell(fill: rgb("#f44b4b").lighten(40%))[_schlecht_],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_gut_],
+    table.cell(fill: rgb("#f44b4b").lighten(40%))[_schlecht_],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_gut_],
+    [YIN-Algorithmus],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_gut_],
+    table.cell(fill: rgb("f1c40f").lighten(60%))[_mittel_],
+    table.cell(fill: rgb("f1c40f").lighten(60%))[_mittel_],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_gut_],
+    [Fourier-/Cepstrum-Analyse],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_gut_],
+    table.cell(fill: rgb("f1c40f").lighten(60%))[_mittel_],
+    table.cell(fill: rgb("f1c40f").lighten(60%))[_mittel_],
+    table.cell(fill: rgb("f1c40f").lighten(60%))[_mittel_],
+    [CREPE],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_gut_],
+    table.cell(fill: rgb("#f44b4b").lighten(40%))[_schlecht_],
+    table.cell(fill: rgb("27ae60").lighten(40%))[_gut_],
+    table.cell(fill: rgb("f1c40f").lighten(60%))[_mittel_],
   ),
   caption: [Entscheidungsmatrix zur Auswahl des Verfahrens],
 )
@@ -1497,7 +1524,6 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
   [Das System sollte kurze Erklärvideos zu Saitenbezeichnungen, Stimmungswahl und Messvorgang bereitstellen.],
 ) <req-nfa-be-04>
 
-#pagebreak()
 *Kompatibilität*
 
 #req(
