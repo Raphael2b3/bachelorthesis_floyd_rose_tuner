@@ -49,7 +49,7 @@
 
     Auf Basis dieses Modells wurde eine plattformübergreifende Flutter-Applikation für Android und iOS entwickelt. Diese unterstützt die einmalige Kalibrierung des Instruments, die Messung des aktuellen Stimmzustands mittels YIN-Algorithmus sowie einen geführten Stimmvorgang mit berechneten Zielfrequenzen.
 
-    Nutzertests zeigten, dass die Gitarre unter kontrollierten akustischen Bedingungen erfolgreich und deutlich schneller gestimmt werden konnte als mit herkömmlichen Methoden. Die Grenzen der aktuellen Implementierung liegen vor allem in der Robustheit der Fundamentalfrequenzerkennung in lauten Umgebungen und starken Obertönen.
+    Nutzertests zeigten, dass die Gitarre unter kontrollierten akustischen Bedingungen erfolgreich und deutlich schneller gestimmt werden konnte als mit herkömmlichen Methoden. Die Grenzen der aktuellen Implementierung liegen vor allem in der Robustheit der Fundamentalfrequenzerkennung in lauten Umgebungen und bei starken Obertönen.
 
     Die Arbeit belegt, dass das Kopplungsverhalten von Floyd-Rose-Gitarren durch eine kalibrierte lineare Matrix hinreichend genau modelliert und für die praktische Unterstützung des Stimmprozesses genutzt werden kann.
 
@@ -147,9 +147,9 @@ Das Floyd-Rose-Tremolo ist ein in der E-Gitarre weit verbreitetes Brückensystem
 Diese Flexibilität hat jedoch einen erheblichen Nachteil: Das Stimmen einer Floyd-Rose-Gitarre ist deutlich aufwändiger als bei herkömmlichen Gitarrenbrücken. Der Grund liegt in der mechanischen Kopplung der Saiten über die rotierbare Brücke. Wird die Spannung einer Saite verändert, verschiebt sich der Gleichgewichtszustand der gesamten Brücke und verstimmt dadurch alle übrigen Saiten. Dieser Kaskadeneffekt zwingt den Spieler zu einem iterativen, zeitaufwändigen Stimmvorgang.
 
 Erfahrungsberichte aus der Praxis belegen Stimmzeiten von 8 bis 30 Minuten
-@youtube_floyd_rose_tune2026 @ultimateguitar_floydrose_tuning_forum -- ein erheblicher Aufwand, insbesondere für professionelle Gitarristen und Gitarrentechniker, die täglich mehrere Instrumente stimmen müssen.
+@youtube_floyd_rose_tune2026 @ultimateguitar_floydrose_tuning_forum. Das ist ein erheblicher Aufwand, insbesondere für professionelle Gitarristen und Gitarrentechniker, die täglich mehrere Instrumente stimmen müssen.
 
-Bestehende Stimmgeräte -- sowohl hardware- als auch softwarebasiert -- berücksichtigen diese Kopplung nicht. Sie zeigen lediglich die aktuelle Frequenz einer Saite an, ohne Auskunft darüber zu geben, auf welchen Zielwert gestimmt werden muss, damit nach dem Stimmen aller Saiten das gewünschte Ergebnis erreicht wird.
+Bestehende Stimmgeräte, sowohl hardware- als auch softwarebasiert, berücksichtigen diese Kopplung nicht. Sie zeigen lediglich die aktuelle Frequenz einer Saite an, ohne Auskunft darüber zu geben, auf welchen Zielwert gestimmt werden muss, damit nach dem Stimmen aller Saiten das gewünschte Ergebnis erreicht wird.
 
 #figure(
   image("assets/floydrose_frontside_neutral.jpg", height: 20%),
@@ -169,7 +169,7 @@ Ziel dieser Arbeit ist die Entwicklung einer mobilen Applikation, die diesen Sti
 Zur Beantwortung dieser Frage wird zunächst ein physikalisches Modell der Floyd-Rose-Gitarre entwickelt, das den Zusammenhang zwischen Saitenspannung, Brückenposition und Schwingungsfrequenz beschreibt. Auf Basis dieses Modells wird eine lineare Näherung hergeleitet und experimentell validiert.
 
 @grundlagen beschreibt die physikalischen Grundlagen der Floyd-Rose-Gitarre, entwickelt das Kopplungsmodell und leitet die mathematische Lösung für den Stimmvorgang her.
-@ablauf erläutert den praktischen Ablauf -- von der einmaligen Kalibrierung bis zum eigentlichen Stimmvorgang.
+@ablauf erläutert den praktischen Ablauf des Stimmvorgangs bei der Floyd-Rose-Gitarre.
 @verfahren stellt die grundlegenden Signalverarbeitungsverfahren vor, die für die Implementierung eines mobilen Stimmgeräts erforderlich sind.
 @softwaredev beschreibt Anforderungsanalyse, Konzeption, Architektur und Implementierung der Applikation.
 @evaluation bewertet die Erfüllung der Anforderungen und wertet die durchgeführten Nutzertests aus.
@@ -179,8 +179,8 @@ Abschließend fasst @fazit die Ergebnisse zusammen und @ausblick benennt Ansätz
 == Bestimmung der Fundamentalfrequenz <verfahren>
 Für die Implementierung eines Stimmgeräts auf mobilen Geräten ist die präzise
 und effiziente Bestimmung der Grundfrequenz (Fundamental Frequency, F0)
-entscheidend. Frequenzabweichungen werden in Cent angegeben -- einer
-logarithmischen Einheit, bei der ein gleichstufiger Halbton exakt 100~Cent
+entscheidend. Frequenzabweichungen werden in Cent angegeben. Cent ist eine
+logarithmische Einheit, bei der ein gleichstufiger Halbton exakt 100~Cent
 entspricht @pierce1999klang. Die Abweichung $d$ in Cent zwischen zwei
 Frequenzen $f_1$ und $f_2$ berechnet sich zu:
 
@@ -241,7 +241,7 @@ $
   d_t (tau) = r_t (0) + r_(t+tau) (0) - 2 r_t (tau)
 $
 
-Durch den zweiten Energieterm $r_(t+tau)(0)$ -- der in der ACF fehlt --
+Durch den zweiten Energieterm $r_(t+tau)(0)$, der in der ACF fehlt,
 ist die Differenzfunktion robust gegenüber Amplitudenänderungen.
 Die Fehlerrate sinkt auf $1,95%$.
 
@@ -306,7 +306,7 @@ erneut transformiert wird, um periodische Muster zu erkennen. Ein Vorteil
 ist die Robustheit gegenüber harmonischen Obertönen sowie die gute Integration
 in digitale Signalverarbeitungssysteme. Nachteilig wirkt sich die eingeschränkte
 Genauigkeit bei niedrigen Frequenzen und verrauschten Signalen aus, da das
-Verfahren Periodizität und harmonische Obertöne voraussetzt -- Annahmen, die in
+Verfahren Periodizität und harmonische Obertöne voraussetzt. Das sind Annahmen, die in
 realen Umgebungen nicht immer erfüllt sind. @Noll1967Cepstrum
 
 *CREPE -- Neuronale Netze*
@@ -319,9 +319,9 @@ welche Muster im Signal welcher Tonhöhe entsprechen.
 Ein prominentes Beispiel ist CREPE @Kim2019CREPE (Convolutional Representation
 for Pitch Estimation), das ein sogenanntes Convolutional Neural Network (CNN)
 direkt auf dem Rohaudiosignal anwendet. CNNs sind eine Klasse neuronaler Netze,
-die ursprünglich für die Bilderkennung entwickelt wurden und lokale Muster --
-im Falle von Audio also charakteristische Wellenformabschnitte -- besonders
-effizient erkennen können. CREPE erreicht dadurch eine hohe Genauigkeit und
+die ursprünglich für die Bilderkennung entwickelt wurden und lokale Muster besonders
+effizient erkennen können.
+Im Falle von Audio werden charakteristische Wellenformabschnitte erkannt. CREPE erreicht dadurch eine hohe Genauigkeit und
 ist gegenüber verschiedenen Klangfarben, Rauschpegeln und Instrumenten
 robuster als regelbasierte Verfahren.
 
@@ -333,6 +333,13 @@ Algorithmen, und das Training erfordert große annotierte Datensätze.
 Im Folgenden wird ein physikalisches Modell der Gitarre beschrieben, um zu verstehen, warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
 
 Die Gitarre spannt sechs Saiten zwischen Brücke und Sattel. Die Saiten schwingen in einer bestimmten Frequenz. Beim Stimmen wickelt man die Saite um den Stimmwirbel, sodass sich Spannung und Frequenz ändern.
+/ E-Saite: 82,41 Hz
+/ A-Saite: 110 Hz
+/ D-Saite: 146,83 Hz
+/ G-Saite: 196 Hz
+/ B-Saite: 246,94 Hz
+/ hohe E-Saite: 329,63 Hz
+
 
 #figure(
   image("assets/stimmwirbel.png", height: 27%),
@@ -388,16 +395,19 @@ In @FRQuer, @FRMQuer und @FRFedern ist zu sehen, wie die Brücke die Tremolofede
       caption: [Draufsicht des physikalischen Modells mit Saiten-Hebelarmen],
     ) <FRMTop>
   ]),
-  grid.cell([
-    #figure(
-      image("assets/FRrealTop.png"),
-      caption: [Draufsicht einer realen \ Floyd-Rose-Brücke],
-    )<FRTop>
-  ]),
+  grid.cell(
+    align: alignment.horizon,
+    [
+      #figure(
+        image("assets/FRrealTop.png"),
+        caption: [Draufsicht einer realen \ Floyd-Rose-Brücke],
+      )<FRTop>
+    ],
+  ),
 )
 
 
-In der Realität hat jede Saite ihre eigene Saitenlänge, wie in @FRMTop und @FRTop zu sehen ist. Sie variieren zwar nur minimal, haben aber einen Einfluss auf die rotatorische Projektion der Kräfte.
+In der Realität hat jede Saite ihre eigene Saitenlänge, wie in @FRMTop und @FRTop zu sehen ist. Obwohl sie nur minimal variieren, haben sie  einen Einfluss auf die rotatorische Projektion der Kräfte.
 
 Die Brücke wird als starrer, gewinkelter Hebel betrachtet, siehe @FRMQuer.
 Die Drehachse liege im Koordinatenursprung.
@@ -415,7 +425,7 @@ $
 $
 
 
-Sei $arrow(P)_S$ die konstante Position des Sattels und $arrow(P)_hat(F)$ die konstante Position, an der die Tremolofeder an den Körper der Gitarre befestigt ist.
+$arrow(P)_S$ sei die konstante Position des Sattels und $arrow(P)_hat(F)$ die konstante Position, an der die Tremolofeder an den Körper der Gitarre befestigt ist.
 Die effektive Saitenlänge und Tremolofederlänge ergeben sich zu
 
 $
@@ -516,16 +526,16 @@ $
   mu_i (arrow(Delta L)) = m_i/(L_(S,i) (arrow(Delta L)) + L_(0M,i) + Delta L_i)
 $
 
-Darauf aufbauend lässt sich eine Abbildung definieren, die die Aufwickelstrecken jeder Saite auf einen Frequenzvektor abbildet:
+Eingesetzt in @eqMersenne, lässt sich eine Abbildung definieren, die die Aufwickelstrecken jeder Saite auf einen Frequenzvektor abbildet:
 
 $
   f_i (arrow(Delta L)) =
   1 / (2 dot L_(S,i) (arrow(Delta L)))
   sqrt((F_"S,i" (arrow(Delta L)) )/ (mu_i (arrow(Delta L))))
-$
+$ <eqErsichtlich>
 
 
-Es wird ersichtlich, dass die Aufwickelstrecken der Saiten die Frequenzen aller Saiten beeinflussen. Das erklärt, warum das Stimmen einer Floyd-Rose-Gitarre so schwierig ist.
+Aus @eqErsichtlich wird ersichtlich, dass die Aufwickelstrecken der Saiten die Frequenzen aller Saiten beeinflussen. Das erklärt, warum das Stimmen einer Floyd-Rose-Gitarre so schwierig ist.
 
 
 === Experiment: Elastizität von Gitarrensaiten
@@ -570,15 +580,15 @@ Die Markierungen, die sich näher am Sattel befanden, legten eine deutlich grö�
 Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder lediglich eine kaum wahrnehmbare Bewegung. Dies spricht dafür, dass die beobachtete Verschiebung nicht durch ein Verformen des Instruments verursacht wurde, sondern auf eine tatsächliche Längenänderung der gespannten Saite zurückzuführen ist. Als die Saite wieder entspannt wurde, waren die Markierungen wieder an ihrer Ausgangsposition. Die Schwingungsfrequenz der Saite war auch wieder dieselbe wie zu Beginn.
 
 Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.
-Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixer Punkt wirkt, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich stärker wandern.
+Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixe Punkte wirken, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich weiter wandern.
 
 
 
 
-=== Experiment: Nachweis Linearität <nachweisLin>
+=== Experiment: Nachweis der Linearität <nachweisLin>
 Beim Stimmen werden die Aufwickelstrecken nur in kleinen Schritten verändert. In diesem Fall verhält sich das System näherungsweise linear. Da das System physikalisch ist, kann das System als stetig betrachtet werden.
 
-Diese Linearität wurde bereits experimentell in der _Projekt 3_ Arbeit des Autors @Schuetz2026FloydRose überprüft. Dabei wurde jedoch nicht der lineare Zusammenhang zwischen der Aufwickelstrecke $arrow(Delta L)$ und den Frequenzen $arrow(f)$ betrachtet. Stattdessen analysierte die Untersuchung den Einfluss der Frequenzänderung einer Saite auf die Frequenzen der übrigen Saiten. Dieses Vorgehen ist insbesondere im Hinblick auf die spätere praktische Anwendung von höherer Relevanz.
+Diese Linearität wurde bereits experimentell in der Arbeit "Projekt 3" des Autors @Schuetz2026FloydRose überprüft. Dabei wurde jedoch nicht der lineare Zusammenhang zwischen der Aufwickelstrecke $arrow(Delta L)$ und den Frequenzen $arrow(f)$ betrachtet. Stattdessen analysierte die Untersuchung den Einfluss der Frequenzänderung einer Saite auf die Frequenzen der übrigen Saiten. Dieses Vorgehen ist insbesondere im Hinblick auf die spätere praktische Anwendung von höherer Relevanz.
 
 *Vorgehensweise*
 
@@ -686,12 +696,12 @@ lineares Regressionsverfahren eingesetzt.
 
 Dabei kommen folgende Verfahren in Betracht:
 
-/ Methode der kleinsten Quadrate (OLS): Minimiert die Summe der quadrierten
+/ Methode der kleinsten Quadrate (OLS)\:: Minimiert die Summe der quadrierten
   vertikalen Abstände in $Y$-Richtung zwischen den Datenpunkten und der
   Regressionsgeraden. Sie setzt voraus, dass ausschließlich die Antwortvariable
   $Y$ fehlerbehaftet ist, während die Prädiktorvariable $X$ als exakt gilt.
 
-/ Orthogonale Regression (Deming-Regression): Minimiert die Summe der
+/ Orthogonale Regression (Deming-Regression)\:: Minimiert die Summe der
   quadrierten senkrechten Abstände der Datenpunkte zur Regressionsgeraden. Sie
   wird angewendet, wenn sowohl $Y$ als auch $X$ Messfehler aufweisen.
   @Glaister01032001
@@ -711,7 +721,7 @@ bestimmen.
 
 
 Mithilfe von @eqFloydRoseTuner wird für jede Saite die Zwischenzielfrequenz
-berechnet -- also die Frequenz, auf die der Gitarrist beim sequentiellen Stimmen
+berechnet. Sie ist als die Frequenz, auf die der Gitarrist beim sequentiellen Stimmen
 abzielt.
 
 Da die Zwischenzielfrequenzen die bereits gestimmten Saiten berücksichtigen,
@@ -855,7 +865,7 @@ $
                + Delta_"E2" dot c_(31)
 $
 
-$f_(z,N)$ ist eine Zwischenzielfrequenz -- nachfolgende Saiten
+$f_(z,N)$ ist eine Zwischenzielfrequenz. Nachfolgende Saiten
 verschieben Saite $N$ noch weiter. Die Endfrequenz aller Saiten konvergiert
 dennoch zu $arrow(g)$, da die $Delta_j$ aus der vollen Verstimmungsmatrix $C$
 berechnet wurden.
@@ -950,7 +960,7 @@ Die vier Verfahren wurden auf einer ordinalen Skala (_schlecht_, _mittel_, _gut_
 
 *Klassische Autokorrelation*
 
-Die klassische Autokorrelation hat eine _schlechte_ Genauigkeit, da sie gegenüber Oktavfehlern und harmonischen Obertönen strukturell anfällig ist @YIN -- insbesondere bei Gitarrensignalen mit starken Obertönen kann das erste Nebenmaximum fälschlicherweise als Grundfrequenz detektiert werden.
+Die klassische Autokorrelation hat eine _schlechte_ Genauigkeit, da sie gegenüber Oktavfehlern und harmonischen Obertönen strukturell anfällig ist @YIN. Insbesondere bei Gitarrensignalen mit starken Obertönen kann das erste Nebenmaximum fälschlicherweise als Grundfrequenz detektiert werden.
 
 Die Robustheit ist _schlecht_, da sie zusätzlich unter der Empfindlichkeit gegenüber additivem Rauschen leidet.
 
@@ -960,7 +970,7 @@ Ihre Effizienz und Implementierbarkeit ist _gut_, da sie auf einer einfachen Ber
 
 Der YIN-Algorithmus reduziert Oktavfehler gegenüber der klassischen Autokorrelation deutlich. Er hat eine _gute_ Genauigkeit mit einem mittleren Fehler von unter 2~% bei periodischen Signalen @YIN.
 
-Die Nachbearbeitungsschritte -- insbesondere die parabolische Interpolation sowie ein absoluter Schwellenwert zur Voicing-Entscheidung -- erhöhen die Zeitkomplexität gegenüber der einfachen Autokorrelation, weshalb die Effizienz als _mittel_ bewertet wurde.
+Die Nachbearbeitungsschritte (parabolische Interpolation, absoluter Schwellenwert) erhöhen die Zeitkomplexität gegenüber der einfachen Autokorrelation, weshalb die Effizienz als _mittel_ bewertet wurde.
 
 Die Robustheit ist _mittel_, da sie im Vergleich zum CREPE-Algorithmus geringer ausfällt @kroon2022comparingconventionalpitchdetection und gleichzeitig von der Differenzbildung profitiert, die stationäres Rauschen teilweise unterdrückt.
 
@@ -984,7 +994,7 @@ Die Robustheit wird als _gut_ bewertet: Da das Modell während des Trainings ein
 
 Die Effizienz wird als _schlecht_ bewertet. Das Netz verarbeitet 1024 Rohsamples in sechs aufeinanderfolgenden Rechenschritten (Faltungslayern), in denen jeweils lokale Muster im Signal gesucht werden, gefolgt von einer abschließenden Klassifikationsschicht mit 360 möglichen Ausgaben. Bereits der erste Rechenschritt erzeugt dabei $128 times 1024 = 131,072$ Zwischenwerte (~512~KB), was etwa dem 16-fachen aller nachfolgenden Schritte entspricht. Der gesamte Arbeitsspeicherbedarf pro Berechnung beträgt ca.\ 600~KB, die Modellgröße rund 4--5~MB.
 
-Die Implementierbarkeit wird als _mittel_ bewertet: CREPE ist als Python-Bibliothek verfügbar, eine direkt einbindbare Lösung für Flutter existiert jedoch nicht. Eine Integration würde die Umwandlung des Modells in ein mobiltaugliches Format (TensorFlow Lite) sowie eine entsprechende Anbindung an Flutter erfordern -- ein erheblicher Mehraufwand gegenüber einer fertigen Bibliothek.
+Die Implementierbarkeit wird als _mittel_ bewertet: CREPE ist als Python-Bibliothek verfügbar, eine direkt einbindbare Lösung für Flutter existiert jedoch nicht. Eine Integration würde die Umwandlung des Modells in ein mobiltaugliches Format (TensorFlow Lite) sowie eine entsprechende Anbindung an Flutter erfordern. Das ist ein erheblicher Mehraufwand gegenüber einer fertigen Bibliothek.
 
 *Auswahl*
 
@@ -1028,14 +1038,14 @@ in _decibels relative to full scale_ (dBFS) @dBFS berechnet, wobei $32768$ dem m
 
 = Softwareentwicklung/Implementierung<softwaredev>
 
-Die Methodik der Softwareentwicklung wurde durch das Buch "Mobile App Engineering" @mobileAppEngineering inspiriert.
+Die Methodik der Softwareentwicklung wurde durch das Buch _Mobile App Engineering_ @mobileAppEngineering inspiriert.
 
 Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in diesem Rahmen entwickelte App ist zwar keine _Enterprise App_, aber die Prinzipien der Softwareentwicklung, die in diesem Buch beschrieben werden, sind dennoch anwendbar. Es werden insbesondere die Prinzipien der Anforderungsanalyse und der nutzerzentrierten Gestaltung übernommen.
 
-Wie im Buch beschrieben, werden Mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Usertests begründet, die mit einer älteren Version der App durchgeführt wurden.
+Wie im Buch beschrieben, werden mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Usertests begründet, die mit einer älteren Version der App durchgeführt wurden.
 
 == Requirements Engineering
-Dieses Kapitel wurde mithilfe des Buchs "Mobile App Engineering" @mobileAppEngineering entwickelt. Die Ergebnisse folgen aus der Befolgung des Kapitels 4 "Requirements Engineering".
+Dieses Kapitel wurde mithilfe des Buchs _Mobile App Engineering_ @mobileAppEngineering entwickelt. Die Ergebnisse folgen aus der Befolgung des Kapitels 4 "Requirements Engineering".
 
 === Projektvision
 
@@ -1049,7 +1059,7 @@ Die Zielgruppe umfasst alle Personen, die regelmäßig oder gelegentlich eine
 Gitarre mit Floyd-Rose-Brücke stimmen müssen. Sie lässt sich in drei Segmente
 unterteilen:
 
-*Gitarren-Einsteiger* erwarben eine Floyd-Rose-Gitarre häufig ohne vollständiges
+*Gitarren-Einsteiger* erwerben eine Floyd-Rose-Gitarre häufig ohne vollständiges
 Bewusstsein über den erhöhten Stimmaufwand dieses Brückensystems. Vorkenntnisse
 über Gitarrentechnik sind in dieser Gruppe gering; Alter und technisches
 Vorwissen variieren stark.
@@ -1159,7 +1169,7 @@ und die Unterstützung mehrerer Stimmungen priorisieren.
 
 Jonas ist 45 Jahre alt und arbeitet seit 18 Jahren als Gitarrentechniker in
 einem Musikfachgeschäft. Er wartet, repariert und stimmt täglich Instrumente
-verschiedener Kunden -- darunter regelmäßig Gitarren mit Floyd-Rose-Brücke.
+verschiedener Kunden, darunter regelmäßig Gitarren mit Floyd-Rose-Brücke.
 
 Er verfügt über tiefgehendes technisches Fachwissen zu Gitarren aller Bauarten
 und ist mit englischsprachiger Fachterminologie vertraut. Zeiteffizienz hat für
@@ -1173,7 +1183,7 @@ für die die Applikation den größten messbaren Effizienzgewinn liefert.
 *Hanna -- Home-Producerin*
 
 Hanna ist 30 Jahre alt und betreibt ein eigenes Heimstudio, in dem sie
-regelmäßig Bands aufnimmt und mischt -- darunter die Band "Fire Hawks". Sie
+regelmäßig Bands aufnimmt und mischt, unter anderem die Band "Fire Hawks". Sie
 arbeitet mit der _DAW Bitwig_ und ist mit _CLAP-_ und _VST-Plugin-Formaten_ sowie
 den Grundlagen der digitalen Signalverarbeitung vertraut. Darüber hinaus
 programmiert sie eigenständig und verfügt über hochpräzise
@@ -1241,7 +1251,7 @@ gestimmt ist.
   gegebenenfalls zur Wiederholung auffordern.
 
 + *Frequenz nicht erkennbar:* Die Gitarre wird zu leise angespielt, sodass das
-  Mikrofon -- insbesondere bei tiefen Saiten -- kein zuverlässiges Signal
+  Mikrofon kein zuverlässiges Signal
   erfasst. In diesem Fall werden häufig harmonische Obertöne gemessen; die App
   sollte durch Rückrechnung die Grundfrequenz ableiten und eine
   Plausibilitätsprüfung anhand des erwarteten Frequenzbereichs durchführen.
@@ -1264,8 +1274,7 @@ Saiten ist die Gitarre korrekt gestimmt.
 
 + *Störgeräusche unterbrechen die Messung:* Hintergrundgeräusche führen dazu,
   dass kontinuierlich neue Frequenzwerte erkannt werden, ohne dass eine Saite
-  angespielt wurde. Über einen einstellbaren Lautstärkeschwellenwert -- etwa
-  einen Schieberegler in den Einstellungen -- kann die Empfindlichkeit des
+  angespielt wurde. Über einen einstellbaren Lautstärkeschwellenwert kann die Empfindlichkeit des
   Mikrofons so angepasst werden, dass Messungen nur ausgelöst werden, wenn die
   Lautstärke der gespielten Saite den Umgebungspegel deutlich übersteigt.
 
@@ -1331,7 +1340,7 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 #req(
   "FBA-15",
   "SOLL",
-  [Ein Nutzer sollte nicht allgemein bekannte Begriffe -- insbesondere Stimmungsbezeichnungen und Saitennamen -- nachvollziehen können.],
+  [Ein Nutzer sollte nicht allgemein bekannte Begriffe, insbesondere Stimmungsbezeichnungen und Saitennamen, nachvollziehen können.],
 ) <req-fba-15>
 #req(
   "FBA-16",
@@ -1586,7 +1595,7 @@ Barrierefreiheitsstandards und weiteren Normen verzichtet.
 
 === Entwicklungsparadigma
 Die Applikation richtet sich gemäß @req-nfa-ko-01 an Nutzer beider
-marktführenden mobilen Betriebssysteme -- iOS und Android. Eine native
+marktführenden mobilen Betriebssysteme (iOS und Android). Eine native
 Entwicklung für jede Plattform separat würde bedeuten, dieselbe
 Fachlogik -- insbesondere den YIN-Algorithmus (@req-fsa-01), die
 Berechnung der Verstimmungsmatrix (@req-fsa-07) sowie die
@@ -1598,8 +1607,8 @@ lokal und ohne Netzwerkzugriff betrieben wird, entfallen die
 Hauptargumente gegen Cross-Platform-Ansätze: Es gibt keine
 plattformspezifischen Push-Benachrichtigungen, keine hardwarenahen
 Hintergrunddienste und keine nativen Zahlungsschnittstellen. Der einzige
-plattformnahe Zugriff -- das Gerätemikrofon -- gehört zu den am weitesten
-verbreiteten hardwarenahen Features mobiler Geräte und wird von allen
+plattformnahe Zugriff ist das Gerätemikrofon und gehört zu den am weitesten
+verbreiteten hardwarenahen Features mobiler Geräte. Es wird von allen
 gängigen Cross-Compiling-Frameworks über eine stabile,
 plattformübergreifende API abgedeckt. Der Effizienzgewinn einer
 gemeinsamen Codebasis überwiegt daher den Mehraufwand einer rein nativen
@@ -2035,7 +2044,7 @@ Muster eignet sich besonders, weil das ViewModel die Schnittstelle
 zwischen View und Model kapselt: Die UI kennt keine Implementierungsdetails
 des Modells und das Modell ist unabhängig von der Darstellung. In
 Verbindung mit Riverpod (@abhaengigkeiten) wird dieses Muster durch
-sogenannte _Provider_ und _Notifier_ umgesetzt -- Provider stellen
+sogenannte _Provider_ und _Notifier_ umgesetzt. Provider stellen
 lesenden Zugriff auf den Zustand bereit, Notifier ermöglichen dessen
 Veränderung und benachrichtigen die UI automatisch über Änderungen,
 sodass betroffene Widgets neu gerendert werden. Ein wesentlicher Vorteil
@@ -2145,7 +2154,7 @@ Guitar {
 Verstimmungsmatrix berechnet wird (@req-fsa-07). Der erste Schlüssel
 bezeichnet die verstimmte Saite, der zweite den Messpunkt-Index. So
 entspricht `samples[1][2]` dem dritten erfassten Gitarrenzustand, als
-Saite A2 (Index 1) verstimmt wurde -- also einem Frequenzvektor der
+Saite A2 (Index 1) verstimmt wurde, also einem Frequenzvektor der
 Form $[f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4"]$.
 
 `matrix` und `inverseMatrix` lassen sich vollständig aus `samples`
@@ -2829,19 +2838,19 @@ Die Auswertung erfolgte qualitativ-deskriptiv auf Basis der dokumentierten Testv
 
     Als der Nutzer aufgefordert wurde, eine Saite gezielt zu verstimmen,
     entstand Unsicherheit darüber, in welche Richtung und um wie viel die
-    Saite verstimmt werden solle -- obwohl der genaue Betrag für das
+    Saite verstimmt werden solle, obwohl der genaue Betrag für das
     Verfahren irrelevant ist.
 
     Zusätzlich hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu
     messen, da die Stahlsaiten einen ausgeprägten Obertonanteil aufwiesen.
     Durch Umpositionierung des Smartphones näher am Lautsprecher sowie
-    durch Betätigung des _Tone-Knobs_ -- der die Funktion eines analogen
-    Tiefpassfilters erfüllt -- konnte das Problem behoben werden.
+    durch Betätigung des _Tone-Knobs_, der die Funktion eines analogen
+    Tiefpassfilters erfüllt, konnte das Problem behoben werden.
 
     Der abschließende Stimmvorgang verlief weitgehend erfolgreich; die
     E2-Saite wurde jedoch zu hoch gestimmt. Dies deutet darauf hin, dass
     die Einträge der Verstimmungsmatrix, die den Einfluss auf E2 beschreiben,
-    den größten Messfehler aufwiesen -- Abweichung von $plus.minus$ 15 Cent. Die restlichen Saiten hatten einen Fehler von $plus.minus$ 3,2 Cent.
+    den größten Messfehler aufwiesen. Es gab eine Abweichung von $plus.minus$ 15 Cent. Die restlichen Saiten hatten einen Fehler von $plus.minus$ 3,2 Cent.
 
     Der effektive Zeitaufwand für den Stimmvorgang betrug 8 Minuten.
     Version der  App: @protoCalib \

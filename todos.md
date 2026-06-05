@@ -29,8 +29,8 @@ Alles was ich gemacht habe,
 
 Todo:
 
-cleane sprache für das was ich geändert habe,
-
-entscheidungsmatrix farben.
-
 johannes feedback einarbeiten
+
+weiter machen bei S.24
+
+gedanken Strich entfernen
