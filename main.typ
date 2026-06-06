@@ -288,7 +288,7 @@ Grobfehlerrate jedoch nur geringen Einfluss: $0,77%$.
 Bei nichtstationären Signalen kann die Schätzung phasenabhängig
 versagen. Schritt 6 sucht in einer Umgebung
 $[t - T_max/2, t + T_max/2]$ nach dem Zeitindex $u$, der das kleinste
-$d'_u (tau_u)$ liefert, und verwendet dessen Schätzung als Ausgangspunkt
+$d'_u (tau_u)$ liefert und verwendet dessen Schätzung als Ausgangspunkt
 für eine erneute, eingeschränkte Suche. Dies entspricht einer
 qualitätsbasierten statt kontinuitätsbasierten Glättung. Fehlerrate:
 $0,50%$.
@@ -327,7 +327,7 @@ robuster als regelbasierte Verfahren.
 
 Der wesentliche Nachteil dieser Ansätze liegt im Ressourcenbedarf: Die
 Berechnung eines neuronalen Netzes ist rechenintensiver als klassische
-Algorithmen, und das Training erfordert große annotierte Datensätze.
+Algorithmen und das Training erfordert große annotierte Datensätze.
 
 == Physikalisches Modell der Gitarre
 Im Folgenden wird ein physikalisches Modell der Gitarre beschrieben, um zu verstehen, warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
@@ -365,7 +365,7 @@ $ F_(S,i) = (L_(S,i) - L_(0S,i)) dot k_(S,i) $<eqSaitenkraft>
 
 Die Federkonstante $k_(S,i)$ ist eine materialspezifische Größe des jeweiligen Saitenabschnitts $L_(S,i)$.
 
-$L_(0S,i)$ beschreibt die unbelastete Saitenlänge im Abschnitt zwischen Sattel und Brücke. Diese Länge wird durch die Aufwickelstrecke $Delta L_i$ beeinflusst. $L'_(0S,i)$ sei die ursprüngliche unbelastete Saitenlänge.
+$L_(0S,i)$ bezeichnet die unbelastete Saitenlänge im Abschnitt zwischen Sattel und Brücke. Diese Länge wird durch die Aufwickelstrecke $Delta L_i$ beeinflusst. $L'_(0S,i)$ sei die ursprüngliche unbelastete Saitenlänge.
 
 $
   L_(0S,i) = L'_(0S,i) - Delta L_i
@@ -577,7 +577,7 @@ In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeige
 
 Die Markierungen, die sich näher am Sattel befanden, legten eine deutlich größere Strecke zurück als jene in unmittelbarer Nähe der Brücke. Die beobachtete Verschiebung nahm kontinuierlich vom Sattel in Richtung Brücke ab.
 
-Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder lediglich eine kaum wahrnehmbare Bewegung. Dies spricht dafür, dass die beobachtete Verschiebung nicht durch ein Verformen des Instruments verursacht wurde, sondern auf eine tatsächliche Längenänderung der gespannten Saite zurückzuführen ist. Als die Saite wieder entspannt wurde, waren die Markierungen wieder an ihrer Ausgangsposition. Die Schwingungsfrequenz der Saite war auch wieder dieselbe wie zu Beginn.
+Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder lediglich eine kaum wahrnehmbare Bewegung. Dies spricht dafür, dass die beobachtete Verschiebung nicht durch ein Verformen des Instruments verursacht wurde, sondern auf eine tatsächliche Längenänderung der gespannten Saite zurückzuführen ist. Als die Saite wieder entspannt wurde, befanden sich die Markierungen wieder an ihrer Ausgangsposition. Die Schwingungsfrequenz der Saite war auch wieder dieselbe wie zu Beginn.
 
 Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.
 Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixe Punkte wirken, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich weiter wandern.
@@ -670,7 +670,7 @@ Beim Zurückbringen einer Saite in ihre Ausgangsposition nahmen alle anderen Sai
 Das System ist elastisch, da Ausgangs- und Endfrequenzen nach jedem Durchgang gleich sind.
 
 Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem Korrelationskoeffizienten nach Bravais-Pearson @pearson1896 zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen.
-In @correlations sind die Korrelationskoeffizienten für jede Saite dargestellt. Der Betrag aller relevanten Werte liegt unter -0,98, was auf eine sehr starke negative Korrelation hinweist. Das rechtfertigt die Annahme einer linearen Beziehung für kleine Änderungen.
+In @correlations sind die Korrelationskoeffizienten für jede Saite dargestellt. Alle relevanten Werte liegen unter -0,98, was auf eine sehr starke negative Korrelation hinweist. Das rechtfertigt die Annahme einer linearen Beziehung für kleine Änderungen.
 = Verfahren
 
 == Ablauf des Stimmvorgangs für Floyd-Rose-Gitarren <ablauf>
@@ -691,7 +691,7 @@ definitionsgemäß bekannt und müssen nicht gemessen werden.
 Der erste Messpunkt beschreibt den Ausgangszustand der Gitarre; alle weiteren
 Messpunkte erfassen das Verhalten der übrigen Saiten bei gezielter Veränderung
 einer einzelnen Saite. Durch eine höhere Anzahl an Messpunkten lässt sich die
-Schätzgenauigkeit der Steigung beliebig steigern. Zur Auswertung wird ein
+Schätzgenauigkeit der Steigung weiter verbessern. Zur Auswertung wird ein
 lineares Regressionsverfahren eingesetzt.
 
 Dabei kommen folgende Verfahren in Betracht:
@@ -1210,7 +1210,7 @@ voraussetzt.
 *Normaler Ablauf:*
 Emil kommt nach einem langen Arbeitstag nach Hause und möchte zur Entspannung
 Gitarre spielen. Über eine YouTube-Empfehlung wird er auf die Applikation
-aufmerksam und hofft, damit den Kauf einer neuen Gitarre vermeiden zu können.
+aufmerksam und hofft, damit den Kauf einer neuen Gitarre vermeiden zu können. Denn er hat es noch nicht geschafft, seine Gitarre zustimmen.
 Er lädt die App herunter, setzt sich mit der Gitarre auf den Boden seines
 Wohnzimmers und legt das Smartphone vor sich.
 
@@ -1247,7 +1247,7 @@ gestimmt ist.
 
 + *Falsche Saite verstimmt:* Emil verstimmt versehentlich die falsche Saite,
   ohne es zu bemerken. Die Applikation sollte anhand der gemessenen Frequenzen
-  automatisch erkennen, ob die korrekte Saite verstimmt wurde, und den Nutzer
+  automatisch erkennen, ob die korrekte Saite verstimmt wurde und den Nutzer
   gegebenenfalls zur Wiederholung auffordern.
 
 + *Frequenz nicht erkennbar:* Die Gitarre wird zu leise angespielt, sodass das
@@ -1404,7 +1404,7 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 #req(
   "FSA-09",
   "MUSS",
-  [Das System muss bei der Kalibrierung automatisch prüfen, ob die vom Nutzer verstimmte Saite der geforderten Saite entspricht, und bei Abweichung die Messung verwerfen und den Schritt wiederholen.],
+  [Das System muss bei der Kalibrierung automatisch prüfen, ob die vom Nutzer verstimmte Saite der geforderten Saite entspricht und bei Abweichung die Messung verwerfen und den Schritt wiederholen.],
 ) <req-fsa-09>
 
 #req(
@@ -1606,9 +1606,7 @@ Da die Applikation gemäß @req-nfa-dp-01 und @req-nfa-dp-02 vollständig
 lokal und ohne Netzwerkzugriff betrieben wird, entfallen die
 Hauptargumente gegen Cross-Platform-Ansätze: Es gibt keine
 plattformspezifischen Push-Benachrichtigungen, keine hardwarenahen
-Hintergrunddienste und keine nativen Zahlungsschnittstellen. Der einzige
-plattformnahe Zugriff ist das Gerätemikrofon und gehört zu den am weitesten
-verbreiteten hardwarenahen Features mobiler Geräte. Es wird von allen
+Hintergrunddienste und keine nativen Zahlungsschnittstellen. Der einzige plattformnahe Zugriff betrifft das Gerätemikrofon, das zu den am weitesten verbreiteten hardwarenahen Funktionen mobiler Geräte zählt. Es wird von allen
 gängigen Cross-Compiling-Frameworks über eine stabile,
 plattformübergreifende API abgedeckt. Der Effizienzgewinn einer
 gemeinsamen Codebasis überwiegt daher den Mehraufwand einer rein nativen
@@ -1822,7 +1820,7 @@ Weiter-Button führt zu @wfKalPrüf.
   ]),
 )
 
-Dort kann der Nutzer die erfasste Messung überprüfen. Anstelle einer
+Dort kann der Nutzer die erfasste Messung überprüfen. Zusätzlich zu einer
 numerischen Frequenzanzeige -- die in den Nutzertests zu Verwirrung
 führte (@nutzerTests, Nutzer 3) -- ist ein Button vorgesehen, der einen
 Ton in der gemessenen Frequenz abspielt. So kann der Nutzer auditiv
@@ -1892,13 +1890,13 @@ geleitet, die eine Übersicht der App-Funktionen sowie einen Link zu
 einem Tutorial-Video enthält (@req-fba-06, @req-nfa-be-04). Von dort
 gelangt er zur Startseite (@dLanding), die bei allen folgenden Starts
 direkt angezeigt wird. Bereits gespeicherte Gitarrenprofile und
-Stimmungen sind vorausgewählt; ein prominenter "Start Tuning"-Button
+Stimmungen sind vorausgewählt; ein prominenter "Start Tuning" Button
 leitet den Stimmvorgang unmittelbar ein (@req-fba-01).
 
 Über "Add A New Guitar" legt der Nutzer ein neues Gitarrenprofil an und
 gelangt zur Gitarrenansicht (@dGitarreEdit). Dort wird vorab ein Name
 mit zufälliger ID generiert, der frei angepasst werden kann
-(@req-fba-12). Der "Calibrate This Guitar"-Button ist mit einem Badge
+(@req-fba-12). Der "Calibrate This Guitar" Button ist mit einem Badge
 versehen und zieht damit die Aufmerksamkeit des Nutzers auf sich; der
 begleitende Hinweistext "This Guitar Needs Calibration" macht den
 nächsten Schritt unmissverständlich deutlich (@req-nfa-be-01). Ein Klick
@@ -1938,7 +1936,7 @@ das der Nutzer eine extern gemessene Frequenz manuell eintragen kann
 wurde, führt "Continue" zur Prüfseite.
 
 Auf der Prüfseite (@dKalPrüf) befindet sich zentral und gut erreichbar
-ein "Play Sound"-Button, der die erkannte Frequenz als Ton abspielt.
+ein "Play Sound" Button, der die erkannte Frequenz als Ton abspielt.
 Der begleitende Text fragt den Nutzer, ob der abgespielte Ton mit dem
 zuvor gespielten übereinstimmt. Bei Nein kehrt er zur Messseite zurück
 und wiederholt die Aufnahme; bei Ja wird die nächste Saite gemessen
@@ -1969,7 +1967,7 @@ und wiederholt die Aufnahme; bei Ja wird die nächste Saite gemessen
 
 @dKalVerändern fordert den Nutzer auf, eine bestimmte Saite zu
 verstimmen. Für den Fall, dass versehentlich die falsche Saite verändert
-wurde, steht ein "Wrong String Changed"-Button zur Verfügung, der den
+wurde, steht ein "Wrong String Changed" Button zur Verfügung, der den
 Schritt zurücksetzt (@req-fsa-09). Nach dem Verstimmen bestätigt der
 Nutzer mit "Done" und der Ablauf folgt dem Interaktionsdesign aus
 @iiakt2.
@@ -2051,57 +2049,27 @@ sodass betroffene Widgets neu gerendert werden. Ein wesentlicher Vorteil
 dieses Ansatzes ist, dass kein manuelles Prop-Passing durch den gesamten
 Widget-Baum erforderlich ist.
 
-*Audio Stream Provider*
 
-Der Audio Stream Provider stellt einen kontinuierlichen Datenstrom der
-Mikrofonaufnahme bereit. Der Datentyp ist ein `Stream<Int16List>`, der
-die rohen PCM-Samples des Mikrofons als 16-Bit-Integer ausgibt und von
-allen nachgelagerten Signalverarbeitungs-Providern konsumiert wird
-(@req-fsa-01).
+Der *Audio Stream Provider* stellt einen kontinuierlichen Datenstrom der Mikrofonaufnahme bereit. Der Datentyp ist ein `Stream<Int16List>`, der die rohen PCM-Samples des Mikrofons als 16-Bit-Integer ausgibt und von allen nachgelagerten Signalverarbeitungs-Providern konsumiert wird (@req-fsa-01).
 
-*Volume Stream Provider*
+Der *Volume Stream Provider* abonniert den Audio Stream Provider  und berechnet den Schalldruckpegel des Eingangssignals in dBFS gemäß @req-fsa-02. Der Ausgabewert ist ein `Stream<double>` im Wertebereich $[-60,0, 0,0]~"dBFS"$.
 
-Abonniert den Audio Stream Provider  und berechnet den
-Schalldruckpegel des Eingangssignals in dBFS gemäß @req-fsa-02. Der
-Ausgabewert ist ein `Stream<double>` im Wertebereich
-$[-60,0, 0,0]~"dBFS"$.
+Der *Frequency Stream Provider* abonniert den Audio Stream Provider  und wendet den YIN-Algorithmus @YIN auf den Audiodatenstrom an (@req-fsa-01). Die Ausgabe ist ein `Stream<double>`, der die geschätzte Grundfrequenz in Hertz liefert.
 
-*Frequency Stream Provider*
+Der *Smoothed Frequency Provider* abonniert den Frequency Stream Provider und glättet die eingehenden Messwerte durch einen gleitenden Mittelwert (@req-fsa-05), um kurzfristige Ausreißer zu dämpfen. Die Ausgabe ist ein `Stream<double>`.
 
-Abonniert den Audio Stream Provider  und wendet den
-YIN-Algorithmus @YIN auf den Audiodatenstrom an (@req-fsa-01). Die
-Ausgabe ist ein `Stream<double>`, der die geschätzte Grundfrequenz in
-Hertz liefert.
+Der *Volume Threshold Provider* liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich $[-60,0, 0,0]~"dBFS"$ (@req-fsa-02). Der Wert wird über den Empfindlichkeits-Schieberegler in den Einstellungen gesteuert(@req-fba-05).
 
-*Smoothed Frequency Provider*
-
-Abonniert den Frequency Stream Provider und glättet die
-eingehenden Messwerte durch einen gleitenden Mittelwert (@req-fsa-05),
-um kurzfristige Ausreißer zu dämpfen. Die Ausgabe ist ein
-`Stream<double>`.
-
-*Volume Threshold Provider*
-
-Liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich
-$[-60,0, 0,0]~"dBFS"$ (@req-fsa-02). Der Wert wird über den
-Empfindlichkeits-Schieberegler in den Einstellungen gesteuert
-(@req-fba-05).
-
-*Detected Frequency Provider*
-
-Kombiniert die Ausgaben des Smoothed Frequency Providers, des Volume
+Der *Detected Frequency Provider* kombiniert die Ausgaben des Smoothed Frequency Providers, des Volume
 Stream Providers und des Volume Threshold Providers und liefert
 die zuletzt erkannte Frequenz als `double`.
-
 Ist manuelle Erkennung aktiviert (`manualDetection == true`), wird die
 Frequenz ausschließlich über einen Notifier gesetzt -- etwa durch eine
 Texteingabe (@req-fba-14). Andernfalls wird der aktuelle Wert des
 Smoothed Frequency Providers übernommen, sofern der Schalldruckpegel
 zum selben Zeitpunkt den Schwellenwert überschreitet (@req-fsa-02).
 
-*String Measure State Provider*
-
-Stellt das `StringMeasureState`-Objekt bereit, das den aktuellen
+Der *String Measure State Provider* stellt das `StringMeasureState`-Objekt bereit, das den aktuellen
 Fortschritt der saitenweisen Messung abbildet:
 
 ```dart
@@ -2111,9 +2079,7 @@ StringMeasureState {
 }
 ```
 
-*Guitar State Provider*
-
-Repräsentiert den aktuellen Frequenzzustand aller sechs Saiten als
+Der *Guitar State Provider* repräsentiert den aktuellen Frequenzzustand aller sechs Saiten als
 `List<double>` der Länge 6. Jeder Eintrag entspricht der zuletzt
 gemessenen Frequenz der jeweiligen Saite. Dieser Provider bildet das
 zentrale zustandstragende Modell während des Stimm- und
@@ -2121,9 +2087,7 @@ Kalibrierungsvorgangs und kann von beliebigen Widgets -- etwa über
 Button-Interaktionen -- aktualisiert werden.
 
 
-*Calibration State Provider*
-
-Stellt das `CalibrationState`-Objekt bereit, das den Fortschritt
+Der *Calibration State Provider* stellt das `CalibrationState`-Objekt bereit, das den Fortschritt
 innerhalb der Kalibrierung verfolgt (@req-fsa-07):
 
 ```dart
@@ -2133,12 +2097,12 @@ CalibrationState {
 }
 ```
 
-*Guitars- und Selected-Guitar-Provider*
 
-Der Guitars-Provider verwaltet die persistente Speicherung aller
-`Guitar`-Objekte auf dem Gerät (@req-fsa-10, @req-fba-03). Der
-Selected-Guitar-Provider hält das aktuell ausgewählte Profil vor.
+Der *Guitars-Provider* verwaltet die persistente Speicherung aller
+`Guitar`-Objekte auf dem Gerät (@req-fsa-10, @req-fba-03).
 
+Der
+*Selected-Guitar-Provider* hält das aktuell ausgewählte Profil vor.
 Ein `Guitar`-Objekt ist wie folgt aufgebaut:
 
 ```dart
@@ -2156,17 +2120,15 @@ bezeichnet die verstimmte Saite, der zweite den Messpunkt-Index. So
 entspricht `samples[1][2]` dem dritten erfassten Gitarrenzustand, als
 Saite A2 (Index 1) verstimmt wurde, also einem Frequenzvektor der
 Form $[f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4"]$.
-
 `matrix` und `inverseMatrix` lassen sich vollständig aus `samples`
 ableiten, werden jedoch aus Performancegründen gecacht und gemeinsam
 persistiert.
 
-*Tunings- und Selected-Tuning-Provider*
+Der *Tunings-Provider* verwaltet die persistente Speicherung aller
+`Tuning`-Objekte (@req-fsa-14, @req-fsa-15).
 
-Der Tunings-Provider verwaltet die persistente Speicherung aller
-`Tuning`-Objekte (@req-fsa-14, @req-fsa-15). Der
-Selected-Tuning-Provider hält die aktuell gewählte Stimmung vor.
-
+Der
+*Selected-Tuning-Provider* hält die aktuell gewählte Stimmung vor.
 Ein `Tuning`-Objekt ist wie folgt aufgebaut:
 
 ```dart
@@ -2991,7 +2953,7 @@ für den Nutzer direkt anwendbar, ohne mentale Zwischenrechnungen.
 
 *Zur Applikation:*
 Die Applikation wurde als plattformübergreifende Flutter-App für Android
-und iOS realisiert. Sie unterstützt den vollständigen Workflow:
+und iOS realisiert. Sie unterstützt den vollständigen Workflow, also die
 einmalige Kalibrierung der gitarrenspezifischen Verstimmungsmatrix,
 Messung des aktuellen Gitarrenzustands und geführtes saitenweises
 Stimmen auf die berechneten Zielfrequenzen. Ergänzend steht ein
@@ -2999,7 +2961,8 @@ Standard-Stimmgerät zur abschließenden Überprüfung bereit.
 
 Die Nutzertests zeigen, dass das Verfahren unter kontrollierten
 akustischen Bedingungen funktioniert: Die Gitarre konnte erfolgreich
-gestimmt werden, und der Gesamtaufwand lag bei 7 bis 8 Minuten.
+gestimmt werden und der Gesamtaufwand (Initiierung und Stimmen) lag bei 7 bis 8 Minuten. Der Stimmvorgang bei bereits initiierten Gitarren dauerte nur 3 Minuten. Zuvor (ohne Applikation) dauerte dies 8 bis 30 Minuten
+@youtube_floyd_rose_tune2026 @ultimateguitar_floydrose_tuning_forum.
 Damit ist die Applikation bereits in ihrer aktuellen Form für
 strukturierte Stimmvorgänge in ruhigen Umgebungen einsetzbar.
 
@@ -3075,7 +3038,7 @@ Messvorgang erheblich beschleunigen würde.
 
 Wenn der Nutzer während des Stimmvorgangs eine Saite anspielt, könnte
 die App anhand der gemessenen Frequenz automatisch erkennen, welche Saite
-verändert wird, und die Anzeige entsprechend umschalten. Voraussetzung
+verändert wird und die Anzeige entsprechend umschalten. Voraussetzung
 ist, dass die Saite bereits näherungsweise auf der Zielfrequenz liegt,
 sodass eine eindeutige Zuordnung möglich ist.
 
@@ -3083,7 +3046,7 @@ sodass eine eindeutige Zuordnung möglich ist.
 
 Aktuell muss der Nutzer nach dem Stimmen jeder Saite manuell zur
 nächsten wechseln. Die App könnte stattdessen automatisch erkennen,
-wann eine Saite den Zielfrequenzbereich erreicht hat, und ohne
+wann eine Saite den Zielfrequenzbereich erreicht hat und ohne
 Nutzerinteraktion zur nächsten Saite fortfahren. Dies würde den
 Stimmvorgang weiter beschleunigen und ist besonders für Persona Jonas
 (@hanna) relevant, der täglich mehrere Gitarren stimmt.
@@ -3103,7 +3066,7 @@ unerfahrene Nutzer wie Persona Emil weiter senken.
 
 Aktuell ist die Referenzfrequenz fest auf $440 "Hz"$ eingestellt.
 Manche Ensembles -- insbesondere im Orchesterkontext -- stimmen auf
-abweichende Referenzwerte wie $438 "Hz"$ oder $442 "Hz"$. Eine
+abweichende Referenzwerte wie $438 "Hz"$ oder $443 "Hz"$. Eine
 konfigurierbare Referenzfrequenz würde es ermöglichen, die Gitarre
 präzise auf solche Ensembles abzustimmen.
 
