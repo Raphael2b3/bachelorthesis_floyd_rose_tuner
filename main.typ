@@ -6,7 +6,7 @@
   semester: "8",
   erstprüfer: "Prof. Konrad Schöbel",
   zweitprüfer: "Prof. Ulf Schemmert",
-  date: "16.06.2026",
+  date: "16. Juni 2026",
   logos: "assets/htwk-logo.png",
   abbildungsverzeichnis: true,
 ) = {
@@ -14,11 +14,17 @@
   align(center)[
     #image(logos, width: 50%)
   ]
-  v(5fr)
+  v(3fr)
   align(center)[
     #text(size: 35pt)[*Bachelorarbeit*]
   ]
   v(2fr)
+  align(center)[
+    #text(size: 16pt)[im Studiengang Telekommunikationsinformatik\
+      der Fakultät Digitale Transformation\
+      der Hochschule für Technik, Wirtschaft und Kultur Leipzig]
+  ]
+  v(3fr)
   align(center)[
     #text(size: 25pt)[#title]
   ]
@@ -26,17 +32,39 @@
   align(center)[
     #text(size: 15pt)[#subtitle]
   ]
-  v(6fr)
+  v(3fr)
   align(center)[
-    #text(size: 15pt)[Name: #author] \
+    #text(size: 15pt)[vorgelegt von]
+    #v(1fr)
+    #text(size: 20pt)[#author]
+    #v(1fr)
     #text(size: 15pt)[Matrikelnummer: #matrikelnummer] \
-    #text(size: 15pt)[Fachsemester: #semester] \
-    #text(size: 15pt)[Erstprüfer: #erstprüfer] \
-    #text(size: 15pt)[Zweitprüfer: #zweitprüfer] \
-    #text(size: 15pt)[Abgabe: #date] \
+    #text(size: 15pt)[#semester\. Fachsemester] \
+    #v(1fr)
+    #text(size: 15pt)[Leipzig, #date] \
+
   ]
+  text(size: 15pt)[Erstgutachter: #h(1fr) #erstprüfer   \
+    Zweitgutachter: #h(1fr) #zweitprüfer]
 
   v(2.4fr)
+  pagebreak()
+  [#v(1em)
+    #align(center)[
+      #text(weight: "bold", size: 14pt)[Sperrvermerk]
+    ]
+
+    Die vorliegende Bachelorarbeit beinhaltet interne vertrauliche Informationen des Autors oder patentrechtlich relevante Informationen. Die Weitergabe des Inhaltes der Arbeit und eventuell beiliegender Zeichnungen und Daten im
+    Gesamten oder in Teilen ist grundsätzlich untersagt. Es dürfen keinerlei Kopien oder Abschriften -- auch in digitaler Form -- gefertigt werden. Ausnahmen bedürfen der vorherigen schriftlichen Genehmigung des Autors.
+    #v(1em)
+    Paulstr. 34, 10557 Berlin \
+    raphael.schuetz0311\@gmail.com\
+    raphael.schuetz\@stud.htwk-leipzig.de \
+    #v(2em)
+    Leipzig, 16. Juni 2026
+    #v(2em)
+    -----------------------------------
+  ]
   pagebreak()
   [#v(1em)
     #align(center)[
@@ -139,7 +167,36 @@
   ),
 )
 #project()
+= Vorwort
 
+Musik begleitet mich von Kleinauf. Meine beiden Eltern sind Musiker und ich lernte schon früh, Gitarre zu spielen.
+Ich besitze selbst eine Floyd-Rose-Gitarre und habe schon mehrere Stunden damit verbracht, diese zu stimmen -- Zeit, die ich auch anderweitig hätte investieren wollen.
+
+Inspiriert durch die Professorinnen und Professoren an meiner Hochschule entschloss ich mich, diesem Problem selbst nachzugehen.
+Da sich der Inhalt des Studiums neben allgemeinen Informatikthemen vor allem mit Signalen und Mobilfunk beschäftigt, war ich mir zunächst nicht sicher, ob eine Bachelorarbeit über eine Gitarre angemessen ist.
+
+Trotz dieser Unsicherheit war meine Motivation für dieses Thema außerordentlich groß. Ich investierte viel Freizeit darin, die technischen Grundlagen zu erlernen und zu verstehen, die letztendlich hilfreich waren, um mein Problem mit diesen Gitarren zu lösen.
+
+Plötzlich fiel es mir wie Schuppen von den Augen: Die Studieninhalte wirkten wie für das Problem gemacht -- mathematische und physikalische Grundlagen für die Modellierung der Gitarre, harmonische Oszillatoren zum Verständnis der Saitenschwingung, die Fourier-Transformation für die Signalanalyse und schließlich Software Engineering für die Entwicklung der App.
+
+Zunächst erscheint das Thema sehr fern von den Inhalten des Telekommunikationsinformatik-Studiums, doch bei genauerem Hinsehen war es die perfekte Vorbereitung für diese Arbeit.
+
+#pagebreak()
+= Danksagung
+Ich möchte vielen Personen danken, die mir geholfen, mich motiviert und wesentlich zum Gelingen des Projektes beigetragen haben.
+
+Mein größter Dank gilt Prof. Konrad Schöbel. Als ich den Themenvorschlag eingereicht habe, hat er die Bachelorarbeit ermöglicht, da er diese vor den Kolleginnen und Kollegen verteidigt und aufgezeigt, wie viele Studieninhalte in dieser Arbeit gebündelt werden. Die zahlreichen Besprechungen und Diskussionen waren sehr hilfreich und haben großen Einfluss auf die Qualität dieser Arbeit genommen. Außerdem danke ich für die Zeit, die für die Korrekturlesung aufgebracht wurde -- weit mehr als erwartet.
+
+Dann möchte ich Prof. Ulf Schemmert als Zweitgutachter danken -- ebenfalls für die Zeit, die zur Korrekturlesung aufgebracht wurde, aber auch für die für diese Arbeit essenziellen Buchempfehlungen und Anregungen. Es war mir ein Vergnügen, mit Ihnen zusammenarbeiten zu dürfen.
+
+Außerdem möchte ich Temesgen danken, der nicht nur ein guter Freund ist, sondern auch ein wertvoller Unterstützer, wenn es darum geht, die User Experience zu verbessern. Viel Feedback zur Verbesserung der Nutzeroberfläche entstand in Zusammenarbeit mit ihm.
+
+Ich danke auch Wassil und Nadia, die mir ermöglicht haben, die App mit ihnen zu testen und so wertvolles Feedback zu erhalten.
+
+Ein besonderer Dank gilt außerdem Prof. Manfred Zollner von der OTH Regensburg, der für mich eine Inspiration war, Gitarren als wissenschaftliches Untersuchungsobjekt zu betrachten.
+
+Zuletzt danke ich meiner Familie, die mir die Floyd-Rose-Gitarre geschenkt hat -- ohne sie hätte ich diese außergewöhnliche, mit Leidenschaft entstandene Bachelorarbeit wohl nicht geschrieben.
+#pagebreak()
 = Motivation
 
 Das Floyd-Rose-Tremolo ist ein in der E-Gitarre weit verbreitetes Brückensystem, das es Musikerinnen und Musikern ermöglicht, während des Spielens die Tonhöhe aller Saiten gleichzeitig zu verändern. Diese Eigenschaft macht es besonders in Rock- und Metalmusik beliebt.
@@ -3147,4 +3204,25 @@ vergrößern.
 
 #bibliography("bib.bib")
 
+#pagebreak()
+#text(size: 15pt)[*Eidesstattliche Versicherung*]
+
+#v(1em)
+
+Ich erkläre hiermit, dass ich diese Bachelorarbeit selbstständig ohne Hilfe Dritter und
+ohne Benutzung anderer als der angegebenen Quellen und Hilfsmittel verfasst habe. Alle den benutzten Quellen wörtlich oder sinngemäß entnommenen Stellen sind als solche
+einzeln kenntlich gemacht. Diese Arbeit ist bislang keiner anderen Prüfungsbehörde vorgelegt und auch nicht veröffentlicht worden.
+
+Die Nutzung generativer KI-Tools (in diesem Fall *claude.ai, Sonnet 4.6*, *grok.com, Grok 4.3*, *chatgpt.com ChatGPT*) erfolgte ausschließlich für ein Text-Lektorat zur Behebung grammatikalischer und stilistischer Fehler. Es wurden keine Argumentationsstrukturen oder inhaltlichen Ideen durch die KI generiert.
+
+Ich bin mir bewusst, dass eine falsche Erklärung rechtliche Folgen haben wird.
+
+#v(1em)
+
+
+Raphael Schütz
+#v(1em)
+
+
+Leipzig, 16 Juni 2026
 
