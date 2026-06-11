@@ -269,10 +269,10 @@ zum Zeitindex $t$ und $W$ die Fenstergröße der Integration. $x_j$ ist dabei de
 
 *YIN-Algorithmus*
 
-Der YIN-Algorithmus @YIN ist eine Weiterentwicklung der klassischen
+Der YIN-Algorithmus ist eine Weiterentwicklung der klassischen
 Autokorrelation, die durch sechs aufeinander aufbauende Schritte die
 Fehlerrate gegenüber dem Basisverfahren von $10,0%$ auf
-$0,5%$ reduziert.
+$0,5%$ reduziert. Diese Werte stammen dabei aus @YIN Tabelle $I$.
 
 *Schritt 1: Autokorrelation (Ausgangsbasis)*
 
@@ -384,7 +384,7 @@ robuster als regelbasierte Verfahren.
 
 Der wesentliche Nachteil dieser Ansätze liegt im Ressourcenbedarf: Die
 Berechnung eines neuronalen Netzes ist rechenintensiver als klassische
-Algorithmen und das Training erfordert große annotierte Datensätze.
+Algorithmen und das Training erfordert große annotierte Datensätze @NNComplex.
 
 == Physikalisches Modell der Gitarre
 Im Folgenden wird ein physikalisches Modell der Gitarre beschrieben, um zu verstehen, warum die Floyd-Rose-Gitarre so schwierig zu stimmen ist.
@@ -597,9 +597,10 @@ Aus @eqErsichtlich wird ersichtlich, dass die Aufwickelstrecken der Saiten die F
 
 === Experiment: Elastizität von Gitarrensaiten
 
-Es wurde die Annahme getroffen, dass sich Gitarrensaiten wie Federn verhalten und das Hooksche Gesetz gilt. Dies wurde im folgenden Experiment überprüft.
+Es wurde die Annahme getroffen, dass sich Gitarrensaiten wie Federn verhalten und das Hooksche Gesetz gilt. Dies wurde im folgenden Experiment qualitativ überprüft. Das Hooksche Gesetz gilt für E-Gitarrensaiten, da sie aus Stahl sind und damit linearelastische Eigenschaften besitzen @stahlhook.
 
-Die Ergebnisse dieses Experiments beruhen auf Vorarbeiten des Autors, die im Rahmen des Moduls "Projekt 3" des Studiengangs Telekommunikationsinformatik an der HTWK Leipzig durchgeführt wurden @Schuetz2026FloydRose.
+Die Ergebnisse dieses Experiments beruhen auf Vorarbeiten des Autors, die im Rahmen des Moduls "Projekt 3" des Studiengangs Telekommunikationsinformatik an der HTWK Leipzig durchgeführt wurden @Schuetz2026FloydRose. Es wurden Spannungsänderungen am Wirbel der höchsten Saite vorgenommen. Dabei wurden mittels Vorher-Nachher-Bildern, die Bewegungen von den Markierungen an den Saiten dokumentiert.
+
 
 In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeigen:
 #{
@@ -639,7 +640,7 @@ Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder ledi
 Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.
 Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixe Punkte wirken, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich weiter wandern.
 
-
+In Abbildung 7.b kann man erkennen, dass der Einfluss auf die anderen Saiten gering ist. Das erklärt, warum für normale Gitarren klassische Stimmverfahren funktionieren.
 
 
 === Experiment: Nachweis der Linearität <nachweisLin>
