@@ -640,7 +640,7 @@ Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder ledi
 Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.
 Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixe Punkte wirken, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich weiter wandern.
 
-In Abbildung 7.b kann man erkennen, dass der Einfluss auf die anderen Saiten gering ist. Das erklärt, warum für normale Gitarren klassische Stimmverfahren funktionieren.
+Abbildung 7.b zeigt, dass der Einfluss auf die anderen Saiten gering ist. Das erklärt, warum für normale Gitarren klassische Stimmverfahren funktionieren.
 
 
 === Experiment: Nachweis der Linearität <nachweisLin>
@@ -1100,7 +1100,7 @@ Die Methodik der Softwareentwicklung wurde durch das Buch _Mobile App Engineerin
 
 Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in diesem Rahmen entwickelte App ist zwar keine _Enterprise App_, aber die Prinzipien der Softwareentwicklung, die in diesem Buch beschrieben werden, sind dennoch anwendbar. Es werden insbesondere die Prinzipien der Anforderungsanalyse und der nutzerzentrierten Gestaltung übernommen.
 
-Wie im Buch beschrieben, werden mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Usertests begründet, die mit einer älteren Version der App durchgeführt wurden.
+Wie im Buch beschrieben, werden mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Nutzertests begründet, die mit einer älteren Version der App durchgeführt wurden.
 
 == Requirements Engineering
 Dieses Kapitel wurde mithilfe des Buchs _Mobile App Engineering_ @mobileAppEngineering entwickelt. Die Ergebnisse folgen aus der Befolgung des Kapitels 4 "Requirements Engineering".
@@ -1702,7 +1702,10 @@ unmittelbar die Benennung und den Kalibrierungsvorgang (@req-fba-12,
 === Interaktionsdesign
 
 Für die Erstellung des Interaktionsdesigns wurde die grafische Sprache
-_Visuelles Vokabular_ nach @Garrett2012 verwendet. Die resultierenden
+_Visuelles Vokabular_ nach @Garrett2012 verwendet.
+Ein Viereck repräsentiert dabei eine Seite. Ein Richtungspfeil zeigt an, zu welcher Seite navigiert werden kann. Dabei schließt ein Richtungspfeil die Möglichkeit der Rücknavigation nicht aus, sondern stellt lediglich den vorgesehenen bzw. optimalen Navigationsverlauf dar. Eine Verbindung ohne Pfeil kennzeichnet hingegen eine vorgesehene bidirektionale Navigation zwischen zwei Seiten.
+
+Die resultierenden
 Diagramme sind in @iiakt1, @iiakt2 und @iiakt3 dargestellt.
 
 *Navigation*
@@ -1720,7 +1723,7 @@ Vom Standard-Stimmgerät aus ist es möglich, direkt in die Kalibrierung
 der aktuell ausgewählten Gitarre zu wechseln, falls das Ergebnis nicht
 den Erwartungen entspricht (@req-fba-11). Auf der Gitarrenansichtsseite
 kann die Gitarre umbenannt (@req-fba-12) und rekalibriert werden.
-
+#pagebreak()
 *Kalibrierung*
 
 #figure(
@@ -1916,6 +1919,8 @@ Kalibrierungsablauf direkt angesprungen werden (@req-fba-08).
 (@req-fba-06, @req-nfa-be-04) sowie des Standard-Stimmgeräts
 (@req-fsa-11, @req-fba-10), das unabhängig vom Floyd-Rose-Algorithmus
 zur schnellen Überprüfung der Stimmung genutzt werden kann.
+
+#pagebreak()
 === Design
 
 *Onboarding*
@@ -1960,6 +1965,7 @@ begleitende Hinweistext "This Guitar Needs Calibration" macht den
 nächsten Schritt unmissverständlich deutlich (@req-nfa-be-01). Ein Klick
 auf den Button startet sofort den Kalibrierungsvorgang.
 
+#pagebreak()
 *Kalibrierung*
 
 #grid(
@@ -2085,120 +2091,9 @@ nächsten Saite (@req-fba-01, @req-fsa-03, @req-fsa-04).
 Nach dem Stimmen aller Saiten gelangt der Nutzer zum
 Standard-Stimmgerät (@dStandardTuner), das die gespielte Note, die
 Frequenz in Hertz sowie die Abweichung in Cent anzeigt und so eine
-abschließende Überprüfung der Stimmung ermöglicht (@req-fsa-11,
-@req-fba-10).
+abschließende Überprüfung der Stimmung ermöglicht (@req-fsa-11, @req-fba-10).
 
-== Architektur
-
-#figure(
-  image("assets/architecture.png"),
-  caption: [Architektur der App],
-) <arch>
-
-Die App folgt dem Architekturmuster _Model-View-ViewModel_ (MVVM). Dieses
-Muster eignet sich besonders, weil das ViewModel die Schnittstelle
-zwischen View und Model kapselt: Die UI kennt keine Implementierungsdetails
-des Modells und das Modell ist unabhängig von der Darstellung. In
-Verbindung mit Riverpod (@abhaengigkeiten) wird dieses Muster durch
-sogenannte _Provider_ und _Notifier_ umgesetzt. Provider stellen
-lesenden Zugriff auf den Zustand bereit, Notifier ermöglichen dessen
-Veränderung und benachrichtigen die UI automatisch über Änderungen,
-sodass betroffene Widgets neu gerendert werden. Ein wesentlicher Vorteil
-dieses Ansatzes ist, dass kein manuelles Prop-Passing durch den gesamten
-Widget-Baum erforderlich ist.
-
-
-Der *Audio Stream Provider* stellt einen kontinuierlichen Datenstrom der Mikrofonaufnahme bereit. Der Datentyp ist ein `Stream<Int16List>`, der die rohen PCM-Samples des Mikrofons als 16-Bit-Integer ausgibt und von allen nachgelagerten Signalverarbeitungs-Providern konsumiert wird (@req-fsa-01).
-
-Der *Volume Stream Provider* abonniert den Audio Stream Provider  und berechnet den Schalldruckpegel des Eingangssignals in dBFS gemäß @req-fsa-02. Der Ausgabewert ist ein `Stream<double>` im Wertebereich $[-60,0, 0,0]~"dBFS"$.
-
-Der *Frequency Stream Provider* abonniert den Audio Stream Provider  und wendet den YIN-Algorithmus @YIN auf den Audiodatenstrom an (@req-fsa-01). Die Ausgabe ist ein `Stream<double>`, der die geschätzte Grundfrequenz in Hertz liefert.
-
-Der *Smoothed Frequency Provider* abonniert den Frequency Stream Provider und glättet die eingehenden Messwerte durch einen gleitenden Mittelwert (@req-fsa-05), um kurzfristige Ausreißer zu dämpfen. Die Ausgabe ist ein `Stream<double>`.
-
-Der *Volume Threshold Provider* liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich $[-60,0, 0,0]~"dBFS"$ (@req-fsa-02). Der Wert wird über den Empfindlichkeits-Schieberegler in den Einstellungen gesteuert(@req-fba-05).
-
-Der *Detected Frequency Provider* kombiniert die Ausgaben des Smoothed Frequency Providers, des Volume
-Stream Providers und des Volume Threshold Providers und liefert
-die zuletzt erkannte Frequenz als `double`.
-Ist manuelle Erkennung aktiviert (`manualDetection == true`), wird die
-Frequenz ausschließlich über einen Notifier gesetzt -- etwa durch eine
-Texteingabe (@req-fba-14). Andernfalls wird der aktuelle Wert des
-Smoothed Frequency Providers übernommen, sofern der Schalldruckpegel
-zum selben Zeitpunkt den Schwellenwert überschreitet (@req-fsa-02).
-
-Der *String Measure State Provider* stellt das `StringMeasureState`-Objekt bereit, das den aktuellen
-Fortschritt der saitenweisen Messung abbildet:
-
-```dart
-StringMeasureState {
-  int currentStringIndex   // Index der aktuell zu messenden Saite (0–5)
-  bool manualDetection     // Eingabemodus: automatisch oder manuell
-}
-```
-
-Der *Guitar State Provider* repräsentiert den aktuellen Frequenzzustand aller sechs Saiten als
-`List<double>` der Länge 6. Jeder Eintrag entspricht der zuletzt
-gemessenen Frequenz der jeweiligen Saite. Dieser Provider bildet das
-zentrale zustandstragende Modell während des Stimm- und
-Kalibrierungsvorgangs und kann von beliebigen Widgets -- etwa über
-Button-Interaktionen -- aktualisiert werden.
-
-
-Der *Calibration State Provider* stellt das `CalibrationState`-Objekt bereit, das den Fortschritt
-innerhalb der Kalibrierung verfolgt (@req-fsa-07):
-
-```dart
-CalibrationState {
-  int currentEffectingStringIndex  // Index der aktuell verstimmten Saite
-  int currentSampleIndex           // Index des aktuellen Messpunkts
-}
-```
-
-
-Der *Guitars-Provider* verwaltet die persistente Speicherung aller
-`Guitar`-Objekte auf dem Gerät (@req-fsa-10, @req-fba-03).
-
-Der
-*Selected-Guitar-Provider* hält das aktuell ausgewählte Profil vor.
-Ein `Guitar`-Objekt ist wie folgt aufgebaut:
-
-```dart
-Guitar {
-  String guitarName                      // Benutzerdefinierter Name (@req-fsa-13)
-  List<List<double>> matrix              // Verstimmungsmatrix C
-  List<List<double>> inverseMatrix       // Gecachte Inverse von C
-  Map<int, List<GuitarState>> samples    // Rohmessdaten der Kalibrierung
-}
-```
-
-`Guitar.samples` speichert alle Messpunkte, aus denen die
-Verstimmungsmatrix berechnet wird (@req-fsa-07). Der erste Schlüssel
-bezeichnet die verstimmte Saite, der zweite den Messpunkt-Index. So
-entspricht `samples[1][2]` dem dritten erfassten Gitarrenzustand, als
-Saite A2 (Index 1) verstimmt wurde, also einem Frequenzvektor der
-Form $[f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4"]$.
-`matrix` und `inverseMatrix` lassen sich vollständig aus `samples`
-ableiten, werden jedoch aus Performancegründen gecacht und gemeinsam
-persistiert.
-
-Der *Tunings-Provider* verwaltet die persistente Speicherung aller
-`Tuning`-Objekte (@req-fsa-14, @req-fsa-15).
-
-Der
-*Selected-Tuning-Provider* hält die aktuell gewählte Stimmung vor.
-Ein `Tuning`-Objekt ist wie folgt aufgebaut:
-
-```dart
-Tuning {
-  String name               // Bezeichnung der Stimmung
-  List<String> goalNotes    // Zielnoten im Format "E2", "A2", …
-}
-```
-
-`Tuning.goalNotes` enthält die standardisierten Notenbezeichnungen im
-Format _Note + Oktave_ (z.~B. `"E2"` für das E in der zweiten Oktave)
-und definiert damit die Zielfrequenzen für den Stimmprozess (@req-fsa-03).
+#pagebreak()
 == Implementierung <impl>
 
 === Auswahl des Cross-Platform-Frameworks<auswahlflutter>
@@ -2539,7 +2434,7 @@ Zurück-Button{
         navigate(Prüfseite)
 }
 ```
-#pagebreak()
+
 *Prüfseite*
 
 ```
@@ -2582,6 +2477,123 @@ Zurück-Button{
 }
 ```
 
+
+== Architektur
+
+#figure(
+  image("assets/architecture.png"),
+  caption: [Architektur der App],
+) <arch>
+
+Die App folgt dem Architekturmuster _Model-View-ViewModel_ (MVVM). Dieses
+Muster eignet sich besonders, weil das ViewModel die Schnittstelle
+zwischen View und Model kapselt: Die UI kennt keine Implementierungsdetails
+des Modells und das Modell ist unabhängig von der Darstellung. In
+Verbindung mit Riverpod (@abhaengigkeiten) wird dieses Muster durch
+sogenannte _Provider_ und _Notifier_ umgesetzt.
+
+Provider stellen
+lesenden Zugriff auf den Zustand bereit, Notifier ermöglichen dessen
+Veränderung und benachrichtigen die UI automatisch über Änderungen,
+sodass betroffene Widgets neu gerendert werden. Ein wesentlicher Vorteil
+dieses Ansatzes ist, dass kein manuelles Prop-Passing durch den gesamten
+Widget-Baum erforderlich ist.
+
+
+Der *Audio Stream Provider* stellt einen kontinuierlichen Datenstrom der Mikrofonaufnahme bereit. Der Datentyp ist ein `Stream<Int16List>`, der die rohen PCM-Samples des Mikrofons als 16-Bit-Integer ausgibt und von allen nachgelagerten Signalverarbeitungs-Providern konsumiert wird (@req-fsa-01).
+
+Der *Volume Stream Provider* abonniert den Audio Stream Provider  und berechnet den Schalldruckpegel des Eingangssignals in dBFS gemäß @req-fsa-02. Der Ausgabewert ist ein `Stream<double>` im Wertebereich $[-60,0, 0,0]~"dBFS"$.
+
+Der *Frequency Stream Provider* abonniert den Audio Stream Provider  und wendet den YIN-Algorithmus @YIN auf den Audiodatenstrom an (@req-fsa-01). Die Ausgabe ist ein `Stream<double>`, der die geschätzte Grundfrequenz in Hertz liefert.
+
+Der *Smoothed Frequency Provider* abonniert den Frequency Stream Provider und glättet die eingehenden Messwerte durch einen gleitenden Mittelwert (@req-fsa-05), um kurzfristige Ausreißer zu dämpfen. Die Ausgabe ist ein `Stream<double>`.
+
+Der *Volume Threshold Provider* liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich $[-60,0, 0,0]~"dBFS"$ (@req-fsa-02). Der Wert wird über den Empfindlichkeits-Schieberegler in den Einstellungen gesteuert(@req-fba-05).
+
+Der *Detected Frequency Provider* kombiniert die Ausgaben des Smoothed Frequency Providers, des Volume
+Stream Providers und des Volume Threshold Providers und liefert
+die zuletzt erkannte Frequenz als `double`.
+Ist manuelle Erkennung aktiviert (`manualDetection == true`), wird die
+Frequenz ausschließlich über einen Notifier gesetzt -- etwa durch eine
+Texteingabe (@req-fba-14). Andernfalls wird der aktuelle Wert des
+Smoothed Frequency Providers übernommen, sofern der Schalldruckpegel
+zum selben Zeitpunkt den Schwellenwert überschreitet (@req-fsa-02).
+
+Der *String Measure State Provider* stellt das `StringMeasureState`-Objekt bereit, das den aktuellen
+Fortschritt der saitenweisen Messung abbildet:
+
+```dart
+StringMeasureState {
+  int currentStringIndex   // Index der aktuell zu messenden Saite (0–5)
+  bool manualDetection     // Eingabemodus: automatisch oder manuell
+}
+```
+
+Der *Guitar State Provider* repräsentiert den aktuellen Frequenzzustand aller sechs Saiten als
+`List<double>` der Länge 6. Jeder Eintrag entspricht der zuletzt
+gemessenen Frequenz der jeweiligen Saite. Dieser Provider bildet das
+zentrale zustandstragende Modell während des Stimm- und
+Kalibrierungsvorgangs und kann von beliebigen Widgets -- etwa über
+Button-Interaktionen -- aktualisiert werden.
+
+
+Der *Calibration State Provider* stellt das `CalibrationState`-Objekt bereit, das den Fortschritt
+innerhalb der Kalibrierung verfolgt (@req-fsa-07):
+
+```dart
+CalibrationState {
+  int currentEffectingStringIndex  // Index der aktuell verstimmten Saite
+  int currentSampleIndex           // Index des aktuellen Messpunkts
+}
+```
+
+
+Der *Guitars-Provider* verwaltet die persistente Speicherung aller
+`Guitar`-Objekte auf dem Gerät (@req-fsa-10, @req-fba-03).
+
+Der
+*Selected-Guitar-Provider* hält das aktuell ausgewählte Profil vor.
+Ein `Guitar`-Objekt ist wie folgt aufgebaut:
+
+```dart
+Guitar {
+  String guitarName                      // Benutzerdefinierter Name (@req-fsa-13)
+  List<List<double>> matrix              // Verstimmungsmatrix C
+  List<List<double>> inverseMatrix       // Gecachte Inverse von C
+  Map<int, List<GuitarState>> samples    // Rohmessdaten der Kalibrierung
+}
+```
+
+`Guitar.samples` speichert alle Messpunkte, aus denen die
+Verstimmungsmatrix berechnet wird (@req-fsa-07). Der erste Schlüssel
+bezeichnet die verstimmte Saite, der zweite den Messpunkt-Index. So
+entspricht `samples[1][2]` dem dritten erfassten Gitarrenzustand, als
+Saite A2 (Index 1) verstimmt wurde, also einem Frequenzvektor der
+Form $[f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4"]$.
+`matrix` und `inverseMatrix` lassen sich vollständig aus `samples`
+ableiten, werden jedoch aus Performancegründen gecacht und gemeinsam
+persistiert.
+
+Der *Tunings-Provider* verwaltet die persistente Speicherung aller
+`Tuning`-Objekte (@req-fsa-14, @req-fsa-15).
+
+Der
+*Selected-Tuning-Provider* hält die aktuell gewählte Stimmung vor.
+Ein `Tuning`-Objekt ist wie folgt aufgebaut:
+
+```dart
+Tuning {
+  String name               // Bezeichnung der Stimmung
+  List<String> goalNotes    // Zielnoten im Format "E2", "A2", …
+}
+```
+
+`Tuning.goalNotes` enthält die standardisierten Notenbezeichnungen im
+Format _Note + Oktave_ (z.~B. `"E2"` für das E in der zweiten Oktave)
+und definiert damit die Zielfrequenzen für den Stimmprozess (@req-fsa-03).
+
+
+
 == Tests während der Entwicklung
 
 *Manuelle Tests*
@@ -2601,7 +2613,8 @@ Manuell getestet wurden:
 - @req-nfa-ro-02, @req-nfa-ro-03
 - @req-nfa-be-01 bis @req-nfa-be-04
 - @req-nfa-dp-01 bis @req-nfa-dp-03
-#pagebreak()
+
+//#pagebreak()
 *Unit-Tests*
 
 Für die mathematisch verifizierbaren Kernanforderungen wurden
@@ -2764,7 +2777,7 @@ Die Nutzertests wurden als unmoderierte, jedoch beobachtete Feld- bzw. Nutzungss
 Die Tests fanden in unterschiedlichen akustischen Umgebungen statt, um die Robustheit der Frequenzanalyse und Signalverarbeitung unter realistischen Bedingungen zu evaluieren:
 
 - ruhige Innenräume mit direkter Gitarrenaufnahme
-- laute Umgebungen (z.\,B. Jam-Situationen)
+- laute Umgebungen (z.,B. Jam-Situationen)
 Der Ablauf folgte keinem strikt vorgegebenen Protokoll, sondern einem task-basierten explorativen Vorgehen.
 Erfasst wurden sowohl quantitative Kennzahlen als auch qualitative Beobachtungen:
 
@@ -3214,7 +3227,7 @@ Ich erkläre hiermit, dass ich diese Bachelorarbeit selbstständig ohne Hilfe Dr
 ohne Benutzung anderer als der angegebenen Quellen und Hilfsmittel verfasst habe. Alle den benutzten Quellen wörtlich oder sinngemäß entnommenen Stellen sind als solche
 einzeln kenntlich gemacht. Diese Arbeit ist bislang keiner anderen Prüfungsbehörde vorgelegt und auch nicht veröffentlicht worden.
 
-Die Nutzung generativer KI-Tools (in diesem Fall *claude.ai, Sonnet 4.6*, *grok.com, Grok 4.3*, *chatgpt.com ChatGPT*) erfolgte ausschließlich für ein Text-Lektorat zur Behebung grammatikalischer und stilistischer Fehler. Es wurden keine Argumentationsstrukturen oder inhaltlichen Ideen durch die KI generiert.
+Die Nutzung generativer KI-Tools (in diesem Fall *claude.ai: Sonnet 4.6*, *grok.com: Grok 4.3*, *chatgpt.com: ChatGPT-5.5-base*) erfolgte ausschließlich für ein Text-Lektorat zur Behebung grammatikalischer und stilistischer Fehler. Es wurden keine Argumentationsstrukturen oder inhaltlichen Ideen durch die KI generiert.
 
 Ich bin mir bewusst, dass eine falsche Erklärung rechtliche Folgen haben wird.
 
