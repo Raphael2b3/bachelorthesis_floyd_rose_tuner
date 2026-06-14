@@ -75,7 +75,7 @@
 
     Ziel dieser Bachelorarbeit war die Entwicklung einer mobilen Applikation, die diesen Vorgang durch ein mathematisches Modell der Brückenkopplung signifikant beschleunigt. Hierzu wurde zunächst ein physikalisches Modell der Floyd-Rose-Gitarre erstellt, das den nichtlinearen Zusammenhang zwischen Saitenspannung, Brückenposition und Schwingungsfrequenz beschreibt. Für kleine Verstimmungen konnte dieses System durch eine gitarrenspezifische *Verstimmungsmatrix* hinreichend genau linearisiert werden. Die Inverse dieser Matrix ermöglicht die direkte Berechnung der erforderlichen Verstimmungsbeträge jeder Saite.
 
-    Auf Basis dieses Modells wurde eine plattformübergreifende Flutter-Applikation für Android und iOS entwickelt. Diese unterstützt die einmalige Kalibrierung des Instruments, die Messung des aktuellen Stimmzustands mittels YIN-Algorithmus sowie einen geführten Stimmvorgang mit berechneten Zielfrequenzen.
+    Auf Basis dieses Modells wurde eine plattformübergreifende Flutter-Applikation für Android und iOS entwickelt. Diese unterstützt die einmalige Kalibrierung des Instruments, die Messung des aktuellen Stimmzustands mittels YIN-Algorithmus sowie einen geführten Stimmvorgang mit berechneten Zwischenzielfrequenz.
 
     Nutzertests zeigten, dass die Gitarre unter kontrollierten akustischen Bedingungen erfolgreich und deutlich schneller gestimmt werden konnte als mit herkömmlichen Methoden. Die Grenzen der aktuellen Implementierung liegen vor allem in der Robustheit der Fundamentalfrequenzerkennung in lauten Umgebungen und bei starken Obertönen.
 
@@ -167,21 +167,6 @@
   ),
 )
 #project()
-= Vorwort
-
-Musik begleitet mich von Kleinauf. Meine beiden Eltern sind Musiker und ich lernte schon früh, Gitarre zu spielen.
-Ich besitze selbst eine Floyd-Rose-Gitarre und habe schon mehrere Stunden damit verbracht, diese zu stimmen -- Zeit, die ich auch anderweitig hätte investieren wollen.
-
-Inspiriert durch die Professorinnen und Professoren an meiner Hochschule entschloss ich mich, diesem Problem selbst nachzugehen.
-Da sich der Inhalt des Studiums neben allgemeinen Informatikthemen vor allem mit Signalen und Mobilfunk beschäftigt, war ich mir zunächst nicht sicher, ob eine Bachelorarbeit über eine Gitarre angemessen ist.
-
-Trotz dieser Unsicherheit war meine Motivation für dieses Thema außerordentlich groß. Ich investierte viel Freizeit darin, die technischen Grundlagen zu erlernen und zu verstehen, die letztendlich hilfreich waren, um mein Problem mit diesen Gitarren zu lösen.
-
-Plötzlich fiel es mir wie Schuppen von den Augen: Die Studieninhalte wirkten wie für das Problem gemacht -- mathematische und physikalische Grundlagen für die Modellierung der Gitarre, harmonische Oszillatoren zum Verständnis der Saitenschwingung, die Fourier-Transformation für die Signalanalyse und schließlich Software Engineering für die Entwicklung der App.
-
-Zunächst erscheint das Thema sehr fern von den Inhalten des Telekommunikationsinformatik-Studiums, doch bei genauerem Hinsehen war es die perfekte Vorbereitung für diese Arbeit.
-
-#pagebreak()
 = Danksagung
 Ich möchte vielen Personen danken, die mir geholfen, mich motiviert und wesentlich zum Gelingen des Projektes beigetragen haben.
 
@@ -199,7 +184,7 @@ Zuletzt danke ich meiner Familie, die mir die Floyd-Rose-Gitarre geschenkt hat -
 #pagebreak()
 = Motivation
 
-Das Floyd-Rose-Tremolo ist ein in der E-Gitarre weit verbreitetes Brückensystem, das es Musikerinnen und Musikern ermöglicht, während des Spielens die Tonhöhe aller Saiten gleichzeitig zu verändern. Diese Eigenschaft macht es besonders in Rock- und Metalmusik beliebt.
+Das Floyd-Rose-Tremolo ist ein bei E-Gitarren weit verbreitetes Brückensystem, das es Musikerinnen und Musikern ermöglicht, während des Spielens die Tonhöhe aller Saiten gleichzeitig zu verändern. Diese Eigenschaft macht es besonders in Rock- und Metalmusik beliebt.
 
 Diese Flexibilität hat jedoch einen erheblichen Nachteil: Das Stimmen einer Floyd-Rose-Gitarre ist deutlich aufwändiger als bei herkömmlichen Gitarrenbrücken. Der Grund liegt in der mechanischen Kopplung der Saiten über die rotierbare Brücke. Wird die Spannung einer Saite verändert, verschiebt sich der Gleichgewichtszustand der gesamten Brücke und verstimmt dadurch alle übrigen Saiten. Dieser Kaskadeneffekt zwingt den Spieler zu einem iterativen, zeitaufwändigen Stimmvorgang.
 
@@ -223,11 +208,13 @@ Ziel dieser Arbeit ist die Entwicklung einer mobilen Applikation, die diesen Sti
   ]
 ]
 
-Zur Beantwortung dieser Frage wird zunächst ein physikalisches Modell der Floyd-Rose-Gitarre entwickelt, das den Zusammenhang zwischen Saitenspannung, Brückenposition und Schwingungsfrequenz beschreibt. Auf Basis dieses Modells wird eine lineare Näherung hergeleitet und experimentell validiert.
+Zur Beantwortung dieser Frage wird ein physikalisches Modell der Floyd-Rose-Gitarre entwickelt, das den Zusammenhang zwischen Saitenspannung, Brückenposition und Schwingungsfrequenz beschreibt. So kann verstanden werden, warum alle Saiten sich untereinander beeinflussen.
+Anschließend wird eine lineare Näherung
+hergeleitet und experimentell validiert. Der Rest der Arbeit ist wie folgt aufgebaut:
 
-@grundlagen beschreibt die physikalischen Grundlagen der Floyd-Rose-Gitarre, entwickelt das Kopplungsmodell und leitet die mathematische Lösung für den Stimmvorgang her.
+@grundlagen beschreibt die physikalischen Grundlagen, entwickelt das Kopplungsmodell der Floyd-Rose-Gitarre und leitet die mathematische Lösung für den Stimmvorgang her.
+@verfahren stellt dabei die grundlegenden Signalverarbeitungsverfahren vor, die für die Implementierung eines mobilen Stimmgeräts erforderlich sind.
 @ablauf erläutert den praktischen Ablauf des Stimmvorgangs bei der Floyd-Rose-Gitarre.
-@verfahren stellt die grundlegenden Signalverarbeitungsverfahren vor, die für die Implementierung eines mobilen Stimmgeräts erforderlich sind.
 @softwaredev beschreibt Anforderungsanalyse, Konzeption, Architektur und Implementierung der Applikation.
 @evaluation bewertet die Erfüllung der Anforderungen und wertet die durchgeführten Nutzertests aus.
 Abschließend fasst @fazit die Ergebnisse zusammen und @ausblick benennt Ansätze für eine Weiterentwicklung.
@@ -252,7 +239,7 @@ Im Folgenden werden gängige Verfahren zur F0-Schätzung vorgestellt.
 In @auswahlf0 werden diese Verfahren hinsichtlich Genauigkeit, Effizienz,
 Robustheit und Implementierbarkeit bewertet und das geeignetste ausgewählt.
 
-*Autokorrelation*
+*Autokorrelation* @YIN
 
 Die Grundidee der Autokorrelation beruht darauf, dass ein periodisches Signal
 mit der Periode $tau$, wenn es mit einer zeitverschobenen Version seiner selbst
@@ -265,9 +252,9 @@ $
 $<acf>
 
 Dabei bezeichnet $r_t (tau)$ den Autokorrelationswert für die Verzögerung $tau$
-zum Zeitindex $t$ und $W$ die Fenstergröße der Integration. $x_j$ ist dabei der j-te Messpunkt der Audiodatei. @YIN
+zum Zeitindex $t$ und $W$ die Fenstergröße der Integration. $x_j$ ist dabei der j-te Messpunkt der Audiodatei.
 
-*YIN-Algorithmus*
+*YIN-Algorithmus* @YIN
 
 Der YIN-Algorithmus ist eine Weiterentwicklung der klassischen
 Autokorrelation, die durch sechs aufeinander aufbauende Schritte die
@@ -311,24 +298,21 @@ gewählt werden. Die _Cumulative Mean Normalized Difference Function_
 $
   d'_t (tau) = cases(
     1 & "falls" tau = 0,
-    display(d_t (tau) / [(1/tau) sum_(j=1)^(tau) d_t (j)]) & "sonst"
+    display((d_t (tau)) / [(1/tau) sum_(j=1)^(tau) d_t (j)]) & "sonst"
   )
 $
 
 Die normierte Funktion startet bei 1 statt bei 0 und fällt nur dort
-unter 1, wo $d_t$ unterhalb des laufenden Mittels liegt. Damit werden
+unter 1, wo $d_t (tau)$ unterhalb des Durchschnitts liegt. Damit werden
 _too-high errors_ reduziert und die obere Suchgrenze des Frequenzbereichs
 entfällt. Fehlerrate: $1,69%$.
 
 *Schritt 4: Absoluter Schwellwert*
 
-Tiefere Oberton-Minima der CMNDF können das Periodenminimum überdecken
-und zu Oktavfehlern führen. YIN wählt daher das _kleinste_ $tau$, für
+Das tiefste Minimum der CMNDF liegt häufig nicht am korrekten $tau$, sondern an kleineren $tau$. YIN wählt daher das _kleinste_ $tau$, für
 das $d'_t (tau)$ unter einen absoluten Schwellwert $theta$ (typisch
-$theta = 0,1$) fällt:
-
-Der Schwellwert entspricht dabei dem tolerierten Anteil aperiodischer
-Leistung am Gesamtsignal und erfordert keine Feinabstimmung. Fehlerrate:
+$theta = 0,1$) fällt. Fällt kein Wert unter $theta$ wird das globale Minimum gewählt.
+Fehlerrate:
 $0,78%$.
 
 *Schritt 5: Parabolische Interpolation*
@@ -449,7 +433,7 @@ In @FRQuer, @FRMQuer und @FRFedern ist zu sehen, wie die Brücke die Tremolofede
   grid.cell([
     #figure(
       image("assets/Topview.png"),
-      caption: [Draufsicht des physikalischen Modells mit Saiten-Hebelarmen],
+      caption: [Draufsicht des physikalischen \ Modells mit Saiten-Hebelarmen],
     ) <FRMTop>
   ]),
   grid.cell(
@@ -464,13 +448,13 @@ In @FRQuer, @FRMQuer und @FRFedern ist zu sehen, wie die Brücke die Tremolofede
 )
 
 
-In der Realität hat jede Saite ihre eigene Saitenlänge, wie in @FRMTop und @FRTop zu sehen ist. Obwohl sie nur minimal variieren, haben sie  einen Einfluss auf die rotatorische Projektion der Kräfte.
+In der Realität hat jede Saite ihre eigene Saitenlänge, wie in @FRMTop und @FRTop#footnote([Man bemerke, dass die Saiten E2 bis E4, sortiert nach Länge der Hebelarme, folgende Reihenfolge bilden: $"E4"->"A2"->"D3"->"E2"->"B3"->"G3"$]) zu sehen ist. Obwohl sie nur minimal variieren, haben sie  einen Einfluss auf die rotatorische Projektion der Kräfte.
 
 Die Brücke wird als starrer, gewinkelter Hebel betrachtet, siehe @FRMQuer.
 Die Drehachse liege im Koordinatenursprung.
 Die Vektoren $arrow(h)_hat(F)$ (Hebelarm der Feder) und $arrow(h)_(S,i)$ (Hebelarm der Saite i)
 schließen konstruktionsbedingt einen konstanten Winkel $alpha_i$ ein.
-Die Beträge $h_hat(F)$ und $h_(S,i)$ sind systemspezifische Konstanten. Jede Saite erhält ihren eigenen Hebelarm $arrow(h)_(S,i)$, um den Aufbau wie in @FRTop und @FRMTop korrekt zu modellieren. Die Tremolofedern erhalten in diesem Modell einen gemeinsamen Hebelarm $arrow(h)_hat(F)$.
+Die Beträge $h_hat(F)$ und $h_(S,i)$ sind systemspezifische Konstanten. Jede Saite erhält ihren eigenen Hebelarm $arrow(h)_(S,i)$, um den Aufbau wie in @FRMTop und @FRTop korrekt zu modellieren. Die Tremolofedern erhalten in diesem Modell einen gemeinsamen Hebelarm $arrow(h)_hat(F)$.
 
 $
   arrow(h)_hat(F)(beta) = h_hat(F) vec(cos(beta), sin(beta))
@@ -483,7 +467,7 @@ $
 
 
 $arrow(P)_S$ sei die konstante Position des Sattels und $arrow(P)_hat(F)$ die konstante Position, an der die Tremolofeder an den Körper der Gitarre befestigt ist.
-Die effektive Saitenlänge und Tremolofederlänge ergeben sich zu
+Die effektive Saitenlänge $L_(S,i)(beta)$ und Tremolofederlänge $L_hat(F)(beta)$ ergeben sich zu
 
 $
   L_(S,i) (beta) = abs(arrow(h)_(S,i)(beta) - arrow(P)_S)
@@ -596,13 +580,16 @@ Aus @eqErsichtlich wird ersichtlich, dass die Aufwickelstrecken der Saiten die F
 
 
 === Experiment: Elastizität von Gitarrensaiten
+Die Ergebnisse dieses Experiments beruhen auf Vorarbeiten des Autors, die im Rahmen des Moduls "Projekt 3" des Studiengangs Telekommunikationsinformatik an der HTWK Leipzig durchgeführt wurden @Schuetz2026FloydRose.
 
-Es wurde die Annahme getroffen, dass sich Gitarrensaiten wie Federn verhalten und das Hooksche Gesetz gilt. Dies wurde im folgenden Experiment qualitativ überprüft. Das Hooksche Gesetz gilt für E-Gitarrensaiten, da sie aus Stahl sind und damit linearelastische Eigenschaften besitzen @stahlhook.
+Es wurde die Annahme getroffen, dass sich Gitarrensaiten wie Federn verhalten und das Hooksche Gesetz gilt. Das Hooksche Gesetz gilt für E-Gitarrensaiten, da sie aus Stahl sind und damit linearelastische Eigenschaften besitzen @stahlhook.
+Dies wurde im folgenden Experiment qualitativ überprüft.
 
-Die Ergebnisse dieses Experiments beruhen auf Vorarbeiten des Autors, die im Rahmen des Moduls "Projekt 3" des Studiengangs Telekommunikationsinformatik an der HTWK Leipzig durchgeführt wurden @Schuetz2026FloydRose. Es wurden Spannungsänderungen am Wirbel der höchsten Saite vorgenommen. Dabei wurden mittels Vorher-Nachher-Bildern, die Bewegungen von den Markierungen an den Saiten dokumentiert.
+Es wurden Spannungsänderungen am Wirbel der höchsten Saite einer normalen Gitarre vorgenommen.
+Dabei wurden mittels Vorher-Nachher-Bildern, die Bewegungen von den Markierungen an den Saiten dokumentiert.
 
 
-In der folgenden Tabelle sind Bilder, die die elastische Dehnung der Saite zeigen:
+In der folgenden Tabelle sind Bilder, die die elastische Dehnung der höchsten Saite (rechts in den Bildern) zeigen:
 #{
   let fret-row(bund, img_pac, cap_pac, img_pac_t, cap_pac_t) = (
     [#bund],
@@ -640,7 +627,7 @@ Die Kontrollmarkierungen auf den übrigen Saiten zeigten dagegen keine oder ledi
 Die Beobachtungen belegen das elastische Verhalten von Gitarrensaiten.
 Wird die Spannung durch Aufwickeln am Stimmwirbel erhöht, verschieben sich die aufgeklebten Markierungen entlang der Saite in unterschiedlichem Ausmaß. Markierungen in der Nähe der Brücke, die als nahezu fixe Punkte wirken, erfahren nur eine sehr geringe Verschiebung, während weiter entfernte Markierungen deutlich weiter wandern.
 
-Abbildung 7.b zeigt, dass der Einfluss auf die anderen Saiten gering ist. Das erklärt, warum für normale Gitarren klassische Stimmverfahren funktionieren.
+Abbildung 7.b zeigt, dass der Einfluss auf die anderen Saiten gering ist. Das erklärt, warum für normale Gitarren klassische Stimmverfahren funktionieren können.
 
 
 === Experiment: Nachweis der Linearität <nachweisLin>
@@ -669,7 +656,7 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
   ),
   caption: "Standard-Stimmung (EADGBE) mit zugehörigen Sollfrequenzen",
 )<tableSaitenNamen>
-#pagebreak()
+
 *Ergebnisse*
 
 *Relative Visualisierung der Frequenzänderungen*
@@ -713,7 +700,6 @@ Anschließend wurde jeweils eine Saite um ein beliebiges $Delta$ (in Hertz) vers
     ) <relativeE4>
   ]),
 )
-#pagebreak()
 *Korrelationskoeffizienten und Fehler*
 
 #figure(
@@ -729,6 +715,17 @@ Das System ist elastisch, da Ausgangs- und Endfrequenzen nach jedem Durchgang gl
 
 Die Linearität des Systems ist nicht perfekt, aber hinreichend gut für kleine Verstimmungen. Sie lässt sich quantitativ mit dem Korrelationskoeffizienten nach Bravais-Pearson @pearson1896 zwischen gemessenen und erwarteten Frequenzänderungen jeder Saite bestimmen.
 In @correlations sind die Korrelationskoeffizienten für jede Saite dargestellt. Alle relevanten Werte liegen unter -0,98, was auf eine sehr starke negative Korrelation hinweist. Das rechtfertigt die Annahme einer linearen Beziehung für kleine Änderungen.
+
+Außerdem fällt auf, dass die Saiten unterschiedlich empfindlich sind. Unabhängig von der beeinflussenden Saite, haben die Saiten, sortiert nach der Empfindlichkeit, folgende Reihenfolge (unempfindlich zu empfindlich):
+$"E2"->"A2"->"D3"->"E4"->"B3"-> "G3"$. In @FRTop konnten wir eine fast identische Reihenfolge feststellen.
+Das deutet an, dass die Länge der Hebelarme einen signifikanten Einfluss auf die Empfindlichkeit der Saiten haben könnten.
+Für die Praxis kann man daraus ein heuristisches Verfahren ableiten. Wir nehmen an, dass die Saiten, die sich auf einer größeren Umlaufbahn um die Rotationsachse befinden, empfindlicher sind:
+
+Man sortiert die Saiten aufsteigend nach Abstand zwischen Kontaktpunkt der Saite auf der Brücke und Sattel.
+Man stimmt die Saiten von kurz nach lang. So reduziert man den Fehler, der durch die Rückkopplung entsteht.
+Bei der hier untersuchten Gitarre stimmt man mit einem normalen Stimmgerät also in der Reihenfolge
+$"E2"->"A2"->"D3"->"E4"->"B3"-> "G3"$.
+
 = Verfahren
 
 == Ablauf des Stimmvorgangs für Floyd-Rose-Gitarren <ablauf>
@@ -738,8 +735,7 @@ sowie die dafür erforderlichen Verfahren erläutert.
 
 === Initiierung -- Bestimmung der Verstimmungsmatrix
 Vor dem eigentlichen Stimmvorgang muss die gitarrenspezifische
-Verstimmungsmatrix $C$ einmalig ermittelt werden. Da sie eine physikalische
-Eigenschaft des jeweiligen Instruments beschreibt, ist diese Kalibrierung nur
+Verstimmungsmatrix $C$ einmalig ermittelt werden. Diese Kalibrierung ist nur
 beim erstmaligen Einsatz der Methode notwendig.
 
 Zur Bestimmung jedes Matrixeintrags werden mindestens zwei Messpunkte benötigt,
@@ -778,12 +774,9 @@ Frequenzmessung aller Saiten erfasst, um den Frequenzvektor $arrow(f)_0$ zu
 bestimmen.
 
 
-Mithilfe von @eqFloydRoseTuner wird für jede Saite die Zwischenzielfrequenz
-berechnet. Sie ist als die Frequenz, auf die der Gitarrist beim sequentiellen Stimmen
+Mithilfe von @eqFloydRoseTuner (hergeleitet im nächsten Abschnitt) wird für jede Saite die Zwischenzielfrequenz
+berechnet. Sie ist die Frequenz, auf die der Gitarrist beim sequentiellen Stimmen
 abzielt.
-
-Da die Zwischenzielfrequenzen die bereits gestimmten Saiten berücksichtigen,
-sind sie von der gewählten Stimmreihenfolge abhängig.
 
 Abschließend wird mithilfe eines herkömmlichen Stimmgeräts verifiziert, ob alle
 Saiten die berechneten Zielfrequenzen erreicht haben und die Gitarre korrekt
@@ -923,8 +916,8 @@ $
                + Delta_"E2" dot c_(31)
 $
 
-$f_(z,N)$ ist eine Zwischenzielfrequenz. Nachfolgende Saiten
-verschieben Saite $N$ noch weiter. Die Endfrequenz aller Saiten konvergiert
+$f_(z,N)$ ist die Zwischenzielfrequenz der Saite N. Nachfolgende Saiten
+verändern die Frequenz der Saite $N$ noch weiter. Die Endfrequenz aller Saiten konvergiert
 dennoch zu $arrow(g)$, da die $Delta_j$ aus der vollen Verstimmungsmatrix $C$
 berechnet wurden.
 
@@ -933,14 +926,14 @@ berechnet wurden.
 Zur systematischen Auswahl wurde eine multikriterielle
 Entscheidungsanalyse nach dem Analytic Hierarchy Process (AHP) @Saaty1980
 durchgeführt.
-
+#pagebreak()
 *Bewertungskriterien und Gewichtung*
 
 Die Kriterien leiten sich direkt aus den Anforderungen einer mobilen
 Echtzeit-Implementierung in Flutter ab. In @auswahlflutter wird erläutert,
 was Flutter ist und warum es eingesetzt wird.
 
-Die Kriterien wurden qualitativ in die Kategorien "_unwichtig_", "_weniger wichtig_" und "_sehr wichtig_" eingeordnet.
+Die Kriterien wurden qualitativ in die Kategorien "_weniger wichtig_" und "_sehr wichtig_" eingeordnet.
 #figure(
   table(
     columns: (auto, auto, auto),
@@ -1050,10 +1043,12 @@ Die Genauigkeit wird als _gut_ bewertet; gemäß @kroon2022comparingconventional
 
 Die Robustheit wird als _gut_ bewertet: Da das Modell während des Trainings eine Vielzahl an Klangfarben, Rauschpegeln und Aufnahmebedingungen gesehen hat, ist es gegenüber solchen Schwankungen widerstandsfähiger als regelbasierte Verfahren.
 
-Die Effizienz wird als _schlecht_ bewertet. Das Netz verarbeitet 1024 Rohsamples in sechs aufeinanderfolgenden Rechenschritten (Faltungslayern), in denen jeweils lokale Muster im Signal gesucht werden, gefolgt von einer abschließenden Klassifikationsschicht mit 360 möglichen Ausgaben. Bereits der erste Rechenschritt erzeugt dabei $128 times 1024 = 131,072$ Zwischenwerte (~512~KB), was etwa dem 16-fachen aller nachfolgenden Schritte entspricht. Der gesamte Arbeitsspeicherbedarf pro Berechnung beträgt ca.\ 600~KB, die Modellgröße rund 4--5~MB.
+Die Effizienz wird als _schlecht_ bewertet. Das Netz verarbeitet 1024 Rohsamples in sechs aufeinanderfolgenden Rechenschritten (Faltungslayern), in denen jeweils lokale Muster im Signal gesucht werden, gefolgt von einer abschließenden Klassifikationsschicht mit 360 möglichen Ausgaben. Bereits der erste Rechenschritt erzeugt dabei $128 times 1024 = 131,072$ Zwischenwerte (~512~KB), was etwa dem 16-fachen aller nachfolgenden Schritte entspricht. Der gesamte Arbeitsspeicherbedarf pro Berechnung beträgt ca.
+600~KB, die Modellgröße rund 4--5~MB.
 
-Die Implementierbarkeit wird als _mittel_ bewertet: CREPE ist als Python-Bibliothek verfügbar, eine direkt einbindbare Lösung für Flutter existiert jedoch nicht. Eine Integration würde die Umwandlung des Modells in ein mobiltaugliches Format (TensorFlow Lite) sowie eine entsprechende Anbindung an Flutter erfordern. Das ist ein erheblicher Mehraufwand gegenüber einer fertigen Bibliothek.
+Die Implementierbarkeit wird als _mittel_ bewertet: CREPE ist als Python-Bibliothek verfügbar, eine direkt einbindbare Lösung für Flutter existiert jedoch nicht. Eine Integration würde die Umwandlung des Modells in ein mobiltaugliches Format (TensorFlow Lite) sowie eine entsprechende Anbindung an Flutter erfordern.
 
+#pagebreak()
 *Auswahl*
 
 Der *YIN-Algorithmus* erzielt die höchste Gesamtbewertung und wird daher für die Implementierung ausgewählt. Trotz etwas geringerer Genauigkeit gegenüber CREPE überzeugt YIN durch die direkte Verfügbarkeit als Flutter-Bibliothek, gute Effizienz sowie ausreichende Robustheit für den vorgesehenen Einsatzbereich.
@@ -1066,8 +1061,8 @@ Um die Zuverlässigkeit der Grundfrequenzschätzung zu erhöhen, wird Ein- und A
 Da der YIN-Algorithmus verwendet wird, lässt sich eine implizite
 Bandpassfilterung durch gezielte Anpassung seiner Parameter erreichen. Durch
 Reduktion der Abtastrate werden Frequenzen oberhalb der halben Abtastrate
-nicht mehr erfasst, was dem Nyquist-Shannon-Abtasttheorem entspricht.
-@oppenheim1999discrete
+nicht mehr erfasst, was dem Nyquist-Shannon-Abtasttheorem entspricht @oppenheim1999discrete.
+
 
 Die untere Grenzfrequenz wird durch die maximale Fensterlänge $W$ begrenzt.
 Gemäß $f = 1 slash T$ darf die Fensterlänge den Wert $T_"max" = 1 slash f_"min"$
@@ -1103,7 +1098,7 @@ Das Buch beschäftigt sich mit der Entwicklung von _Enterprise Apps_. Die in die
 Wie im Buch beschrieben, werden mobile Applikationen in iterativen Prozessen entwickelt. Daher werden manche Designentscheidungen mit Nutzertests begründet, die mit einer älteren Version der App durchgeführt wurden.
 
 == Requirements Engineering
-Dieses Kapitel wurde mithilfe des Buchs _Mobile App Engineering_ @mobileAppEngineering entwickelt. Die Ergebnisse folgen aus der Befolgung des Kapitels 4 "Requirements Engineering".
+Die Ergebnisse dieses Kapitels folgen aus der Befolgung des Kapitels 4 "Requirements Engineering"  des Buchs _Mobile App Engineering_ @mobileAppEngineering.
 
 === Projektvision
 
@@ -1123,9 +1118,7 @@ Bewusstsein über den erhöhten Stimmaufwand dieses Brückensystems. Vorkenntnis
 Vorwissen variieren stark.
 
 *Professionelle Gitarristen* verfügen über mehrere Instrumente in
-unterschiedlichen Stimmungen, um ein breites klangliches Spektrum abdecken zu
-können. Sie besitzen fundierte Gitarrenkenntnisse und kommunizieren in der Regel
-auf Englisch.
+unterschiedlichen Stimmungen. Sie besitzen fundierte Gitarrenkenntnisse und kennen in der Regel englische Fachbegriffe der Musik.
 
 *Gitarrentechniker in Musikgeschäften* stellen die zeitkritischste Benutzergruppe
 dar. Sie stimmen und warten potenziell täglich mehrere Floyd-Rose-Gitarren für
@@ -1136,7 +1129,7 @@ Applikation den größten Effizienzgewinn.
 === Systemkontext
 
 Der Systemkontext beschreibt alle materiellen und immateriellen Einflussfaktoren,
-die im Zusammenhang mit dem Projekt stehen. @mobileAppEngineering Im vorliegenden
+die im Zusammenhang mit dem Projekt stehen @mobileAppEngineering. Im vorliegenden
 Fall umfasst er folgende Aspekte:
 
 *Benutzer:* Personen, die eine Floyd-Rose-Gitarre stimmen möchten, unabhängig
@@ -1258,8 +1251,7 @@ Werkzeugen eine hohe Messgenauigkeit.
 professionellen Aufnahmekontext, für die Präzision und Geschwindigkeit des
 Stimmvorgangs direkte Auswirkungen auf den Produktionsablauf haben. Zudem
 verfügen Nutzerinnen dieses Segments außerhalb der Applikation über
-hochpräzise Messinstrumente, was eine entsprechend hohe Messgenauigkeit
-voraussetzt.
+hochpräzise Messinstrumente.
 
 === Szenarien
 
@@ -1334,7 +1326,7 @@ Saiten ist die Gitarre korrekt gestimmt.
   dass kontinuierlich neue Frequenzwerte erkannt werden, ohne dass eine Saite
   angespielt wurde. Über einen einstellbaren Lautstärkeschwellenwert kann die Empfindlichkeit des
   Mikrofons so angepasst werden, dass Messungen nur ausgelöst werden, wenn die
-  Lautstärke der gespielten Saite den Umgebungspegel deutlich übersteigt.
+  Lautstärke der gespielten Saite den Schwellwert und den Umgebungspegel übersteigt.
 
 
 === Anforderungen
@@ -1347,7 +1339,7 @@ sowie nach der Wertigkeit gemäß Kano-Modell priorisiert. Anforderungen mit
 hohem Wert und hohem Ausfallrisiko erhalten dabei die höchste Priorität,
 gefolgt von Anforderungen mit hohem Nutzen bei geringem Risiko. Anforderungen
 mit geringem Nutzen und geringem Risiko werden zuletzt eingestuft. Dies folgt
-aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
+aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_ @Cohn2004.
 
 *Funktionale Benutzeranforderungen*
 
@@ -1380,7 +1372,7 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 #req(
   "FBA-10",
   "SOLL",
-  [Ein Nutzer sollte die Stimmung seiner Gitarre mithilfe eines herkömmlichen Stimmgeräts auf Richtigkeit prüfen können.],
+  [Ein Nutzer sollte die Stimmung seiner Gitarre mithilfe eines integrierten herkömmlichen Stimmgeräts auf Richtigkeit prüfen können.],
 ) <req-fba-10>
 
 #req("FBA-11", "SOLL", [Ein Nutzer sollte die App auf seine Gitarre rekalibrieren können.]) <req-fba-11>
@@ -1422,9 +1414,9 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 #req(
   "FSA-03",
   "MUSS",
-  [Das System muss nach einer vollständigen Zustandsmessung aller Saiten ($arrow(f)_0$) für jede Saite $N$ die absolute Zielfrequenz gemäß
+  [Das System muss nach einer vollständigen Zustandsmessung aller Saiten ($arrow(f)_0$) für jede Saite $N$ die absolute Zwischenzielfrequenz gemäß
     $
-      f_N = f_"0,N" + sum_(i=1)^(N) Delta_i dot C_(N\,i)
+      f_(z,N) = f_"0,N" + sum_(i=1)^(N) Delta_i dot C_(N,i)
     $
     berechnen.],
 ) <req-fsa-03>
@@ -1432,7 +1424,7 @@ aus @mobileAppEngineering und der sogenannten _Wert-Risiko-Matrix_@Cohn2004.
 #req(
   "FSA-04",
   "MUSS",
-  [Das System muss sicherstellen, dass Saiten stets in der Reihenfolge E2 $arrow$ A2 $arrow$ D3 $arrow$ G3 $arrow$ B3 $arrow$ E4 gestimmt werden, sodass die Verstimmungseinflüsse bereits gestimmter Saiten in die Zielfrequenz nachfolgender Saiten einfließen.],
+  [Das System muss sicherstellen, dass Saiten stets in der Reihenfolge E2 $arrow$ A2 $arrow$ D3 $arrow$ G3 $arrow$ B3 $arrow$ E4 gestimmt werden, sodass die Verstimmungseinflüsse bereits gestimmter Saiten in die Zwischenzielfrequenz nachfolgender Saiten korrekt einfließen.],
 ) <req-fsa-04>
 
 #req(
@@ -1682,22 +1674,27 @@ Implementierung deutlich.
 Einstiegspunkt bildet der Startbildschirm, von dem aus alle
 wesentlichen Funktionen erreichbar sind:
 
-+ *Hilfe* -- kontextsensitive Unterstützung zur Bedienung (@req-fba-06)
-+ *Gitarre auswählen* -- Laden eines gespeicherten Gitarrenprofils für
-  den Stimmvorgang (@req-fba-03)
-+ *Standard-Stimmgerät* -- konventionelles chromatisches Stimmgerät zur
-  schnellen Überprüfung der Stimmung ohne Floyd-Rose-Logik (@req-fba-10)
-+ *Stimmung auswählen* -- Zielstimmung für den Stimmprozess festlegen
-  (@req-fba-09)
-+ *Gitarre anlegen* -- neues Gitarrenprofil erstellen; relevant
-  insbesondere für Persona Jonas (@hanna), der täglich neue
-  Instrumente stimmt (@req-fba-02)
-+ *Floyd-Rose-Stimmen* -- Kernfunktion der App (@req-fba-01)
+*Gitarre auswählen* -- Laden eines gespeicherten Gitarrenprofils für
+den Stimmvorgang (@req-fba-03)
+
+*Hilfe* -- kontextsensitive Unterstützung zur Bedienung (@req-fba-06)
+
+*Standard-Stimmgerät* -- konventionelles chromatisches Stimmgerät zur
+schnellen Überprüfung der Stimmung ohne Floyd-Rose-Logik (@req-fba-10)
+
+*Stimmung auswählen* -- Zielstimmung für den Stimmprozess festlegen
+(@req-fba-09)
+
+*Gitarre anlegen* -- neues Gitarrenprofil erstellen; relevant
+insbesondere für Persona Jonas (@hanna), der täglich neue
+Instrumente stimmt (@req-fba-02)
+
+*Floyd-Rose-Stimmen* -- Kernfunktion der App (@req-fba-01)
 
 Wird eine bestehende Gitarre ausgewählt, stehen zusätzlich die Aktionen
-_Umbenennen_, _Rekalibrieren_ (@req-fba-11) und _Löschen_ zur
+*Umbenennen*, *Rekalibrieren* (@req-fba-11) und *Löschen* zur
 Verfügung. Wird eine neue Gitarre angelegt, durchläuft der Nutzer
-unmittelbar die Benennung und den Kalibrierungsvorgang (@req-fba-12,
+unmittelbar die *Benennung* und den *Kalibrierungsvorgang* (@req-fba-12,
 @req-fba-02).
 === Interaktionsdesign
 
@@ -1723,7 +1720,7 @@ Vom Standard-Stimmgerät aus ist es möglich, direkt in die Kalibrierung
 der aktuell ausgewählten Gitarre zu wechseln, falls das Ergebnis nicht
 den Erwartungen entspricht (@req-fba-11). Auf der Gitarrenansichtsseite
 kann die Gitarre umbenannt (@req-fba-12) und rekalibriert werden.
-#pagebreak()
+
 *Kalibrierung*
 
 #figure(
@@ -1761,7 +1758,7 @@ Der Stimmprozess folgt einem ähnlichen Ablauf wie die Kalibrierung.
 Zunächst spielt der Nutzer jede Saite einzeln an; nach jeder Messung
 kann er den erfassten Wert auf einer Bestätigungsseite prüfen. Sobald
 alle sechs Saiten gemessen sind, berechnet das System die individuellen
-Zielfrequenzen gemäß @req-fsa-03 und führt den Nutzer saitenweise
+Zwischenzielfrequenzen gemäß @req-fsa-03 und führt den Nutzer saitenweise
 durch den Stimmvorgang, bis die Gitarre korrekt gestimmt ist
 (@req-fba-01).
 
@@ -1775,8 +1772,8 @@ Interaktionszustände von Komponenten sowie Navigationsstrukturen und
 gewährleistet damit eine plattformkonforme, konsistente Darstellung
 (@req-nfa-ko-03).
 
-Für Konzeption und
-UI-Design wird Figma#footnote[https://www.figma.com/] eingesetzt, das ebenfalls ein offizielles
+Für die Konzeption und das
+UI-Design wurde Figma#footnote[https://www.figma.com/] eingesetzt, das ebenfalls ein offizielles
 Material-3-Komponentenset bereitstellt und so einen konsistenten
 Übergang vom Entwurf zur Implementierung ermöglicht.
 
@@ -1800,13 +1797,13 @@ vereinfacht und die Nutzerführung strukturiert wurde.
   grid.cell([
     #figure(
       image("assets/prototyp_create_guitar.png", height: 30%),
-      caption: [Früher vertikaler Prototyp der \ Kalibrierungsansicht],
+      caption: [Früher Vertikaler Prototyp-1 der Kalibrierungsansicht],
     ) <protCreateGuita>
   ]),
   grid.cell([
     #figure(
       image("assets/prototyp_calibration.png", height: 30%),
-      caption: [Überarbeiteter Prototyp: \ Kalibrierungsansicht],
+      caption: [Prototyp 2 Kalibrierungsansicht],
     ) <protoCalib>
   ]),
 )
@@ -1822,19 +1819,19 @@ Wireframes erstellt, um die Benutzeroberfläche zu konkretisieren und optimieren
   grid.cell([
     #figure(
       image("assets/wf_landing.png", height: 25%),
-      caption: [Wireframe: \ Startseite],
+      caption: [Wireframe-1 --  Startseite],
     ) <wfLanding>
   ]),
   grid.cell([
     #figure(
       image("assets/wf_gitarren_editierung.png", height: 25%),
-      caption: [Wireframe: \ Gitarre bearbeiten],
+      caption: [Wireframe-2 --  Gitarre bearbeiten],
     ) <wfGitarreEdit>
   ]),
   grid.cell([
     #figure(
       image("assets/wf_kalibrierung1.png", height: 25%),
-      caption: [Wireframe: Kalibrierung -- Saite messen],
+      caption: [Wireframe-3 -- Kalibrierung (Saite messen)],
     ) <wfKalMessen>
   ]),
 )
@@ -1845,14 +1842,14 @@ und das Standard-Stimmgerät jederzeit erreichbar. Auf der Startseite
 selbst kann der Nutzer eine Zielstimmung sowie ein Gitarrenprofil
 auswählen. Gemäß dem Nutzungsszenario von Jonas (@hanna) ist zudem
 das direkte Anlegen einer neuen Gitarre prominent platziert. Ein großer
-Stimmen-Button leitet den Floyd-Rose-Stimmprozess ein (@req-fba-01).
+Stimmen-Button leitet den Floyd-Rose-Stimmprozess ein --  @req-fba-01.
 
 @wfGitarreEdit zeigt die Bearbeitungsansicht einer gespeicherten
 Gitarre. Von hier aus kann der Nutzer das Profil umbenennen (@req-fba-12),
 löschen sowie die Kalibrierung starten (@req-fba-11).
 @wfKalMessen zeigt den ersten Schritt der Kalibrierung. Am oberen Rand
 informiert ein Fortschrittsindikator über den aktuellen Stand. Darunter
-wird der Nutzer aufgefordert, eine bestimmte Saite anzuspielen; die
+wird der Nutzer aufgefordert, eine bestimmte Saite anzuspielen. Die
 laufende Frequenzmessung wird unmittelbar darunter visualisiert. Ein
 Weiter-Button führt zu @wfKalPrüf.
 
@@ -1864,19 +1861,19 @@ Weiter-Button führt zu @wfKalPrüf.
   grid.cell([
     #figure(
       image("assets/wf_kalibrierung2.png", height: 25%),
-      caption: [Wireframe: \ Kalibrierung -- Messung prüfen],
+      caption: [Wireframe-4 --  Kalibr. (Messung prüfen)],
     ) <wfKalPrüf>
   ]),
   grid.cell([
     #figure(
       image("assets/wf_kalibrierung3.png", height: 25%),
-      caption: [Wireframe: \ Kalibrierung -- \ Saite verstimmen],
+      caption: [Wireframe-5  -- Kalibr. (Verstimmen)],
     ) <wfKalVerändern>
   ]),
   grid.cell([
     #figure(
       image("assets/wf_check_kalibrierung.png", height: 25%),
-      caption: [Wireframe: \ Kalibrierung -- \ Gesamtübersicht],
+      caption: [Wireframe-6 -- Kalibr. (Gesamtübersicht)],
     ) <wfKalib>
   ]),
 )
@@ -1904,13 +1901,13 @@ Kalibrierungsablauf direkt angesprungen werden (@req-fba-08).
   grid.cell([
     #figure(
       image("assets/wf_hilfe_page.png", height: 30%),
-      caption: [Wireframe: Hilfsseite],
+      caption: [Wireframe-7 Hilfsseite],
     ) <wfHelp>
   ]),
   grid.cell([
     #figure(
       image("assets/wf_standard_tuner.png", height: 30%),
-      caption: [Wireframe: Standard-Stimmgerät],
+      caption: [Wireframe-8 Standard-Stimmgerät],
     ) <wfStandardTuner>
   ]),
 )
@@ -1920,7 +1917,6 @@ Kalibrierungsablauf direkt angesprungen werden (@req-fba-08).
 (@req-fsa-11, @req-fba-10), das unabhängig vom Floyd-Rose-Algorithmus
 zur schnellen Überprüfung der Stimmung genutzt werden kann.
 
-#pagebreak()
 === Design
 
 *Onboarding*
@@ -1931,19 +1927,19 @@ zur schnellen Überprüfung der Stimmung genutzt werden kann.
   grid.cell([
     #figure(
       image("assets/d_help.png", height: 30%),
-      caption: [Design: \ Hilfsseite],
+      caption: [Design Hilfsseite],
     ) <dHelp>
   ]),
   grid.cell([
     #figure(
       image("assets/d_setup.png", height: 30%),
-      caption: [Design: Startseite],
+      caption: [Design Startseite],
     ) <dLanding>
   ]),
   grid.cell([
     #figure(
       image("assets/d_gitarre.png", height: 30%),
-      caption: [Design: Gitarre \ bearbeiten],
+      caption: [Design Gitarre bearbeiten],
     ) <dGitarreEdit>
   ]),
 )
@@ -1965,7 +1961,6 @@ begleitende Hinweistext "This Guitar Needs Calibration" macht den
 nächsten Schritt unmissverständlich deutlich (@req-nfa-be-01). Ein Klick
 auf den Button startet sofort den Kalibrierungsvorgang.
 
-#pagebreak()
 *Kalibrierung*
 
 #grid(
@@ -1974,19 +1969,19 @@ auf den Button startet sofort den Kalibrierungsvorgang.
   grid.cell([
     #figure(
       image("assets/d_cal_m.png", height: 25%),
-      caption: [Design: \ Kalibrierung -- Saite messen],
+      caption: [Design  Kalibr. (Saite messen)],
     ) <dKalMessen>
   ]),
   grid.cell([
     #figure(
       image("assets/d_manualdetect.png", height: 25%),
-      caption: [Design: Manuelle Frequenzeingabe],
+      caption: [Design  Manuelle Frequenzeingabe],
     ) <dManDet>
   ]),
   grid.cell([
     #figure(
       image("assets/d_cal_check.png", height: 25%),
-      caption: [Design: \ Kalibrierung -- Messung prüfen],
+      caption: [Design Kalibr. (Messung prüfen)],
     ) <dKalPrüf>
   ]),
 )
@@ -2003,7 +1998,7 @@ Auf der Prüfseite (@dKalPrüf) befindet sich zentral und gut erreichbar
 ein "Play Sound" Button, der die erkannte Frequenz als Ton abspielt.
 Der begleitende Text fragt den Nutzer, ob der abgespielte Ton mit dem
 zuvor gespielten übereinstimmt. Bei Nein kehrt er zur Messseite zurück
-und wiederholt die Aufnahme; bei Ja wird die nächste Saite gemessen
+und wiederholt die Aufnahme. Bei Ja wird die nächste Saite gemessen
 (@req-fba-07, @req-fba-08).
 
 #grid(
@@ -2012,27 +2007,26 @@ und wiederholt die Aufnahme; bei Ja wird die nächste Saite gemessen
   grid.cell([
     #figure(
       image("assets/d_cal_cha.png", height: 25%),
-      caption: [Design: \ Kalibrierung -- Saite \ verstimmen],
+      caption: [Design Kalibr. (Saite verstimmen)],
     ) <dKalVerändern>
   ]),
   grid.cell([
     #figure(
       image("assets/d_control.png", height: 25%),
-      caption: [Design: \ Kalibrierung -- Gesamtübersicht],
+      caption: [Design Kalibr. (Gesamtübersicht)],
     ) <dKalib>
   ]),
   grid.cell([
     #figure(
       image("assets/d_select_guit.png", height: 25%),
-      caption: [Design: Gitarre \ auswählen],
+      caption: [Design Gitarre auswählen],
     ) <dselect>
   ]),
 )
 
 @dKalVerändern fordert den Nutzer auf, eine bestimmte Saite zu
 verstimmen. Für den Fall, dass versehentlich die falsche Saite verändert
-wurde, steht ein "Wrong String Changed" Button zur Verfügung, der den
-Schritt zurücksetzt (@req-fsa-09). Nach dem Verstimmen bestätigt der
+wurde, steht ein "Wrong String Changed" Button zur Verfügung, der dem Nutzer hilft, den Fehler zu korrigieren (@req-fsa-09). Nach dem Verstimmen bestätigt der
 Nutzer mit "Done" und der Ablauf folgt dem Interaktionsdesign aus
 @iiakt2.
 
@@ -2049,8 +2043,7 @@ Möchte der Nutzer auf der Startseite (@dLanding) eine gespeicherte
 Gitarre auswählen, öffnet sich eine Auswahlliste (@dselect). Jeder
 Eintrag enthält ein Stift-Icon, über das der Nutzer direkt zur
 Gitarrenansicht navigiert. Wurde eine Gitarre bereits kalibriert, zeigt
-@drecal, dass der Kalibrierungsbutton weiterhin vorhanden, aber weniger
-prominent gestaltet ist, um erfahrene Nutzer nicht zu bremsen
+@drecal, dass der Kalibrierungsbutton weiterhin vorhanden
 (@req-fba-11).
 #grid(
   align: center,
@@ -2059,19 +2052,19 @@ prominent gestaltet ist, um erfahrene Nutzer nicht zu bremsen
   grid.cell([
     #figure(
       image("assets/d_recal.png", height: 35%),
-      caption: [Design: \ Rekalibrieren],
+      caption: [Design Rekalibr.],
     ) <drecal>
   ]),
   grid.cell([
     #figure(
       image("assets/d_fr_tuner.png", height: 35%),
-      caption: [Design: \ Floyd-Rose-Tuner],
+      caption: [Design FRT (Floyd-Rose-Tuner)],
     ) <dFRTuner>
   ]),
   grid.cell([
     #figure(
       image("assets/d_standard_tuner.png", height: 35%),
-      caption: [Design: \ Standard-Stimmgerät],
+      caption: [Design Standard Stimmgerät],
     ) <dStandardTuner>
   ]),
 )
@@ -2126,7 +2119,7 @@ IDE-Integration -- reduziert die Zeit bis zu ersten funktionierenden
 Ergebnissen erheblich. Aus eigener Erfahrung war die Einstiegshürde bei
 Flutter trotz der neuen Sprache geringer als bei .NET MAUI, dessen
 Abstraktion über native Controls zu unerwartetem Verhalten und schwer
-nachvollziehbaren Fehlern führte.
+nachvollziehbaren Fehlern führte. React Native hat den Vorteil, dass es große Ähnlichkeiten zur Webentwicklung aufweißt. Erfahrungen in der Webentwicklung erleichtern den Einstieg in React Native.
 
 *Codestabilität*
 
@@ -2244,8 +2237,8 @@ benötigt und sind nicht Teil des ausgelieferten Artefakts:
 
 === Quellcode
 
-Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar:
-#link("https://github.com/Raphael2b3/floyd_rose_tuner")
+Die App wurde mit Git versioniert und ist öffentlich auf GitHub verfügbar: \
+#link("https://github.com/Raphael2b3/floyd_rose_tuner/tree/stand-bachelorarbeit")
 
 === Kalibrierungslogik
 
@@ -2285,9 +2278,9 @@ $
   "max" = 2 + 2 dot 5 + 13 dot 2 + 26 dot 5 = 168
 $
 
-Der normierte Fortschritt $p = "progress" \/ "max" in [0, 1]$ wird
+Der normierte Fortschritt $p = "progress" / "max" in [0, 1]$ wird
 direkt als Füllstand der Fortschrittsanzeige verwendet.
-
+#pagebreak()
 *Navigationslogik*
 
 #figure(
@@ -2296,18 +2289,17 @@ direkt als Füllstand der Fortschrittsanzeige verwendet.
 ) <zstKalib>
 
 Die Zustandsübergänge beim Drücken von "Weiter" sind in @zstKalib mit
-den Labels a) bis h) dargestellt und werden im Folgenden als
+den Labels a) bis g) dargestellt und werden im Folgenden als
 Pseudocode ausformuliert. #footnote([`++` ist die Kurzform für
   $v = v + 1$; analog gilt `--` für $v = v - 1$.])
 
 
 *Messseite*
-```
-Weiter-Button{ // Übergang a)
+```py
+Weiter-Button: // Übergang a)
     navigate(Prüfseite);
-}
 
-Zurück-Button{
+Zurück-Button:
     if stringIndex == 0 && sampleIndex == 0 && effectIndex == 0:
         // Übergang x)
         exit()
@@ -2321,25 +2313,22 @@ Zurück-Button{
         else:               // Übergang e)
             sampleIndex = 1 // letztes Sample der vorherigen Verstimmung
         navigate(Veränderungsseite)
-}
+
 ```
 
 *Prüfseite*
 
-```
-Weiter-Button{
+```py
+Weiter-Button:
     samples[effectIndex][sampleIndex][stringIndex] = messung
-
     if stringIndex < 5: // Übergang b)
         stringIndex++
         prüfungFehler=false
         navigate(Messseite)
-
     else if sampleIndex == 1 && effectIndex == 5:
         calculateMatrix() // Übergang g)
         saveGuitar()
         navigate(Kontrollansicht)
-
     else:
         if sampleIndex == 0: // Übergang c)
             stringIndex = effectIndex
@@ -2350,36 +2339,33 @@ Weiter-Button{
             stringIndex = effectIndex
             sampleIndex = 0
         navigate(Veränderungsseite)
-}
 
-Zurück-Button{ // Übergang a) rückwärts
+Zurück-Button: // Übergang a) rückwärts
     navigate(Messseite)
-}
+
 ```
 
 *Veränderungsseite*
 
-```
-Fertig-Button{ // Übergang d)
+```py
+Fertig-Button: // Übergang d)
     sampleIndex++
     stringIndex = 0
     prüfungFehler=false
     navigate(Messseite)
-}
 
-WrongStringChanged-Button{ // Übergang e)
+WrongStringChanged-Button: // Übergang e)
     sampleIndex = 0
     stringIndex = 0
     prüfungFehler=false
     navigate(Messseite)
-}
 
-Zurück-Button{ // Übergang c) rückwärts
+Zurück-Button: // Übergang c) rückwärts
     stringIndex = 5
     if sampleIndex == 1 && effectIndex > 0: // Übergang f) rückwärts
         effectIndex--
     navigate(Prüfseite)
-}
+
 ```
 
 === Stimmlogik
@@ -2400,11 +2386,10 @@ Der Stimmvorgang wird durch zwei Variablen beschrieben:
   [`pageId`], [$in NN, {0, 1, 2}$], [Aktuelle Seite: 0 = Messen, 1 = Prüfen, 2 = Stimmen],
   [`stringIndex`], [$in NN, [0, 5]$], [Index der Saite, mit der aktuell interagiert wird],
 )
-
+#pagebreak()
 *Fortschrittsberechnung*
 
-Da die Stimmseite eine abweichende Gewichtung benötigt, ist der
-Fortschrittswert stückweise definiert:
+Die Fortschrittsberechnung teilt sich in zwei Teile auf. Der erste Teil beschreibt die Messung und Prüfung der Saiten (pageId ist 0 oder 1). Der zweite Teil beschreibt den Stimmvorgang, bei dem jede Saite nur einmal verändert werden muss (pageId=2).
 
 $
   "progress" = cases(
@@ -2416,31 +2401,28 @@ $
 *Navigationslogik*
 
 Die Zustandsübergänge beim Drücken von "Weiter" und "Zurück" sind in
-@zststm mit den Labels a) bis f) dargestellt und werden im Folgenden
+@zststm mit den Labels a) bis e) dargestellt und werden im Folgenden
 als Pseudocode ausformuliert.
 
 *Messseite*
 
-```
-Weiter-Button:{ // Übergang a)
+```py
+Weiter-Button: // Übergang a)
     navigate(Prüfseite)
-}
 
-Zurück-Button{
+Zurück-Button:
     if stringIndex == 0: // Übergang x)
         exit()
     else: // Übergang b) rückwärts
         stringIndex--
         navigate(Prüfseite)
-}
 ```
 
 *Prüfseite*
 
-```
-Weiter-Button{
+```py
+Weiter-Button:
     speicherMessung(stringMeasureState[stringIndex] = messung)
-
     if stringIndex < 5: // Übergang b)
         stringIndex++
         navigate(Messseite)
@@ -2448,25 +2430,24 @@ Weiter-Button{
         stringIndex = 0
         berechneZielfrequenzen()
         navigate(Stimmseite)
-}
 
-Zurück-Button{ // reverse a)
+Zurück-Button: // reverse a)
     navigate(Messseite)
-}
+
 ```
 
 *Stimmseite*
 
-```
-Weiter-Button{
+```py
+Weiter-Button:
     if stringIndex < 5: // Übergang d)
         stringIndex++
     else: // Übergang e)
         navigate(Ende)
         return
     navigate(Stimmseite) // gleiche Seite, neue Saite
-}
-Zurück-Button{
+
+Zurück-Button:
     if stringIndex > 0: // Übergang d) rückwärts
         stringIndex--
     else: // Übergang e) rückwärts
@@ -2474,7 +2455,7 @@ Zurück-Button{
         navigate(Prüfseite)
         return
     navigate(Stimmseite)
-}
+
 ```
 
 
@@ -2489,7 +2470,7 @@ Die App folgt dem Architekturmuster _Model-View-ViewModel_ (MVVM). Dieses
 Muster eignet sich besonders, weil das ViewModel die Schnittstelle
 zwischen View und Model kapselt: Die UI kennt keine Implementierungsdetails
 des Modells und das Modell ist unabhängig von der Darstellung. In
-Verbindung mit Riverpod (@abhaengigkeiten) wird dieses Muster durch
+Verbindung mit Riverpod #footnote(link("https://riverpod.dev/")) (@abhaengigkeiten) wird dieses Muster durch
 sogenannte _Provider_ und _Notifier_ umgesetzt.
 
 Provider stellen
@@ -2508,10 +2489,10 @@ Der *Frequency Stream Provider* abonniert den Audio Stream Provider  und wendet 
 
 Der *Smoothed Frequency Provider* abonniert den Frequency Stream Provider und glättet die eingehenden Messwerte durch einen gleitenden Mittelwert (@req-fsa-05), um kurzfristige Ausreißer zu dämpfen. Die Ausgabe ist ein `Stream<double>`.
 
-Der *Volume Threshold Provider* liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich $[-60,0, 0,0]~"dBFS"$ (@req-fsa-02). Der Wert wird über den Empfindlichkeits-Schieberegler in den Einstellungen gesteuert(@req-fba-05).
+Der *Volume Threshold Provider* liefert den konfigurierbaren Lautstärkeschwellenwert im Wertebereich $[-60 , 0] "dBFS"$ (@req-fsa-02). Der Wert wird über den Empfindlichkeits-Schieberegler in den Einstellungen gesteuert(@req-fba-05).
 
-Der *Detected Frequency Provider* kombiniert die Ausgaben des Smoothed Frequency Providers, des Volume
-Stream Providers und des Volume Threshold Providers und liefert
+Der *Detected Frequency Provider* kombiniert die Ausgaben des *Smoothed Frequency Providers*, des *Volume
+Stream Providers* und des *Volume Threshold Providers* und liefert
 die zuletzt erkannte Frequenz als `double`.
 Ist manuelle Erkennung aktiviert (`manualDetection == true`), wird die
 Frequenz ausschließlich über einen Notifier gesetzt -- etwa durch eine
@@ -2523,10 +2504,10 @@ Der *String Measure State Provider* stellt das `StringMeasureState`-Objekt berei
 Fortschritt der saitenweisen Messung abbildet:
 
 ```dart
-StringMeasureState {
+StringMeasureState:
   int currentStringIndex   // Index der aktuell zu messenden Saite (0–5)
   bool manualDetection     // Eingabemodus: automatisch oder manuell
-}
+
 ```
 
 Der *Guitar State Provider* repräsentiert den aktuellen Frequenzzustand aller sechs Saiten als
@@ -2541,10 +2522,10 @@ Der *Calibration State Provider* stellt das `CalibrationState`-Objekt bereit, da
 innerhalb der Kalibrierung verfolgt (@req-fsa-07):
 
 ```dart
-CalibrationState {
+CalibrationState:
   int currentEffectingStringIndex  // Index der aktuell verstimmten Saite
   int currentSampleIndex           // Index des aktuellen Messpunkts
-}
+
 ```
 
 
@@ -2571,7 +2552,7 @@ entspricht `samples[1][2]` dem dritten erfassten Gitarrenzustand, als
 Saite A2 (Index 1) verstimmt wurde, also einem Frequenzvektor der
 Form $[f_"E2", f_"A2", f_"D3", f_"G3", f_"B3", f_"E4"]$.
 `matrix` und `inverseMatrix` lassen sich vollständig aus `samples`
-ableiten, werden jedoch aus Performancegründen gecacht und gemeinsam
+ableiten, werden jedoch aus Performancegründen gecached und gemeinsam
 persistiert.
 
 Der *Tunings-Provider* verwaltet die persistente Speicherung aller
@@ -2582,10 +2563,9 @@ Der
 Ein `Tuning`-Objekt ist wie folgt aufgebaut:
 
 ```dart
-Tuning {
+Tuning:
   String name               // Bezeichnung der Stimmung
   List<String> goalNotes    // Zielnoten im Format "E2", "A2", …
-}
 ```
 
 `Tuning.goalNotes` enthält die standardisierten Notenbezeichnungen im
@@ -2608,7 +2588,7 @@ Manuell getestet wurden:
 - @req-fba-01 bis @req-fba-16
 - @req-fsa-01, @req-fsa-02
 - @req-fsa-04 bis @req-fsa-06
-- @req-fsa-09 bis @req-fsa-16
+- @req-fsa-10 bis @req-fsa-16
 - @req-nfa-mg-01 bis @req-nfa-mg-03
 - @req-nfa-ro-02, @req-nfa-ro-03
 - @req-nfa-be-01 bis @req-nfa-be-04
@@ -2630,7 +2610,7 @@ automatisierte Unit-Tests implementiert:
 
 Die folgenden Anforderungen wurden im Rahmen dieser Arbeit nicht
 getestet und stellen offene Punkte für eine Weiterentwicklung dar:
-
+- @req-fsa-10: technisch zu anspruchsvoll um es in der kurzen Zeit umzusetzen.
 - @req-nfa-la-01, @req-nfa-la-02: Latenzmessung erfordert eine
   instrumentierte Testumgebung zur präzisen Zeiterfassung
 - @req-nfa-ro-01: Systematischer Test bei definiertem Umgebungspegel
@@ -2639,6 +2619,258 @@ getestet und stellen offene Punkte für eine Weiterentwicklung dar:
   verschiedenen Geräten und Betriebssystemversionen stehen aus
 
 = Evaluation<evaluation>
+== Nutzertests <nutzerTests>
+Die Nutzertests wurden als unmoderierte, jedoch beobachtete Feld- bzw. Nutzungsszenarien durchgeführt. Die Probanden erhielten die Anwendung ohne strukturierte Einweisung und führten den Stimmprozess eigenständig durch, während der Autor als passiver Beobachter anwesend war. Ziel war die Erfassung realistischer Nutzungssituationen sowie potenzieller Fehlerquellen im Bedien- und Messprozess.
+
+Die Tests fanden in unterschiedlichen akustischen Umgebungen statt, um die Robustheit der Frequenzanalyse und Signalverarbeitung unter realistischen Bedingungen zu evaluieren:
+
+- ruhige Innenräume mit direkter Gitarrenaufnahme
+- laute Umgebungen (z.,B. Jam-Situationen)
+Der Ablauf folgte keinem strikt vorgegebenen Protokoll, sondern einem task-basierten explorativen Vorgehen.
+Erfasst wurden sowohl quantitative Kennzahlen als auch qualitative Beobachtungen:
+
+- Dauer der Kalibrierung
+- Dauer des gesamten Stimmprozesses
+- Robustheit unter Störbedingungen (Lärm, Verzerrung)
+- Verständlichkeit der Benutzerführung und der visuellen Darstellung
+
+Die Tests wurden iterativ über mehrere Softwareversionen durchgeführt, wodurch ein Vergleich der Systementwicklung hinsichtlich Effizienz, Stabilität und Benutzerverständnis möglich wurde.
+
+Die Auswertung erfolgte qualitativ-deskriptiv auf Basis der dokumentierten Testverläufe sowie ergänzend durch Zeitmessungen der einzelnen Prozessschritte.
+
+#{
+  // Ab hier sind alle Überschriften innerhalb der Klammern blockiert
+  set heading(outlined: false)
+  [
+
+    *Nutzer 0*
+
+    Die App wurde in einem ruhigen Zimmer mit verstärkter Gitarre ohne
+    Verzerrungseffekt getestet. Die Frequenzen aller Saiten wurden korrekt
+    erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es traten
+    vereinzelte Schwankungen bei der Erkennung der Fundamentalfrequenz auf,
+    die den Prozess geringfügig verlangsamten.
+
+    Die Bestimmung der Verstimmungsmatrix inklusive anschließender
+    Überprüfung der Messdaten dauerte 3:47 Minuten; der gesamte
+    Stimmvorgang war nach ca. 7 Minuten abgeschlossen.
+
+    Version der  App: @protCreateGuita \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
+
+    *Nutzer 1*
+
+    Die App wurde auf einer Jam-Session vorgestellt. Beim Versuch, die
+    Frequenzen der E-Gitarre zu messen, wurde nicht die Fundamentalfrequenz,
+    sondern der erste Oberton (Faktor 2) erkannt. Als Ursache kommen zwei
+    Faktoren zusammen: die laute Umgebung sowie ein aktiver
+    Verzerrungseffekt, der den Obertonanteil des Signals verstärkte. Der
+    Stimmvorgang musste abgebrochen werden.
+
+    Dieser Test macht deutlich, dass die Fundamentalfrequenzerkennung unter
+    ungünstigen akustischen Bedingungen robuster gestaltet werden muss.
+
+    Version der App: @protCreateGuita \
+    Mobilgerät: Redmi 10 2022 \
+    Modell: ~22011119UY
+
+    *Nutzer 2*
+
+    Die App wurde unter guten akustischen Bedingungen verwendet.
+    Es fiel auf, dass der Kalibrierungsprozess zwar technisch korrekt
+    funktionierte, jedoch unnötige Wiederholungen enthielt: Nachdem der
+    Zustand der Gitarre nach dem Verstimmen einer Saite gemessen wurde,
+    könnte dieser Zustand direkt als Ausgangslage für die Messung der
+    nächsten Saite weiterverwendet werden. Dieser Schritt wurde
+    manuell ausgelöst.
+
+    Darüber hinaus zeigte sich ein grundlegenderes Problem: Beim Stimmen
+    einer Saite mithilfe der App wurden zunächst die korrekten
+    Zielabweichungen $Delta f$ angezeigt. Sobald jedoch eine Saite aktiv
+    verstimmt wurde, veränderte sich -- erwartungsgemäß aufgrund der
+    Brückenkopplung -- der Zustand aller übrigen Saiten. Diese
+    Zustandsänderung wurde nicht in die nachfolgende Berechnung der
+    $Delta f$ einbezogen, sodass die Gitarre am Ende nicht präzise gestimmt
+    war. Als Konsequenz muss der Stimmvorgang die durch jede
+    Saitenänderung verursachten Folgeverstimmungen schrittweise
+    vorausberechnen und kompensieren.
+
+
+    Version der App: @protCreateGuita \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
+
+    *Nutzer 3*
+
+    Nutzer 3 war mit der Darstellung roher Frequenzwerte (in Hz) überfordert
+    und konnte deren Bedeutung nicht einordnen. Dies bestätigte den Bedarf
+    einer abstrahierten, intuitiv verständlichen Visualisierung der
+    Stimmgenauigkeit anstelle numerischer Frequenzangaben.
+
+    Version der
+    App: @protoCalib \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
+
+    *Nutzer 4*
+
+    Nutzer 4 versuchte, die Gitarre unmittelbar nach dem
+    Öffnen der App zu stimmen, ohne den Kalibrierungsschritt zu
+    durchlaufen. Die App konnte nicht ausreichend klar vermitteln, dass
+    zunächst mehrere Messreihen zur Bestimmung der Verstimmungsmatrix
+    erforderlich sind. Auch das Tutorial-Video war zu dem Zeitpunkt nicht verfügbar.
+
+    Als der Nutzer aufgefordert wurde, eine Saite gezielt zu verstimmen,
+    entstand Unsicherheit darüber, in welche Richtung und um wie viel die
+    Saite verstimmt werden solle, obwohl der genaue Betrag für das
+    Verfahren irrelevant ist.
+
+    Zusätzlich hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu
+    messen, da die Stahlsaiten einen ausgeprägten Obertonanteil aufwiesen.
+    Durch Umpositionierung des Smartphones näher am Lautsprecher sowie
+    durch Betätigung des _Tone-Knobs_, der die Funktion eines analogen
+    Tiefpassfilters erfüllt, konnte das Problem behoben werden.
+
+    Der abschließende Stimmvorgang verlief weitgehend erfolgreich; die
+    E2-Saite wurde jedoch zu hoch gestimmt. Dies deutet darauf hin, dass
+    die Einträge der Verstimmungsmatrix, die den Einfluss auf E2 beschreiben,
+    den größten Messfehler aufwiesen. Es gab eine Abweichung von $plus.minus$ 15 Cent. Die restlichen Saiten hatten einen Fehler von $plus.minus$ 3,2 Cent.
+
+    Der effektive Zeitaufwand für den Stimmvorgang betrug 8 Minuten.
+
+    Version der  App: @protoCalib \
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
+
+    *Nutzer 5*
+
+    Nutzer 5 testete die App in der finalen Version. Die Kalibrierung dauerte
+    7:00 Minuten und hat sich damit im Vergleich zu älteren Versionen, in denen
+    dieser Schritt in 3:30 Minuten abgeschlossen werden konnte, deutlich
+    verlängert. Der anschließende Stimmprozess nahm 1:30 Minuten in Anspruch
+    und war erfolgreich. Die mittlere Abweichung betrug $plus.minus$~3,3~Cent. \
+
+    Version der App: Aktuellste Version (Stand 14.6.2026)\
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
+
+    *Nutzer 6*
+
+    Nutzer 6 benötigte 6:26 Minuten für die Kalibrierung und 5:40 Minuten für
+    den Stimmprozess. Das größte Problem war die Erkennung tiefer Frequenzen
+    im Bereich von 60--80~Hz. Die Ursache liegt darin, dass Vielfache dieser
+    Frequenzen -- etwa 120~Hz und 160~Hz -- ebenfalls plausible Messwerte für
+    benachbarte Saiten darstellen, was zu Verwechslungen führt. Daraus ergibt
+    sich die Empfehlung, tiefe Frequenzen bei der Schätzung bevorzugt zu
+    behandeln.
+
+    #figure(
+      table(
+        columns: (auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header([*Saite*], [*Abweichung*]),
+        [E2], [+15 Cent],
+        [A2], [+8 Cent],
+        [D3], [+5 Cent],
+        [G3], [+20 Cent],
+        [B3], [+7 Cent],
+        [E4], [+0 Cent],
+      ),
+      caption: [Nutzer 6 -- Abweichungen nach dem Stimmen],
+    )
+
+    Version der App: Aktuellste Version (Stand 14.6.2026)\
+    Mobilgerät: Galaxy S20 5G \
+    Modell: SM-G981B/DS
+
+    *Nutzer 7*
+
+    Nutzer 7 testete den Wechsel von Standard-E- zur Drop-D-Stimmung, bei dem
+    die tiefe E-Saite auf D2 umgestimmt wird. Der Stimmprozess dauerte
+    3:00 Minuten. Auch bei diesem Test traten Schwierigkeiten bei der Erkennung
+    tiefer Frequenzen auf. Der Test wurde auf einem Redmi 10 2022 durchgeführt.
+
+    #figure(
+      table(
+        columns: (auto, auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header([*Saite*], [*Ausgangsfrequenz*], [*Abweichung*]),
+        [D2], [82,97 Hz], [+0 Cent],
+        [A2], [110,4 Hz], [+6 Cent],
+        [D3], [147,4 Hz], [+3 Cent],
+        [G3], [198,4 Hz], [+12 Cent],
+        [B3], [247,3 Hz], [+2 Cent],
+        [E4], [329,9 Hz], [+4 Cent],
+      ),
+      caption: [Nutzer 7 -- Ausgangsfrequenzen und Abweichungen nach dem Stimmen],
+    )
+    Version der App: Aktuellste Version (Stand 14.6.2026)\
+    Mobilgerät: Redmi 10 2022 \
+    Modell: ~22011119UY
+
+    *Nutzer 8*
+
+    Nutzer 8 führte Kalibrierung und Stimmvorgang durch, wobei die Saiten
+    nach oben verstimmt wurden. Die Kalibrierung dauerte 5:18 Minuten, der
+    Stimmprozess 3:20 Minuten.
+
+    #figure(
+      table(
+        columns: (auto, auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header([*Saite*], [*Ausgangsfrequenz*], [*Abweichung*]),
+        [E2], [85,49 Hz], [+4 Cent],
+        [A2], [118,6 Hz], [+15 Cent],
+        [D3], [147,63 Hz], [+10 Cent],
+        [G3], [202,85 Hz], [+20 Cent],
+        [B3], [250,3 Hz], [+13 Cent],
+        [E4], [334,0 Hz], [+10 Cent],
+      ),
+      caption: [Nutzer 8 -- Ausgangsfrequenzen und Abweichungen nach dem Stimmen],
+    )
+
+    Version der App: Aktuellste Version (Stand 14.6.2026)\
+    Mobilgerät: Redmi 10 2022 \
+    Modell: ~22011119UY
+
+    *Nutzer 9*
+
+    Nutzer 9 führte Kalibrierung und Stimmvorgang durch, wobei die Saiten
+    nach unten verstimmt wurden. Die Kalibrierung dauerte 5:18 Minuten, der
+    Stimmprozess 2:29 Minuten. Nach einer zweiten Iteration lagen alle Saiten
+    innerhalb einer Abweichung von maximal $plus.minus$~5~Cent.
+
+    #figure(
+      table(
+        columns: (auto, auto, auto, auto, auto),
+        stroke: (x: none, y: 0.5pt),
+        table.header(
+          [*Saite*],
+          [*Ausgangs- \ frequenz*],
+          [*Abweichung \ Iteration 1*],
+          [*End- \ frequenz*],
+          [*Abweichung \ Iteration 2*],
+        ),
+        [E2], [84,0 Hz], [+0 Cent], [82,5 Hz], [$lt.eq$ 5 Cent],
+        [A2], [106,2 Hz], [+5 Cent], [111,3 Hz], [$lt.eq$ 5 Cent],
+        [D3], [144,96 Hz], [+8 Cent], [147,8 Hz], [$lt.eq$ 5 Cent],
+        [G3], [192,5 Hz], [+6 Cent], [197,4 Hz], [$lt.eq$ 5 Cent],
+        [B3], [232,0 Hz], [+0 Cent], [247,2 Hz], [$lt.eq$ 5 Cent],
+        [E4], [312,58 Hz], [+0 Cent], [330,1 Hz], [$lt.eq$ 5 Cent],
+      ),
+      caption: [Nutzer 9 -- Ausgangsfrequenzen, Abweichungen und Endfrequenzen nach zwei Iterationen],
+    )
+
+    Version der App: Aktuellste Version (Stand 14.6.2026)\
+    Mobilgerät: Redmi 10 2022 \
+    Modell: ~22011119UY
+  ]
+}
+
+*Anmerkung*\
+
+Es fällt auf, dass der Kalibrierungsablauf in der aktuellen Version der App im Vergleich zu den Prototypen mehr Zeit benötigt (3min davor, jetzt 7 min). Grund dafür ist die explizite Nutzerführung, da sie zusätzliche Schritte hinzugefügt hat, damit pro Seite weniger Informationen angezeigt werden. Es wurde Verständlichkeit gegen Zeit eingetauscht.
 
 == Funktionsfähigkeit des Algorithmus
 
@@ -2771,239 +3003,7 @@ von $70 "dB(A)"$ außerhalb des Projektumfangs lag.
 @req-nfa-ko-01 und @req-nfa-ko-02 konnten aufgrund fehlender Hardware
 und zeitlicher Einschränkungen nicht systematisch auf verschiedenen
 Geräten und Betriebssystemversionen getestet werden.
-== Nutzertests <nutzerTests>
-Die Nutzertests wurden als unmoderierte, jedoch beobachtete Feld- bzw. Nutzungsszenarien durchgeführt. Die Probanden erhielten die Anwendung ohne strukturierte Einweisung und führten den Stimmprozess eigenständig durch, während der Autor als passiver Beobachter anwesend war. Ziel war die Erfassung realistischer Nutzungssituationen sowie potenzieller Fehlerquellen im Bedien- und Messprozess.
 
-Die Tests fanden in unterschiedlichen akustischen Umgebungen statt, um die Robustheit der Frequenzanalyse und Signalverarbeitung unter realistischen Bedingungen zu evaluieren:
-
-- ruhige Innenräume mit direkter Gitarrenaufnahme
-- laute Umgebungen (z.,B. Jam-Situationen)
-Der Ablauf folgte keinem strikt vorgegebenen Protokoll, sondern einem task-basierten explorativen Vorgehen.
-Erfasst wurden sowohl quantitative Kennzahlen als auch qualitative Beobachtungen:
-
-- Dauer der Kalibrierung
-- Dauer des gesamten Stimmprozesses
-- Robustheit unter Störbedingungen (Lärm, Verzerrung)
-- Verständlichkeit der Benutzerführung und der visuellen Darstellung
-
-Die Tests wurden iterativ über mehrere Softwareversionen durchgeführt, wodurch ein Vergleich der Systementwicklung hinsichtlich Effizienz, Stabilität und Benutzerverständnis möglich wurde.
-
-Die Auswertung erfolgte qualitativ-deskriptiv auf Basis der dokumentierten Testverläufe sowie ergänzend durch Zeitmessungen der einzelnen Prozessschritte.
-
-#{
-  // Ab hier sind alle Überschriften innerhalb der Klammern blockiert
-  set heading(outlined: false)
-  [
-
-    *Nutzer 0*
-
-    Die App wurde in einem ruhigen Zimmer mit verstärkter Gitarre ohne
-    Verzerrungseffekt getestet. Die Frequenzen aller Saiten wurden korrekt
-    erkannt und die Gitarre konnte erfolgreich gestimmt werden. Es traten
-    vereinzelte Schwankungen bei der Erkennung der Fundamentalfrequenz auf,
-    die den Prozess geringfügig verlangsamten.
-
-    Die Bestimmung der Verstimmungsmatrix inklusive anschließender
-    Überprüfung der Messdaten dauerte 3:47 Minuten; der gesamte
-    Stimmvorgang war nach ca. 7 Minuten abgeschlossen.
-
-    Version der  App: @protCreateGuita \
-    Mobilgerät: Galaxy S20 5G \
-    Modell: SM-G981B/DS
-
-    *Nutzer 1*
-
-    Die App wurde auf einer Jam-Session vorgestellt. Beim Versuch, die
-    Frequenzen der E-Gitarre zu messen, wurde nicht die Fundamentalfrequenz,
-    sondern der erste Oberton (Faktor 2) erkannt. Als Ursache kommen zwei
-    Faktoren zusammen: die laute Umgebung sowie ein aktiver
-    Verzerrungseffekt, der den Obertonanteil des Signals verstärkte. Der
-    Stimmvorgang musste abgebrochen werden.
-
-    Dieser Test macht deutlich, dass die Fundamentalfrequenzerkennung unter
-    ungünstigen akustischen Bedingungen robuster gestaltet werden muss.
-
-    Version der App: @protCreateGuita \
-    Mobilgerät: Galaxy S20 5G \
-    Modell: SM-G981B/DS
-
-    *Nutzer 2*
-
-    Die App wurde unter guten akustischen Bedingungen verwendet.
-    Es fiel auf, dass der Kalibrierungsprozess zwar technisch korrekt
-    funktionierte, jedoch unnötige Wiederholungen enthielt: Nachdem der
-    Zustand der Gitarre nach dem Verstimmen einer Saite gemessen wurde,
-    könnte dieser Zustand direkt als Ausgangslage für die Messung der
-    nächsten Saite weiterverwendet werden. Aktuell wird dieser Schritt
-    manuell ausgelöst.
-
-    Darüber hinaus zeigte sich ein grundlegenderes Problem: Beim Stimmen
-    einer Saite mithilfe der App wurden zunächst die korrekten
-    Zielabweichungen $Delta f$ angezeigt. Sobald jedoch eine Saite aktiv
-    verstimmt wurde, veränderte sich -- erwartungsgemäß aufgrund der
-    Brückenkopplung -- der Zustand aller übrigen Saiten. Diese
-    Zustandsänderung wurde nicht in die nachfolgende Berechnung der
-    $Delta f$ einbezogen, sodass die Gitarre am Ende nicht präzise gestimmt
-    war. Als Konsequenz muss der Stimmvorgang die durch jede
-    Saitenänderung verursachten Folgeverstimmungen schrittweise
-    vorausberechnen und kompensieren.
-
-
-    Version der App: @protCreateGuita \
-    Mobilgerät: Galaxy S20 5G \
-    Modell: SM-G981B/DS
-
-    *Nutzer 3*
-
-    Nutzer 3 war mit der Darstellung roher Frequenzwerte (in Hz) überfordert
-    und konnte deren Bedeutung nicht einordnen. Dies bestätigte den Bedarf
-    einer abstrahierten, intuitiv verständlichen Visualisierung der
-    Stimmgenauigkeit anstelle numerischer Frequenzangaben.
-    Version der  App: @protoCalib
-
-    *Nutzer 4*
-
-    Nutzer 4 versuchte, die Gitarre unmittelbar nach dem
-    Öffnen der App zu stimmen, ohne den Kalibrierungsschritt zu
-    durchlaufen. Die App konnte nicht ausreichend klar vermitteln, dass
-    zunächst mehrere Messreihen zur Bestimmung der Verstimmungsmatrix
-    erforderlich sind. Auch das Tutorial-Video war zu dem Zeitpunkt nicht verfügbar.
-
-    Als der Nutzer aufgefordert wurde, eine Saite gezielt zu verstimmen,
-    entstand Unsicherheit darüber, in welche Richtung und um wie viel die
-    Saite verstimmt werden solle, obwohl der genaue Betrag für das
-    Verfahren irrelevant ist.
-
-    Zusätzlich hatte die App Schwierigkeiten, die tiefen Saiten korrekt zu
-    messen, da die Stahlsaiten einen ausgeprägten Obertonanteil aufwiesen.
-    Durch Umpositionierung des Smartphones näher am Lautsprecher sowie
-    durch Betätigung des _Tone-Knobs_, der die Funktion eines analogen
-    Tiefpassfilters erfüllt, konnte das Problem behoben werden.
-
-    Der abschließende Stimmvorgang verlief weitgehend erfolgreich; die
-    E2-Saite wurde jedoch zu hoch gestimmt. Dies deutet darauf hin, dass
-    die Einträge der Verstimmungsmatrix, die den Einfluss auf E2 beschreiben,
-    den größten Messfehler aufwiesen. Es gab eine Abweichung von $plus.minus$ 15 Cent. Die restlichen Saiten hatten einen Fehler von $plus.minus$ 3,2 Cent.
-
-    Der effektive Zeitaufwand für den Stimmvorgang betrug 8 Minuten.
-    Version der  App: @protoCalib \
-    Mobilgerät: Galaxy S20 5G \
-    Modell: SM-G981B/DS
-
-    *Nutzer 5*
-
-    Nutzer 5 testete die App in der finalen Version. Die Kalibrierung dauerte
-    7:00 Minuten und hat sich damit im Vergleich zu älteren Versionen, in denen
-    dieser Schritt in 3:30 Minuten abgeschlossen werden konnte, deutlich
-    verlängert. Der anschließende Stimmprozess nahm 1:30 Minuten in Anspruch
-    und war erfolgreich. Die mittlere Abweichung betrug $plus.minus$~3,3~Cent. \
-    Mobilgerät: Galaxy S20 5G \
-    Modell: SM-G981B/DS
-
-    *Nutzer 6*
-
-    Nutzer 6 benötigte 6:26 Minuten für die Kalibrierung und 5:40 Minuten für
-    den Stimmprozess. Das größte Problem war die Erkennung tiefer Frequenzen
-    im Bereich von 60--80~Hz. Die Ursache liegt darin, dass Vielfache dieser
-    Frequenzen -- etwa 120~Hz und 160~Hz -- ebenfalls plausible Messwerte für
-    benachbarte Saiten darstellen, was zu Verwechslungen führt. Daraus ergibt
-    sich die Empfehlung, tiefe Frequenzen bei der Schätzung bevorzugt zu
-    behandeln.
-
-    #figure(
-      table(
-        columns: (auto, auto),
-        stroke: (x: none, y: 0.5pt),
-        table.header([*Saite*], [*Abweichung*]),
-        [E2], [+15 Cent],
-        [A2], [+8 Cent],
-        [D3], [+5 Cent],
-        [G3], [+20 Cent],
-        [B3], [+7 Cent],
-        [E4], [+0 Cent],
-      ),
-      caption: [Nutzer 6 -- Abweichungen nach dem Stimmen],
-    )
-
-    *Nutzer 7*
-
-    Nutzer 7 testete den Wechsel von Standard-E- zur Drop-D-Stimmung, bei dem
-    die tiefe E-Saite auf D2 umgestimmt wird. Der Stimmprozess dauerte
-    3:00 Minuten. Auch bei diesem Test traten Schwierigkeiten bei der Erkennung
-    tiefer Frequenzen auf. Der Test wurde auf einem Redmi 10 2022 durchgeführt.
-
-    #figure(
-      table(
-        columns: (auto, auto, auto),
-        stroke: (x: none, y: 0.5pt),
-        table.header([*Saite*], [*Ausgangsfrequenz*], [*Abweichung*]),
-        [D2], [82,97 Hz], [+0 Cent],
-        [A2], [110,4 Hz], [+6 Cent],
-        [D3], [147,4 Hz], [+3 Cent],
-        [G3], [198,4 Hz], [+12 Cent],
-        [B3], [247,3 Hz], [+2 Cent],
-        [E4], [329,9 Hz], [+4 Cent],
-      ),
-      caption: [Nutzer 7 -- Ausgangsfrequenzen und Abweichungen nach dem Stimmen],
-    )
-    Mobilgerät: Redmi 10 2022 \
-    Modell: ~22011119UY
-
-    *Nutzer 8*
-
-    Nutzer 8 führte Kalibrierung und Stimmvorgang durch, wobei die Saiten
-    nach oben verstimmt wurden. Die Kalibrierung dauerte 5:18 Minuten, der
-    Stimmprozess 3:20 Minuten.
-
-    #figure(
-      table(
-        columns: (auto, auto, auto),
-        stroke: (x: none, y: 0.5pt),
-        table.header([*Saite*], [*Ausgangsfrequenz*], [*Abweichung*]),
-        [E2], [85,49 Hz], [+4 Cent],
-        [A2], [118,6 Hz], [+15 Cent],
-        [D3], [147,63 Hz], [+10 Cent],
-        [G3], [202,85 Hz], [+20 Cent],
-        [B3], [250,3 Hz], [+13 Cent],
-        [E4], [334,0 Hz], [+10 Cent],
-      ),
-      caption: [Nutzer 8 -- Ausgangsfrequenzen und Abweichungen nach dem Stimmen],
-    )
-    Mobilgerät: Redmi 10 2022 \
-    Modell: ~22011119UY
-
-    *Nutzer 9*
-
-    Nutzer 9 führte Kalibrierung und Stimmvorgang durch, wobei die Saiten
-    nach unten verstimmt wurden. Die Kalibrierung dauerte 5:18 Minuten, der
-    Stimmprozess 2:29 Minuten. Nach einer zweiten Iteration lagen alle Saiten
-    innerhalb einer Abweichung von maximal $plus.minus$~5~Cent. Der Test wurde
-    auf einem Redmi~10 (2022, Modell~22011119UY) durchgeführt.
-
-    #figure(
-      table(
-        columns: (auto, auto, auto, auto, auto),
-        stroke: (x: none, y: 0.5pt),
-        table.header(
-          [*Saite*],
-          [*Ausgangs- \ frequenz*],
-          [*Abweichung \ Iteration 1*],
-          [*End- \ frequenz*],
-          [*Abweichung \ Iteration 2*],
-        ),
-        [E2], [84,0 Hz], [+0 Cent], [82,5 Hz], [$lt.eq$ 5 Cent],
-        [A2], [106,2 Hz], [+5 Cent], [111,3 Hz], [$lt.eq$ 5 Cent],
-        [D3], [144,96 Hz], [+8 Cent], [147,8 Hz], [$lt.eq$ 5 Cent],
-        [G3], [192,5 Hz], [+6 Cent], [197,4 Hz], [$lt.eq$ 5 Cent],
-        [B3], [232,0 Hz], [+0 Cent], [247,2 Hz], [$lt.eq$ 5 Cent],
-        [E4], [312,58 Hz], [+0 Cent], [330,1 Hz], [$lt.eq$ 5 Cent],
-      ),
-      caption: [Nutzer 9 -- Ausgangsfrequenzen, Abweichungen und Endfrequenzen nach zwei Iterationen],
-    )
-    Mobilgerät: Redmi 10 2022 \
-    Modell: ~22011119UY
-  ]
-}
 = Fazit <fazit>
 
 Diese Arbeit hatte zum Ziel, das Kopplungsverhalten einer
@@ -3175,6 +3175,7 @@ vergrößern.
 
 #pagebreak()
 #heading(depth: 1, "Glossar", numbering: none, outlined: false)
+/ Cent: eine logarithmische Einheit, bei der ein gleichstufiger musikalischer Halbton exakt 100~Cent entspricht
 / Bund: Ein Metallstift, der quer über den Gitarrenhals verläuft und die Saiten in Abschnitte unterteilt, um verschiedene Töne zu erzeugen, wenn die Saite auf den Bund gedrückt wird.
 / Brücke: Ein fester Punkt am Gitarrenkörper, an dem die Saiten befestigt sind (vgl. @figBegriffe).
 / CLAP: CLever Audio Plug-in
@@ -3239,4 +3240,3 @@ Raphael Schütz
 
 
 Leipzig, 16 Juni 2026
-
