@@ -48,23 +48,7 @@
     Zweitgutachter: #h(1fr) #zweitprüfer]
 
   v(2.4fr)
-  pagebreak()
-  [#v(1em)
-    #align(center)[
-      #text(weight: "bold", size: 14pt)[Sperrvermerk]
-    ]
 
-    Die vorliegende Bachelorarbeit beinhaltet interne vertrauliche Informationen des Autors oder patentrechtlich relevante Informationen. Die Weitergabe des Inhaltes der Arbeit und eventuell beiliegender Zeichnungen und Daten im
-    Gesamten oder in Teilen ist grundsätzlich untersagt. Es dürfen keinerlei Kopien oder Abschriften -- auch in digitaler Form -- gefertigt werden. Ausnahmen bedürfen der vorherigen schriftlichen Genehmigung des Autors.
-    #v(1em)
-    Paulstr. 34, 10557 Berlin \
-    raphael.schuetz0311\@gmail.com\
-    raphael.schuetz\@stud.htwk-leipzig.de \
-    #v(2em)
-    Leipzig, 16. Juni 2026
-    #v(2em)
-    -----------------------------------
-  ]
   pagebreak()
   [#v(1em)
     #align(center)[
@@ -3228,7 +3212,7 @@ Ich erkläre hiermit, dass ich diese Bachelorarbeit selbstständig ohne Hilfe Dr
 ohne Benutzung anderer als der angegebenen Quellen und Hilfsmittel verfasst habe. Alle den benutzten Quellen wörtlich oder sinngemäß entnommenen Stellen sind als solche
 einzeln kenntlich gemacht. Diese Arbeit ist bislang keiner anderen Prüfungsbehörde vorgelegt und auch nicht veröffentlicht worden.
 
-Die Nutzung generativer KI-Tools (in diesem Fall *claude.ai: Sonnet 4.6*, *grok.com: Grok 4.3*, *chatgpt.com: ChatGPT-5.5-base*) erfolgte ausschließlich für ein Text-Lektorat zur Behebung grammatikalischer und stilistischer Fehler. Es wurden keine Argumentationsstrukturen oder inhaltlichen Ideen durch die KI generiert.
+Die Nutzung generativer KI-Tools (in diesem Fall claude.ai: Sonnet 4.6, grok.com: Grok 4.3, chatgpt.com: ChatGPT-5.5-base) erfolgte ausschließlich für ein Text-Lektorat zur Behebung grammatikalischer und stilistischer Fehler. Es wurden keine Argumentationsstrukturen oder inhaltlichen Ideen durch die KI generiert.
 
 Ich bin mir bewusst, dass eine falsche Erklärung rechtliche Folgen haben wird.
 
